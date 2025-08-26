@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI와 함께하는 정보과제연구 (통합 최종)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans KR', sans-serif;
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #4f46e5, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        details > summary { list-style: none; }
+        details > summary::-webkit-details-marker { display: none; }
+        details[open] summary .arrow-down { transform: rotate(180deg); }
+        .arrow-down { transition: transform 0.2s ease-in-out; }
+        .prompt-card {
+            background: #1e293b;
+            border-left: 4px solid #818cf8;
+        }
+        .step-grid-item {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .step-grid-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold text-indigo-600">🚀 정보과제연구</div>
+            <div class="hidden md:flex space-x-6">
+                <a href="#hour1" class="text-gray-600 hover:text-indigo-500 transition">1교시: AI와 아이디어 발전소</a>
+                <a href="#hour2" class="text-gray-600 hover:text-indigo-500 transition">2교시: 연구 설계 & 수행</a>
+                <a href="#hour3" class="text-gray-600 hover:text-indigo-500 transition">3교시: 결과 보고 & 공유</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main -->
+    <main class="container mx-auto px-6 py-12">
+
+        <!-- Hero -->
+        <section class="text-center py-16">
+            <h1 class="text-5xl md:text-7xl font-black mb-4">
+                <span class="gradient-text">AI 크루</span>와 함께 떠나는<br>정보과제연구 탐험!
+            </h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                여러분은 이제부터 탐험가, Gemini는 여러분의 만능 크루입니다. 함께 멋진 아이디어를 발견하고, 최고의 연구 계획서를 만들어봅시다!
+            </p>
+        </section>
+
+        <!-- Research Steps Visualization -->
+        <section id="research-map" class="py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold mb-2">정보 과제 연구의 전체 지도 🗺️</h2>
+                <p class="text-gray-500">우리가 앞으로 나아갈 길입니다. 각 단계를 차근차근 정복해봅시다.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                <!-- Phase 1: Planning -->
+                <div class="col-span-1 md:col-span-3 font-bold text-xl text-indigo-600 mb-2">1. 계획 (30%)</div>
+                <div class="step-grid-item bg-white p-6 rounded-xl shadow-md border border-indigo-100">
+                    <div class="text-3xl mb-2">1️⃣</div><h3 class="font-bold">주제 탐색 및 자료 조사</h3>
+                </div>
+                <div class="step-grid-item bg-white p-6 rounded-xl shadow-md border border-indigo-100">
+                    <div class="text-3xl mb-2">2️⃣</div><h3 class="font-bold">문제 원인과 해결 방안 탐색</h3>
+                </div>
+                <div class="step-grid-item bg-white p-6 rounded-xl shadow-md border border-indigo-100">
+                    <div class="text-3xl mb-2">3️⃣</div><h3 class="font-bold">연구 계획서 작성</h3>
+                </div>
+
+                <!-- Phase 2: Execution -->
+                <div class="col-span-1 md:col-span-3 font-bold text-xl text-pink-600 mt-8 mb-2">2. 수행 (50%)</div>
+                <div class="step-grid-item bg-white p-6 rounded-xl shadow-md border border-pink-100">
+                    <div class="text-3xl mb-2">4️⃣</div><h3 class="font-bold">지식 및 기능 습득</h3>
+                </div>
+                <div class="step-grid-item bg-white p-6 rounded-xl shadow-md border border-pink-100">
+                    <div class="text-3xl mb-2">5️⃣</div><h3 class="font-bold">실험 및 결과 정리</h3>
+                </div>
+                <div class="step-grid-item bg-white p-6 rounded-xl shadow-md border border-pink-100">
+                    <div class="text-3xl mb-2">6️⃣</div><h3 class="font-bold">산출물 제작</h3>
+                </div>
+                
+                <!-- Phase 3: Presentation -->
+                <div class="col-span-1 md:col-span-3 font-bold text-xl text-amber-600 mt-8 mb-2">3. 표현 (20%)</div>
+                <div class="step-grid-item bg-white p-6 rounded-xl shadow-md border border-amber-100">
+                    <div class="text-3xl mb-2">7️⃣</div><h3 class="font-bold">연구 보고서 작성</h3>
+                </div>
+                <div class="step-grid-item bg-white p-6 rounded-xl shadow-md border border-amber-100">
+                    <div class="text-3xl mb-2">8️⃣</div><h3 class="font-bold">산출물 발표</h3>
+                </div>
+                <div class="step-grid-item bg-white p-6 rounded-xl shadow-md border border-amber-100">
+                    <div class="text-3xl mb-2">9️⃣</div><h3 class="font-bold">평가</h3>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-16 border-gray-200">
+
+        <!-- 1st Hour -->
+        <section id="hour1" class="py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold mb-2">1교시: AI 아이디어 발전소 가동! 💡</h2>
+                <p class="text-gray-500">멍하니 앉아있지 마세요! AI 크루와 함께라면, 여러분의 작은 관심사가 엄청난 연구 주제로 변신합니다.</p>
+            </div>
+            
+            <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-200 mb-12">
+                 <h3 class="text-2xl font-bold mb-6 text-center text-gray-800">🧭 오늘의 탐험 지도: 계획 단계 완전 정복!</h3>
+                 <div class="space-y-4">
+                    <details class="group" open>
+                        <summary class="flex justify-between items-center p-4 rounded-lg cursor-pointer bg-indigo-50 hover:bg-indigo-100">
+                            <h4 class="text-xl font-bold text-indigo-800">STEP 1: 주제 탐색 및 문제 발견</h4>
+                            <div class="arrow-down"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg></div>
+                        </summary>
+                        <div class="p-6 text-gray-700 space-y-6">
+                            <div>
+                                <h5 class="font-bold text-lg mb-2 text-indigo-700">🎯 주제 탐색의 기본 원칙</h5>
+                                <p class="bg-indigo-50 p-3 rounded-md">정보 과제 연구 주제는 정보 과학의 의미를 담아, 생활 속 문제를 컴퓨터로 효율적으로 해결할 수 있는 것이어야 합니다.</p>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-lg mb-2 text-indigo-700">🤔 주제 탐색 시 스스로에게 던져야 할 질문 4가지</h5>
+                                <ul class="space-y-2">
+                                    <li><strong class="text-indigo-600">관심/흥미:</strong> 내가 정말 재미있게 탐구할 수 있는 분야인가?</li>
+                                    <li><strong class="text-indigo-600">선행 연구:</strong> 다른 사람들은 이 주제를 어떻게 연구했을까? 내가 참고할 만한 자료가 있는가?</li>
+                                    <li><strong class="text-indigo-600">연구 방법:</strong> 이 주제를 탐구하기에 적절한 방법(설문조사, 실험, 데이터 분석 등)이 있는가?</li>
+                                    <li><strong class="text-indigo-600">소통/피드백:</strong> 내 연구 아이디어를 다른 사람에게 설명했을 때, 그들이 이해하고 공감하는가?</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-lg mb-2 text-indigo-700">✅ 좋은 주제의 조건 & 예시</h5>
+                                <ul class="list-disc list-inside space-y-1">
+                                    <li><strong>구체적인 연구 주제:</strong> "청소년의 스마트폰 사용" (X) ➡️ "알림(푸시 메시지)이 고등학생의 학습 집중도에 미치는 영향 분석" (O)</li>
+                                    <li><strong>이론적 배경 뒷받침:</strong> 인지 심리학의 '주의 이론'과 HCI(Human-Computer Interaction) 연구를 이론적 배경으로 삼을 수 있음.</li>
+                                    <li><strong>실현 가능한 자료 수집/분석:</strong> '스크린 타임' 앱 데이터와 설문조사를 통해 데이터 수집, 통계 프로그램(SPSS, Python)으로 분석 가능.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-lg mb-2 text-indigo-700">🔍 자료 수집 방법</h5>
+                                <p>문헌 연구(논문, 서적), 설문조사, 인터뷰, 실험, 관찰, 기존 데이터(공공 데이터 등) 활용 등 다양한 방법이 있습니다.</p>
+                            </div>
+                             <div>
+                                <h5 class="font-bold text-lg mb-2 text-indigo-700">💡 주제에서 문제 도출하기</h5>
+                                <p><strong>주제:</strong> 기상 변화에 따른 자율 자동차와 인공지능<br>➡️ <strong>문제:</strong> 자율 자동차는 센서로 수집된 데이터를 인공지능으로 분석하여 기상 변화에도 안전 운전이 가능한가?</p>
+                            </div>
+                        </div>
+                    </details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center p-4 rounded-lg cursor-pointer bg-indigo-50 hover:bg-indigo-100">
+                            <h4 class="text-xl font-bold text-indigo-800">STEP 2: 연구 계획서 작성법 (A to Z)</h4>
+                            <div class="arrow-down"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg></div>
+                        </summary>
+                        <div class="p-6 text-gray-700 space-y-6">
+                            <div>
+                                <h5 class="font-bold text-lg mb-2 text-indigo-700">📜 연구 계획서의 4가지 역할</h5>
+                                <ul class="grid md:grid-cols-2 gap-4">
+                                    <li class="bg-gray-50 p-3 rounded-md"><strong>설계도:</strong> 연구의 목표와 결과를 제시하는 청사진</li>
+                                    <li class="bg-gray-50 p-3 rounded-md"><strong>효율성 증가:</strong> 체계적인 계획으로 시간과 노력 절약</li>
+                                    <li class="bg-gray-50 p-3 rounded-md"><strong>정당성 확보:</strong> 연구의 필요성과 의미를 증명</li>
+                                    <li class="bg-gray-50 p-3 rounded-md"><strong>보고서 초안:</strong> 최종 보고서의 뼈대 역할</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-lg mb-2 text-indigo-700">🔬 연구 계획서의 구성과 작성 요령</h5>
+                                <div class="space-y-4">
+                                    <div class="border-l-4 border-indigo-300 pl-4">
+                                        <h6 class="font-semibold">1. 서론 (Introduction)</h6>
+                                        <p class="text-sm">연구의 첫인상! <strong>연구 주제, 선정 이유(동기), 목적, 연구 문제</strong>를 명확하게 밝혀 독자의 흥미를 유발해요.</p>
+                                    </div>
+                                    <div class="border-l-4 border-indigo-300 pl-4">
+                                        <h6 class="font-semibold">2. 이론적 배경 (Theoretical Background)</h6>
+                                        <p class="text-sm">내 연구가 근본 없지 않다는 것을 보여주는 부분! 관련 이론, 선행 연구를 조사하고 분석하여 내 연구의 이론적 토대를 마련해요. <span class="font-bold text-red-500">(주의! 단순 요약은 금물! 내 연구와 어떻게 연결되는지 분석해야 해요.)</span></p>
+                                    </div>
+                                    <div class="border-l-4 border-indigo-300 pl-4">
+                                        <h6 class="font-semibold">3. 연구 내용 및 방법 (Methodology)</h6>
+                                        <p class="text-sm">연구의 심장! <strong>무엇을(내용), 어떻게(방법) 연구할지</strong> 구체적인 계획과 일정을 서술해요.</p>
+                                    </div>
+                                    <div class="border-l-4 border-indigo-300 pl-4">
+                                        <h6 class="font-semibold">4. 기대 효과 및 활용 (Expected Results)</h6>
+                                        <p class="text-sm">연구의 비전! 연구 결과가 어떤 긍정적 영향을 미칠 수 있을지, 어떻게 활용될 수 있을지 예측해봐요.</p>
+                                    </div>
+                                    <div class="border-l-4 border-indigo-300 pl-4">
+                                        <h6 class="font-semibold">5. 참고 문헌 (References)</h6>
+                                        <p class="text-sm">연구의 신뢰도! 인용한 모든 자료의 출처를 정해진 양식(예: APA)에 맞춰 정확하게 밝혀요.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-lg mb-2 text-indigo-700">✍️ 연구 노트 작성 지침</h5>
+                                <p>날짜, 시간, 연구 내용, 결과, 그리고 나의 생각(의문점, 아이디어 등)을 빠짐없이, 상세하게, 객관적으로 기록하는 것이 중요합니다.</p>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
+                <h3 class="text-2xl font-bold mb-6 text-center text-indigo-700">Mission 1: 내 머릿속 아이디어, AI로 폭발시키기!</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h4 class="font-bold text-lg mb-2">⚡️ 1단계: 관심사 연결하기</h4>
+                        <p class="text-sm text-gray-600 mb-3">내 관심사를 AI에게 알려주고, 정보과학과 연결된 연구 주제를 추천받아 보세요.</p>
+                        <div class="prompt-card p-4 rounded-md text-white">
+                            <p class="text-sm font-mono">"나는 [음악 듣기, 웹툰 보기, 축구 경기 분석 등]에 관심이 많아. 이 관심사를 정보과학과 연결해서 탐구할 수 있는 연구 주제 아이디어 5가지를 고등학생 수준에서 구체적인 예시와 함께 제안해줘."</p>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h4 class="font-bold text-lg mb-2">⚡️ 2단계: 키워드 조합하기</h4>
+                        <p class="text-sm text-gray-600 mb-3">전혀 상관없어 보이는 단어들을 조합해 세상에 없던 연구 주제를 만들어 보세요.</p>
+                        <div class="prompt-card p-4 rounded-md text-white">
+                            <p class="text-sm font-mono">"['인공지능', '학교 급식', '만족도'] 이 세 가지 키워드를 모두 사용해서, 데이터를 분석하는 창의적인 정보과제연구 문제를 3가지 만들어줘. 각 문제에 대한 간단한 연구 방법도 포함해줘."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-200 mt-12">
+                <h3 class="text-2xl font-bold mb-6 text-center text-indigo-700">Mission 2: AI와 함께, A+ 연구 계획서 설계하기</h3>
+                <p class="text-center mb-6 text-gray-600">연구 계획서는 연구의 나침반! 아래 템플릿을 채워 Gemini에게 보내면, 순식간에 논리적인 연구 계획서 초안이 완성됩니다.</p>
+                
+                <div class="bg-gray-800 text-white p-6 rounded-lg">
+                    <h4 class="text-xl font-bold mb-4 text-center">📜 궁극의 연구 계획서 마스터 프롬프트</h4>
+                    <div class="bg-gray-900 p-4 rounded-md h-72 overflow-y-auto">
+                        <p id="prompt-template" class="text-sm font-mono whitespace-pre-wrap">
+너는 이제부터 고등학생의 정보과제연구를 돕는 전문 멘토야. 아래 내용을 바탕으로, 학생들이 따라 하기 쉬운 모범적인 연구 계획서 초안을 작성해줘. 각 항목마다 교과서적인 설명과 함께 구체적인 예시를 풍부하게 들어줘.
+
+**1. 연구 주제:** [여기에 Mission 1에서 정한 나의 연구 주제 입력]
+
+**2. 서론**
+   - **연구 동기 및 필요성:** [내가 이 연구를 왜 하고 싶은지, 이 연구가 왜 중요한지 간단하게 입력. 예: 급식 메뉴에 대한 친구들의 불만이 많아서]
+   - **연구 목적:** [이 연구를 통해 무엇을 명확히 밝혀내고 싶은지 입력. 예: 급식 만족도에 영향을 미치는 핵심 요인 분석]
+   - **연구 문제:** [연구를 통해 답을 찾고 싶은 구체적인 질문 1~2가지. 예: 1. 가장 선호/비선호하는 메뉴는 무엇인가? 2. 메뉴의 어떤 요소(맛, 양, 국적 등)가 만족도에 가장 큰 영향을 미치는가?]
+
+**3. 이론적 배경**
+   - **관련 이론/기술:** [내 연구에 필요한 핵심 개념이나 기술. 예: 데이터 시각화, 텍스트 마이닝, 설문조사 분석법]
+   - **선행 연구 조사:** (이 부분은 비워둘테니, 네가) 이 연구 주제와 관련해서 찾아볼 만한 선행 연구 분야나 검색 키워드를 2~3가지 추천해줘.
+
+**4. 연구 내용 및 방법**
+   - **연구 대상 및 범위:** [누구를 대상으로, 어디까지 연구할 것인지. 예: 우리 학교 학생 100명, 최근 3개월간의 급식 메뉴]
+   - **연구 절차 및 방법:** [어떤 순서로, 무엇을 사용해서 연구할지 구체적으로. 예: 1) 구글 폼으로 설문지 제작 및 배포. 2) 수집된 데이터를 파이썬으로 분석. 3) 분석 결과를 그래프로 시각화]
+   - **예상 주요 활동 일정:** [언제까지 무엇을 할지 대략적인 계획. 예: 1주차-설문조사, 2주차-데이터 분석, 3주차-보고서 작성]
+
+**5. 기대 효과 및 활용 방안**
+   - [이 연구 결과가 어떻게 활용될 수 있을지 자유롭게 상상해서 입력. 예: 학교 영양사 선생님께 분석 결과를 전달하여 메뉴 개선에 기여]
+
+**6. 참고 문헌**
+   - (이 부분도 비워둘테니, 네가) 위 내용과 관련하여 참고할 만한 가상의 논문이나 책 형식의 참고 문헌 예시를 APA 양식에 맞춰 2개 만들어줘.
+                        </p>
+                    </div>
+                    <button onclick="copyPrompt()" class="mt-4 w-full bg-indigo-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-600 transition-all">
+                        연구 계획서 초안 생성 프롬프트 복사하기
+                    </button>
+                    <div id="copy-message" class="text-center mt-2 text-green-400 font-semibold opacity-0 transition-opacity">복사 완료! Gemini와 함께 최고의 계획서를 만들어보세요!</div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-16 border-gray-200">
+
+        <!-- 2nd Hour -->
+        <section id="hour2" class="py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold mb-2">2교시: 계획을 현실로, 연구 설계 & 수행 🔬</h2>
+                <p class="text-gray-500">이제 진짜 탐험 시간! 똑똑하게 연구를 설계하고, 계획대로 실행해봅시다.</p>
+            </div>
+
+            <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-200 space-y-4">
+                 <h3 class="text-2xl font-bold mb-6 text-center text-gray-800">🧭 오늘의 탐험 지도: 이론 먼저 살펴보기</h3>
+                <details class="group">
+                    <summary class="flex justify-between items-center p-4 rounded-lg cursor-pointer bg-pink-50 hover:bg-pink-100"><h3 class="text-xl font-bold text-pink-800">STEP 3: 똑똑한 연구 설계</h3><div class="arrow-down"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg></div></summary>
+                    <div class="p-4 text-gray-700 space-y-4">
+                        <p><strong>변인(Variable) 이해하기:</strong> 연구의 핵심 재료! <strong>독립 변인</strong>(원인), <strong>종속 변인</strong>(결과), <strong>통제 변인</strong>(영향을 줄 수 있지만 일정하게 유지하는 것)을 명확히 구분해야 신뢰도 높은 결과를 얻을 수 있어요.</p>
+                        <p><strong>연구 방법론:</strong> <strong>가설-연역적 연구</strong>(가설을 세우고 실험으로 검증) vs <strong>귀납적 연구</strong>(여러 관찰을 통해 일반적인 결론 도출)</p>
+                    </div>
+                </details>
+                <details class="group">
+                    <summary class="flex justify-between items-center p-4 rounded-lg cursor-pointer bg-pink-50 hover:bg-pink-100"><h3 class="text-xl font-bold text-pink-800">STEP 4: 꼼꼼한 실행과 정리</h3><div class="arrow-down"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg></div></summary>
+                    <div class="p-4 text-gray-700 space-y-4">
+                        <p><strong>연구 노트는 나의 보물지도:</strong> 모든 과정, 데이터, 심지어 실패 경험까지 상세히 기록하세요. 나중에 보고서 쓸 때 최고의 재료가 됩니다.</p>
+                        <div class="bg-gray-100 p-4 rounded-md">
+                            <h4 class="font-bold mb-2">🔎 연구 수행 점검표 (Self-Check!)</h4>
+                            <ul class="list-disc list-inside text-sm">
+                                <li>가설을 검증하기에 적합한 데이터를 수집하고 있는가?</li>
+                                <li>변인의 통제는 제대로 이루어지고 있는가?</li>
+                                <li>다양한 변수를 탐색하고 결과에 영향을 미칠 요인을 고려했는가?</li>
+                                <li>연구 윤리를 잘 지키고 있는가?</li>
+                            </ul>
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <hr class="my-16 border-gray-200">
+
+        <!-- 3rd Hour -->
+        <section id="hour3" class="py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold mb-2">3교시: 탐험의 끝, 보고 & 공유 📢</h2>
+                <p class="text-gray-500">여러분의 위대한 발견을 세상에 알릴 시간! 보고서로 정리하고, 웹페이지로 멋지게 발표해봅시다.</p>
+            </div>
+
+            <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-200 space-y-4 mb-12">
+                 <h3 class="text-2xl font-bold mb-6 text-center text-gray-800">🧭 오늘의 탐험 지도: 이론 먼저 살펴보기</h3>
+                <details class="group">
+                    <summary class="flex justify-between items-center p-4 rounded-lg cursor-pointer bg-amber-50 hover:bg-amber-100"><h3 class="text-xl font-bold text-amber-800">STEP 5: 연구 보고서 작성</h3><div class="arrow-down"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg></div></summary>
+                    <div class="p-4 text-gray-700 space-y-4">
+                        <p><strong>연구 계획서 vs 보고서:</strong> 계획서는 '할 일(Future)', 보고서는 '한 일(Past)'! 보고서는 실제 수행한 내용과 결과를 객관적으로 서술하는 데 초점을 맞춥니다.</p>
+                        <p><strong>보고서 작성 Tip:</strong> 문장은 간결하게, 전문 용어는 정확하게, 표와 그래프를 적극 활용하여 객관적 사실 위주로 서술하세요!</p>
+                    </div>
+                </details>
+                <details class="group">
+                    <summary class="flex justify-between items-center p-4 rounded-lg cursor-pointer bg-amber-50 hover:bg-amber-100"><h3 class="text-xl font-bold text-amber-800">STEP 6: 발표 및 평가</h3><div class="arrow-down"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg></div></summary>
+                    <div class="p-4 text-gray-700 space-y-4">
+                        <p><strong>발표의 핵심:</strong> 정해진 시간 안에 연구의 핵심 내용을 명확하고 흥미롭게 전달하는 것! 웹페이지는 여러분의 연구 결과를 보여주는 가장 현대적이고 강력한 도구입니다.</p>
+                    </div>
+                </details>
+            </div>
+             <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
+                <h3 class="text-2xl font-bold mb-4 text-center">🚀 최종 미션: 내 연구 결과, 웹으로 세상에 알리기!</h3>
+                <p class="text-center mb-6 text-gray-600">Gemini에게 아래 프롬프트를 보내고, 완성된 코드를 <a href="https://www.netlify.com/drop/" target="_blank" class="text-indigo-500 font-bold hover:underline">Netlify Drop</a>에 올려 나만의 연구 결과 사이트를 만드세요!</p>
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <p class="text-sm font-mono text-gray-700">"내 정보과제연구 결과를 발표하는 단일 HTML 웹페이지를 만들어줘. 주제는 '[내 연구 주제]'야. 서론, 연구 과정, 핵심 연구 결과(그래프나 표 포함), 그리고 결론 및 제언 순서로 구성해줘. 학생들이 만든 것처럼 창의적이고 보기 좋게 디자인해줘."</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white mt-16">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <p>정보과제연구, AI 크루와 함께라면 누구나 위대한 탐험가!</p>
+            <p class="text-sm text-gray-400 mt-2">&copy; 2025 Creative Commons License. Freely use for educational purposes.</p>
+        </div>
+    </footer>
+
+    <script>
+        function copyPrompt() {
+            const promptText = document.getElementById('prompt-template').innerText;
+            const textarea = document.createElement('textarea');
+            textarea.value = promptText;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                navigator.clipboard.writeText(textarea.value).then(showCopyMessage, () => {
+                    document.execCommand('copy');
+                    showCopyMessage();
+                });
+            } catch (err) {
+                document.execCommand('copy');
+                showCopyMessage();
+            }
+            document.body.removeChild(textarea);
+        }
+
+        function showCopyMessage() {
+            const message = document.getElementById('copy-message');
+            message.classList.remove('opacity-0');
+            setTimeout(() => {
+                message.classList.add('opacity-0');
+            }, 3000);
+        }
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+
+</body>
+</html>

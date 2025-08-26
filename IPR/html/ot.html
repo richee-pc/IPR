@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 정보 과제 연구 오리엔테이션</title>
+    <!-- Chosen Palette: Calm Harmony -->
+    <!-- Application Structure Plan: A single-page, vertical scrolling layout was chosen to present the orientation content in a logical, narrative flow, mirroring a presentation. A sticky top navigation bar allows users to easily jump between key sections (Introduction, Purpose, Curriculum, Evaluation, Schedule), enhancing usability. This structure is more intuitive for a linear topic like an OT than a tabbed or multi-page layout. Key interactions include smooth scrolling, hover effects on cards for visual feedback, and an interactive doughnut chart for the evaluation breakdown, making the information more engaging and digestible. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Evaluation Breakdown (50% Plan, 50% Execution) -> Goal: Compare proportions -> Viz/Method: Interactive Doughnut Chart -> Interaction: Hover tooltips -> Justification: More engaging and visually immediate than text or a static table for comparing two simple parts of a whole. -> Library: Chart.js/Canvas.
+        - Report Info: Course Purpose (3 key benefits) -> Goal: Inform & Engage -> Presentation: Interactive Cards -> Interaction: Click/Hover to reveal details -> Justification: Breaks down information into digestible chunks, encouraging user interaction and focusing attention on one point at a time. -> Method: HTML/CSS/JS.
+        - Report Info: Schedule (Timeline) -> Goal: Show Change/Process -> Presentation: Vertical Timeline -> Interaction: Static visual flow -> Justification: A vertical timeline is a highly intuitive way to represent chronological information, making the semester's progression easy to follow. -> Method: HTML/Tailwind CSS.
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #F8F7F4;
+            color: #3D405B;
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, #81B29A 0%, #6A9C89 100%);
+        }
+        .nav-link {
+            transition: color 0.3s;
+        }
+        .nav-link:hover {
+            color: #E07A5F;
+        }
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 40vh;
+            max-height: 400px;
+        }
+        details > summary {
+            cursor: pointer;
+            list-style: none;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+        details[open] > summary .arrow {
+            transform: rotate(180deg);
+        }
+        .quiz-option {
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="#home" class="font-bold text-xl text-[#3D405B]">🚀 정보 과제 연구</a>
+            <div class="hidden md:flex space-x-8">
+                <a href="#icebreaker" class="nav-link">아이스브레이킹</a>
+                <a href="#intro" class="nav-link">과목소개</a>
+                <a href="#purpose" class="nav-link">수업목표</a>
+                <a href="#curriculum" class="nav-link">수업내용</a>
+                <a href="#evaluation" class="nav-link">평가방법</a>
+                <a href="#schedule" class="nav-link">수업일정</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pt-2 pb-4 space-y-2">
+            <a href="#icebreaker" class="block nav-link">아이스브레이킹</a>
+            <a href="#intro" class="block nav-link">과목소개</a>
+            <a href="#purpose" class="block nav-link">수업목표</a>
+            <a href="#curriculum" class="block nav-link">수업내용</a>
+            <a href="#evaluation" class="block nav-link">평가방법</a>
+            <a href="#schedule" class="block nav-link">수업일정</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="home" class="hero-gradient text-white text-center py-20 px-6">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">2025학년도 2학기 정보 과제 연구</h1>
+        <p class="text-xl md:text-2xl">스스로 질문하고 컴퓨터로 답을 찾는 짜릿한 여정!</p>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+    
+        <!-- 아이스브레이킹 게임 -->
+        <section id="icebreaker" class="my-16">
+            <h2 class="text-3xl font-bold text-center mb-12">🧊 아이스브레이킹: 핵심 용어 스피드 퀴즈!</h2>
+            <div id="quiz-container" class="bg-white p-8 rounded-2xl shadow-lg max-w-2xl mx-auto text-center">
+                <div id="quiz-start-screen">
+                    <p class="text-5xl mb-4">💡</p>
+                    <h3 class="text-2xl font-bold mb-4">수업 시작 전, 몸풀기 퀴즈!</h3>
+                    <p class="text-gray-600 mb-8">제한 시간 30초 안에 정보과학 핵심 용어를 몇 개나 맞출 수 있을까요?</p>
+                    <button id="start-quiz-btn" class="bg-[#E07A5F] text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-[#d46a50] transition-transform duration-300 hover:scale-105">퀴즈 시작!</button>
+                </div>
+
+                <div id="quiz-game-screen" class="hidden">
+                    <div class="flex justify-between items-center mb-4">
+                        <div id="quiz-timer" class="text-2xl font-bold text-[#3D405B]">⏳ 30</div>
+                        <div id="quiz-progress" class="text-lg font-semibold text-gray-500"></div>
+                        <div id="quiz-score" class="text-2xl font-bold text-[#81B29A]">점수: 0</div>
+                    </div>
+                    <div id="quiz-question" class="text-2xl font-bold mb-8 min-h-[70px]"></div>
+                    <div id="quiz-options" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    </div>
+                </div>
+
+                <div id="quiz-end-screen" class="hidden">
+                    <p class="text-5xl mb-4">🎉</p>
+                    <h3 class="text-2xl font-bold mb-4">퀴즈 종료!</h3>
+                    <p id="quiz-final-score" class="text-3xl font-bold text-[#E07A5F] mb-8"></p>
+                    <button id="restart-quiz-btn" class="bg-[#81B29A] text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-[#6a9c89] transition-transform duration-300 hover:scale-105">다시 풀어보기</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 과목 소개 -->
+        <section id="intro" class="my-16">
+            <h2 class="text-3xl font-bold text-center mb-4">🤔 '정보 과제 연구'는 어떤 과목인가요?</h2>
+            <p class="text-center text-lg text-gray-600 mb-12 max-w-3xl mx-auto">단순한 코딩 수업이 아니에요! 우리 주변의 <strong class="text-[#E07A5F]">실생활 문제</strong>를 스스로 발견하고, <strong class="text-[#E07A5F]">컴퓨팅 사고력</strong>을 사용해 창의적으로 해결하는 <strong class="text-[#E07A5F]">🎉 프로젝트 기반 수업</strong>입니다.</p>
+            <div class="bg-white p-10 rounded-2xl shadow-lg text-center card-hover">
+                <p class="text-5xl mb-4">🧑‍🔬</p>
+                <p class="text-2xl font-bold text-[#E07A5F]">여러분 모두가 한 학기 동안 '연구자'가 되어보는 시간!</p>
+            </div>
+        </section>
+
+        <!-- 수업 목표 -->
+        <section id="purpose" class="my-16">
+            <h2 class="text-3xl font-bold text-center mb-12">🎯 이 수업, 왜 중요할까요?</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-2xl shadow-lg text-center card-hover">
+                    <p class="text-5xl mb-4">🧩</p>
+                    <h3 class="text-xl font-bold mb-2">문제 해결 능력 UP!</h3>
+                    <p class="text-gray-600">복잡한 문제의 핵심을 파악하고 논리적인 해결책을 찾는 힘을 길러요.</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-lg text-center card-hover">
+                    <p class="text-5xl mb-4">💡</p>
+                    <h3 class="text-xl font-bold mb-2">창의·융합적 사고력 UP!</h3>
+                    <p class="text-gray-600">정보 지식을 사회, 과학 등 다양한 분야와 연결하며 새로운 아이디어를 만들어요.</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-lg text-center card-hover">
+                    <p class="text-5xl mb-4">🤝</p>
+                    <h3 class="text-xl font-bold mb-2">협력과 소통 능력 UP!</h3>
+                    <p class="text-gray-600">팀원들과 함께 문제를 해결하고 내 연구를 효과적으로 설명하고 설득해요.</p>
+                </div>
+            </div>
+            <div class="mt-12 bg-[#3D405B] text-white p-6 rounded-2xl text-center shadow-xl">
+                <p class="font-bold text-xl">궁극적인 목표: 미래 사회가 원하는 창의적인 문제 해결사로 성장하기!</p>
+            </div>
+        </section>
+
+        <!-- 수업 내용 -->
+        <section id="curriculum" class="my-16">
+            <h2 class="text-3xl font-bold text-center mb-12">📚 한 학기 동안 무엇을 배울까요?</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white p-8 rounded-2xl shadow-lg card-hover">
+                    <h3 class="text-2xl font-bold mb-4 text-[#81B29A]">Part 1. 정보 과제 연구의 개념 및 방법</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li>'연구'란 무엇일까?</li>
+                        <li>컴퓨팅 사고력의 핵심: <strong>추상화 & 자동화</strong></li>
+                        <li>다른 과학 연구와 비교하기</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-lg card-hover">
+                    <h3 class="text-2xl font-bold mb-4 text-[#E07A5F]">Part 2. 정보 과제 연구 방법론</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li>연구의 A to Z 경험하기!</li>
+                        <li class="font-bold">주제 선정 → 계획서 작성 → 연구 수행 → 보고서 작성 및 발표</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 평가 방법 -->
+        <section id="evaluation" class="my-16">
+            <h2 class="text-3xl font-bold text-center mb-4">💯 평가는 어떻게 이루어지나요?</h2>
+            <p class="text-center text-lg text-gray-600 mb-12">지필고사 없는 <strong>100% 과정 중심 평가</strong>로 진행됩니다!</p>
+            <div class="bg-white p-8 rounded-2xl shadow-lg flex flex-col md:flex-row items-center gap-8">
+                <div class="w-full md:w-1/2">
+                    <div class="chart-container">
+                        <canvas id="evaluationChart"></canvas>
+                    </div>
+                </div>
+                <div class="w-full md:w-1/2 space-y-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-[#81B29A]">연구 계획 (50%)</h3>
+                        <p class="text-gray-600">프로젝트 기반 연구 계획서 작성 (9월 평가)</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-[#E07A5F]">연구 수행 (50%)</h3>
+                        <p class="text-gray-600">프로젝트 및 실습 기반 연구 진행 및 결과 보고 (10월 평가)</p>
+                    </div>
+                    <p class="pt-4 font-bold text-center md:text-left">"논리적인 설계, 성실한 수행, 그리고 여러분의 성장하는 모습이 가장 중요해요!"</p>
+                </div>
+            </div>
+            
+            <!-- 수행평가 세부 계획 -->
+            <div class="mt-12 bg-white p-8 rounded-2xl shadow-lg">
+                <h3 class="text-2xl font-bold text-center mb-8">수행평가 세부 계획</h3>
+                <div class="space-y-4">
+                    <details class="bg-gray-50 p-4 rounded-lg">
+                        <summary class="flex justify-between items-center font-bold text-lg">
+                            <span>📝 연구 계획 (50점)</span>
+                            <span class="arrow transition-transform duration-300">▼</span>
+                        </summary>
+                        <div class="mt-4 border-t pt-4">
+                            <table class="w-full text-left">
+                                <thead class="border-b">
+                                    <tr><th class="py-2">평가요소</th><th class="py-2">배점</th><th class="py-2">주요 채점 기준</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b"><td class="py-2">주제 탐색 및 자료 조사</td><td class="py-2">20점</td><td class="py-2 text-sm">흥미 분야 키워드 작성, 관련 자료 탐색 및 요약, 주제 선정 및 논리적 설명</td></tr>
+                                    <tr class="border-b"><td class="py-2">문제 발견 및 선정</td><td class="py-2">30점</td><td class="py-2 text-sm">인과적 표현을 사용한 문제 도출, 과학적 근거 수집 및 최종 문제 선정</td></tr>
+                                    <tr><td class="py-2">연구 계획서 작성</td><td class="py-2">50점</td><td class="py-2 text-sm">연구 목적, 이론적 배경, 연구 과정 및 방법, 기대 효과 등을 포함한 계획서 완성도</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </details>
+                    <details class="bg-gray-50 p-4 rounded-lg">
+                        <summary class="flex justify-between items-center font-bold text-lg">
+                            <span>🔬 연구 수행 (50점)</span>
+                             <span class="arrow transition-transform duration-300">▼</span>
+                        </summary>
+                        <div class="mt-4 border-t pt-4">
+                            <table class="w-full text-left">
+                                <thead class="border-b">
+                                    <tr><th class="py-2">평가요소</th><th class="py-2">배점</th><th class="py-2">주요 채점 기준</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b"><td class="py-2">연구 방법 설계</td><td class="py-2">25점</td><td class="py-2 text-sm">계획서 기반 자료 수집, 컴퓨터를 활용한 효율적 연구 방법의 논리적 설계</td></tr>
+                                    <tr class="border-b"><td class="py-2">연구 수행</td><td class="py-2">50점</td><td class="py-2 text-sm">설계한 방법에 따른 절차적 연구 수행, 결과 도출 및 분석/설명 능력</td></tr>
+                                    <tr><td class="py-2">연구 수행 점검</td><td class="py-2">25점</td><td class="py-2 text-sm">연구 수행 점검표를 통한 지속적 평가, 분석 및 개선 방향 제시</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <!-- 수업 일정 -->
+        <section id="schedule" class="my-16">
+            <h2 class="text-3xl font-bold text-center mb-12">🗓️ 수업 일정 안내</h2>
+            <div class="relative max-w-2xl mx-auto">
+                <div class="absolute w-1 bg-[#81B29A]/30 h-full left-1/2 transform -translate-x-1/2"></div>
+                <!-- 8월 -->
+                <div class="relative mb-8">
+                    <div class="absolute w-8 h-8 bg-[#81B29A] rounded-full left-1/2 transform -translate-x-1/2 flex items-center justify-center text-white font-bold">8</div>
+                    <div class="bg-white p-6 rounded-2xl shadow-lg w-[calc(50%-2rem)] ml-auto text-right">
+                        <h3 class="font-bold text-lg">튼튼한 기본기 다지기!</h3>
+                        <p class="text-sm text-gray-600">OT, 개념 및 방법론 학습</p>
+                    </div>
+                </div>
+                <!-- 9월 -->
+                <div class="relative mb-8">
+                    <div class="absolute w-8 h-8 bg-[#E07A5F] rounded-full left-1/2 transform -translate-x-1/2 flex items-center justify-center text-white font-bold">9</div>
+                    <div class="bg-white p-6 rounded-2xl shadow-lg w-[calc(50%-2rem)] mr-auto text-left">
+                        <h3 class="font-bold text-lg">연구의 첫 단추!</h3>
+                        <p class="text-sm text-gray-600">주제 선정 및 <strong>연구 계획서 작성</strong></p>
+                    </div>
+                </div>
+                <!-- 10월 -->
+                <div class="relative mb-8">
+                    <div class="absolute w-8 h-8 bg-[#81B29A] rounded-full left-1/2 transform -translate-x-1/2 flex items-center justify-center text-white font-bold">10</div>
+                    <div class="bg-white p-6 rounded-2xl shadow-lg w-[calc(50%-2rem)] ml-auto text-right">
+                        <h3 class="font-bold text-lg">다 함께 프로젝트 수행!</h3>
+                        <p class="text-sm text-gray-600">팀별 연구 및 <strong>결과 정리</strong></p>
+                    </div>
+                </div>
+                <!-- 11월 -->
+                <div class="relative">
+                    <div class="absolute w-8 h-8 bg-[#E07A5F] rounded-full left-1/2 transform -translate-x-1/2 flex items-center justify-center text-white font-bold">11</div>
+                    <div class="bg-white p-6 rounded-2xl shadow-lg w-[calc(50%-2rem)] mr-auto text-left">
+                        <h3 class="font-bold text-lg">멋진 마무리!</h3>
+                        <p class="text-sm text-gray-600">최종 결과 발표 및 성적 확인</p>
+                    </div>
+                </div>
+            </div>
+             <div class="mt-12 text-center bg-yellow-100 text-yellow-800 p-4 rounded-lg">
+                <p>📌 <strong>이수 기준</strong>: 수업의 <strong>2/3 이상 출석</strong>은 필수! 성실한 참여 부탁해요!</p>
+            </div>
+        </section>
+
+        <!-- 마무리 -->
+        <section id="final" class="my-16 text-center">
+             <h2 class="text-3xl font-bold text-center mb-12">마지막으로, 여러분에게!</h2>
+             <div class="space-y-4 max-w-2xl mx-auto text-lg">
+                <p>실패를 두려워하지 마세요!</p>
+                <p>끊임없이 질문하고, 새로운 방법을 시도해 보세요.</p>
+                <p class="font-bold text-[#3D405B]">정해진 답을 찾는 수업이 아닌, <span class="text-[#E07A5F]">여러분만의 답을 만들어가는 수업</span>입니다.</p>
+             </div>
+             <p class="mt-10 text-2xl font-bold">여러분의 빛나는 아이디어와 뜨거운 열정을 기대하겠습니다! 😊</p>
+        </section>
+
+    </main>
+    
+    <footer class="bg-[#3D405B] text-white text-center py-10 mt-12">
+        <h3 class="text-2xl font-bold mb-4">Q & A</h3>
+        <p>궁금한 점이 있나요?</p>
+        <div class="mt-4">
+            <p><strong>담당 교사:</strong> 조대부고 김다은</p>
+            <p><strong>연락처:</strong> 062-230-0284</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Mobile Menu Toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            const mobileLinks = mobileMenu.querySelectorAll('a');
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+
+            // Chart.js Doughnut Chart
+            const ctx = document.getElementById('evaluationChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['연구 계획 (50%)', '연구 수행 (50%)'],
+                    datasets: [{
+                        data: [50, 50],
+                        backgroundColor: ['#81B29A', '#E07A5F'],
+                        borderColor: '#F8F7F4',
+                        borderWidth: 4,
+                        hoverOffset: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { font: { size: 14, family: "'Noto Sans KR', sans-serif" } } },
+                        tooltip: { callbacks: { label: (context) => context.label } }
+                    },
+                    cutout: '60%'
+                }
+            });
+
+            // Icebreaker Quiz Logic
+            const quizData = [
+                { question: "문제 해결을 위한 절차나 방법을 순서대로 명확하게 표현한 것은?", options: ["알고리즘", "변수", "컴파일러", "데이터"], answer: "알고리즘" },
+                { question: "복잡한 문제에서 핵심만 남기고 나머지는 생략하는 사고 과정은?", options: ["자동화", "추상화", "병렬화", "디버깅"], answer: "추상화" },
+                { question: "수많은 데이터 속에서 유용한 정보를 찾아내는 기술은?", options: ["클라우드 컴퓨팅", "사물 인터넷", "빅데이터", "블록체인"], answer: "빅데이터" },
+                { question: "컴퓨터가 인간처럼 생각하고 학습하도록 만드는 기술은?", options: ["가상현실", "인공지능", "알고리즘", "증강현실"], answer: "인공지능" },
+                { question: "컴퓨터처럼 문제를 효율적으로 해결하는 사고 과정을 무엇이라고 할까요?", options: ["과학적 사고", "창의적 사고", "컴퓨팅 사고력", "논리적 사고"], answer: "컴퓨팅 사고력" }
+            ];
+
+            const startScreen = document.getElementById('quiz-start-screen');
+            const gameScreen = document.getElementById('quiz-game-screen');
+            const endScreen = document.getElementById('quiz-end-screen');
+            const startBtn = document.getElementById('start-quiz-btn');
+            const restartBtn = document.getElementById('restart-quiz-btn');
+            const timerEl = document.getElementById('quiz-timer');
+            const scoreEl = document.getElementById('quiz-score');
+            const progressEl = document.getElementById('quiz-progress');
+            const questionEl = document.getElementById('quiz-question');
+            const optionsEl = document.getElementById('quiz-options');
+            const finalScoreEl = document.getElementById('quiz-final-score');
+
+            let currentQuestionIndex, score, timeLeft, timerInterval;
+            const TIME_LIMIT = 30;
+
+            function startGame() {
+                quizData.sort(() => 0.5 - Math.random());
+                currentQuestionIndex = 0;
+                score = 0;
+                timeLeft = TIME_LIMIT;
+                startScreen.classList.add('hidden');
+                endScreen.classList.add('hidden');
+                gameScreen.classList.remove('hidden');
+                scoreEl.textContent = `점수: ${score}`;
+                timerEl.textContent = `⏳ ${timeLeft}`;
+                showQuestion();
+                startTimer();
+            }
+
+            function startTimer() {
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    timerEl.textContent = `⏳ ${timeLeft}`;
+                    if (timeLeft <= 0) {
+                        endGame();
+                    }
+                }, 1000);
+            }
+
+            function showQuestion() {
+                if (currentQuestionIndex >= quizData.length) {
+                    endGame();
+                    return;
+                }
+                progressEl.textContent = `문제 ${currentQuestionIndex + 1} / ${quizData.length}`;
+                const currentQuestion = quizData[currentQuestionIndex];
+                questionEl.textContent = currentQuestion.question;
+                optionsEl.innerHTML = '';
+                currentQuestion.options.sort(() => 0.5 - Math.random()).forEach(option => {
+                    const button = document.createElement('button');
+                    button.textContent = option;
+                    button.className = 'quiz-option w-full bg-gray-100 p-4 rounded-lg font-semibold hover:bg-gray-200 border-2 border-transparent';
+                    button.onclick = () => selectAnswer(button, option, currentQuestion.answer);
+                    optionsEl.appendChild(button);
+                });
+            }
+
+            function selectAnswer(selectedButton, selectedOption, correctAnswer) {
+                Array.from(optionsEl.children).forEach(btn => {
+                    btn.disabled = true;
+                    if (btn.textContent === correctAnswer) {
+                        btn.classList.remove('bg-gray-100');
+                        btn.classList.add('bg-green-500', 'text-white', 'border-green-700');
+                    }
+                });
+
+                if (selectedOption === correctAnswer) {
+                    score += 10;
+                    scoreEl.textContent = `점수: ${score}`;
+                } else {
+                    selectedButton.classList.remove('bg-gray-100');
+                    selectedButton.classList.add('bg-red-500', 'text-white', 'border-red-700');
+                }
+                
+                setTimeout(() => {
+                    currentQuestionIndex++;
+                    showQuestion();
+                }, 1500);
+            }
+
+            function endGame() {
+                clearInterval(timerInterval);
+                gameScreen.classList.add('hidden');
+                endScreen.classList.remove('hidden');
+                const totalScore = quizData.length * 10;
+                finalScoreEl.textContent = `최종 점수: ${score}점 / ${totalScore}점`;
+            }
+
+            startBtn.addEventListener('click', startGame);
+            restartBtn.addEventListener('click', startGame);
+        });
+    </script>
+
+</body>
+</html>

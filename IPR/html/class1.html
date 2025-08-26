@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI x 정보과제연구 | 나만의 프로젝트 연구소</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .module-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .prompt-recipe {
+            background-color: #1e293b;
+            color: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            font-family: 'monospace';
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            position: relative;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #4a5568;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .copy-btn:hover {
+            background-color: #2d3748;
+        }
+        .toast-message {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #2d3748;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 7px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto max-w-4xl p-4 sm:p-8">
+
+        <!-- ======================= HEADER ======================= -->
+        <header class="text-center bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-8 sm:p-12 rounded-2xl shadow-lg mb-12">
+            <h1 class="text-4xl sm:text-5xl font-black mb-2">🚀 AI x 정보과제연구</h1>
+            <p class="text-xl sm:text-2xl font-bold">나만의 프로젝트 연구소</p>
+            <p class="text-lg mt-4">세상의 모든 문제를 해결하는 너만의 연구 비법, AI와 함께 찾아보자!</p>
+        </header>
+
+        <!-- ======================= INTRO ======================= -->
+        <div class="bg-white p-8 rounded-2xl shadow-md mb-12">
+            <p class="text-lg">안녕하세요, 미래의 연구자 여러분! 👋</p>
+            <p class="mt-4">혹시 '연구'나 '프로젝트'라는 말만 들어도 머리가 지끈거리나요? 오늘, 그 생각을 180도 바꿔줄 특별한 여정에 여러분을 초대합니다. 이 페이지를 끝까지 탐험하고 나면, 여러분은 어떤 어려운 문제라도 자신 있게 해결하는 '프로젝트 마스터'가 되어 있을 거예요. 최강의 파트너, 생성형 AI와 함께 지금 바로 시작해봅시다!</p>
+        </div>
+
+        <!-- ======================= MODULE 1 (REVISED & EXPANDED) ======================= -->
+        <section id="module1" class="mb-12">
+            <h2 class="text-3xl font-bold border-l-8 border-blue-500 pl-4 mb-6">MODULE 1: 연구의 모든 것, 기초 다지기 <span class="text-gray-500 text-2xl">(50분)</span></h2>
+            <div class="space-y-6">
+                
+                <div class="module-card bg-white p-6 rounded-xl shadow">
+                    <h3 class="text-xl font-bold mb-3">🧐 연구(Research)란 무엇일까?</h3>
+                    <p><b>탐구</b>가 '단순히 무언가를 찾아보는 행위'라면, <b>연구</b>는 '체계적이고 과학적인 절차에 따라 지식의 경계를 넓히는 전문적인 탐구 활동'입니다. 즉, 연구는 그냥 검색이 아니라, 새로운 사실을 발견하거나 기존 이론을 검증하기 위한 '목적 있는 항해'와 같아요.</p>
+                    <div class="mt-4 bg-blue-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-blue-800">🎯 연구의 4가지 목적 (슈퍼파워!)</h4>
+                        <ul class="list-disc list-inside mt-2">
+                            <li><b>기술(Description):</b> 현상을 있는 그대로 상세히 묘사하고 기록하기</li>
+                            <li><b>설명(Explanation):</b> '왜?'라는 질문에 답하며 현상의 원인과 결과를 밝히기</li>
+                            <li><b>예측(Prediction):</b> 축적된 데이터를 바탕으로 미래에 일어날 일을 예상하기</li>
+                            <li><b>통제(Control):</b> 특정 조건을 조작하여 원하는 결과를 이끌어내기</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="module-card bg-white p-6 rounded-xl shadow">
+                    <h3 class="text-xl font-bold mb-3">🔬 연구의 종류와 분류</h3>
+                    <p class="mb-4">연구는 접근 방식과 대상에 따라 다양하게 나눌 수 있어요.</p>
+                     <div class="space-y-4">
+                        <div>
+                            <h4 class="font-bold">1. 연구 형태에 따른 분류</h4>
+                            <ul class="list-disc list-inside">
+                                <li><b>과학적 연구:</b> 자연 현상의 법칙을 찾는 연구 (ex. 물리, 화학)</li>
+                                <li><b>사회과학적 연구:</b> 인간 사회의 현상을 분석하는 연구 (ex. 경제, 사회)</li>
+                                <li><b>예술적/실무 위주 연구:</b> 창작 활동이나 실제 문제 해결에 초점을 맞춘 연구</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold">2. 자료 수집 방법에 따른 분류</h4>
+                             <ul class="list-disc list-inside">
+                                <li><b>1차적 연구:</b> 연구자가 직접 데이터를 생산 (설문, 실험, 인터뷰)</li>
+                                <li><b>2차적 연구:</b> 다른 사람이 이미 만들어 놓은 데이터를 분석 (문헌, 통계자료)</li>
+                            </ul>
+                        </div>
+                         <div>
+                            <h4 class="font-bold">3. 자료 특성에 따른 분류 (⭐중요!⭐)</h4>
+                            <div class="grid md:grid-cols-2 gap-4 mt-2">
+                                <div class="bg-indigo-50 p-4 rounded-lg">
+                                    <h5 class="font-bold text-indigo-800">양적 연구 (Quantitative)</h5>
+                                    <p>숫자와 통계로 세상을 설명해요. '몇 명이나?', '얼마나 변했을까?' 같은 질문에 답하죠. 객관적이고 일반화하기 좋아요.</p>
+                                </div>
+                                <div class="bg-teal-50 p-4 rounded-lg">
+                                    <h5 class="font-bold text-teal-800">질적 연구 (Qualitative)</h5>
+                                    <p>숫자로 표현하기 어려운 깊은 의미를 탐구해요. '왜 그렇게 생각할까?', '어떤 경험을 했을까?' 같은 질문에 답하죠. 심층적인 이해를 도와줘요.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- UPDATED SECTION -->
+                <div class="module-card bg-white p-6 rounded-xl shadow">
+                    <h3 class="text-xl font-bold mb-3">🛠️ 프로 연구러의 생각 도구: 연구 방법론 심화</h3>
+                    <p class="mb-4">훌륭한 연구자는 뛰어난 탐정처럼 다양한 생각의 도구를 자유자재로 사용해요. 각 도구의 사용법을 자세히 알아봅시다.</p>
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-bold">비교와 대조</h4>
+                            <p>두 가지 이상의 대상을 나란히 놓고 공통점(비교)과 차이점(대조)을 찾아내는 방법입니다. 이를 통해 각 대상의 특징을 더 명확하게 이해할 수 있습니다. (예: 스마트폰과 폴더폰의 장단점 비교)</p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold">분류와 분석</h4>
+                            <p><b>분류</b>는 여러 대상을 일정한 기준에 따라 나누어 묶는 것이고, <b>분석</b>은 하나의 대상을 구성 요소로 쪼개어 그 관계를 파악하는 것입니다. 복잡한 정보를 체계적으로 정리할 때 필수적입니다. (예: 학교 도서관의 책을 주제별로 분류하기, 스마트폰을 하드웨어와 소프트웨어로 나누어 분석하기)</p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold">추론 (Inference)</h4>
+                            <p>이미 알고 있는 정보를 근거로 새로운 결론을 이끌어내는 논리적 사고 과정입니다.</p>
+                            <ul class="list-decimal list-inside ml-4 mt-2 space-y-2">
+                                <li><b>연역법 (Deductive Reasoning):</b> '대전제 → 소전제 → 결론'의 구조를 가집니다. 일반적이고 보편적인 원리(대전제)에서 시작하여 구체적인 사례(소전제)에 적용, 필연적인 결론을 도출합니다. 가설을 세우고 검증하는 과학적 연구에 주로 사용됩니다.</li>
+                                <li><b>귀납법 (Inductive Reasoning):</b> 여러 구체적인 사례나 관찰 결과를 종합하여 일반적인 법칙이나 원리를 이끌어냅니다. 새로운 이론이나 가설을 만들 때 유용하지만, 관찰한 사례가 전체를 대표하지 못할 경우 성급한 일반화의 오류를 범할 수 있습니다.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold">유추 (Analogy)</h4>
+                            <p>낯설거나 복잡한 대상을 이미 잘 알고 있는 익숙한 대상에 빗대어 설명하고 이해하는 방법입니다. 창의적인 아이디어를 얻는 데 도움이 되지만, 두 대상이 본질적으로는 다르기 때문에 논리적 비약이 생길 수 있음을 항상 경계해야 합니다.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NEW SECTION -->
+                <div class="module-card bg-white p-6 rounded-xl shadow">
+                    <h3 class="text-xl font-bold mb-3">🌍 세상을 보는 두 개의 창: 자연과학 vs 사회과학</h3>
+                    <p class="mb-4">연구는 탐구 대상에 따라 크게 두 가지 접근법을 가집니다.</p>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-orange-50 p-4 rounded-lg">
+                            <h4 class="font-bold text-orange-800">자연과학 방법론</h4>
+                            <p><b>대상:</b> 자연 현상 (물질, 생명 등)<br><b>목표:</b> 보편적인 법칙과 인과관계 발견<br><b>특징:</b> 객관성, 통제된 실험, 계량화, 반복 가능성 중시. 주로 연역적 접근과 양적 연구를 활용합니다.</p>
+                        </div>
+                        <div class="bg-cyan-50 p-4 rounded-lg">
+                            <h4 class="font-bold text-cyan-800">사회과학 방법론</h4>
+                            <p><b>대상:</b> 인간과 사회 현상 (문화, 제도 등)<br><b>목표:</b> 현상의 의미 해석 및 이해<br><b>특징:</b> 인간의 주관성, 가변성 인정. 실험이 어려운 경우가 많아 관찰, 인터뷰, 설문 등 다양한 방법 사용. 양적 연구와 질적 연구를 모두 활용합니다.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="module-card bg-white p-6 rounded-xl shadow">
+                    <h3 class="text-xl font-bold mb-3">💻 정보 과학과 정보 과제 연구</h3>
+                    <p><b>정보 과학</b>은 정보를 효율적으로 수집, 처리, 관리, 활용하는 방법을 연구하는 학문이에요. 우리가 배울 <b>정보 과제 연구</b>는 바로 이 정보 과학의 원리와 기술을 바탕으로, 컴퓨팅 사고력을 활용해 실생활의 문제를 해결하는 프로젝트 중심의 연구 활동을 의미합니다.</p>
+                </div>
+
+                <div class="module-card bg-white p-6 rounded-xl shadow">
+                    <h3 class="text-xl font-bold mb-3">🧠 연구의 핵심 엔진: 컴퓨팅 사고력(CT)</h3>
+                    <p class="mb-4">복잡한 문제를 컴퓨터처럼 체계적으로 해결하는 4가지 생각의 기술, '컴퓨팅 사고력'은 정보 과제 연구의 필수품이에요!</p>
+                    <div class="space-y-3">
+                        <p><b>1. 추상화 (Abstraction):</b> 문제의 핵심만 남기고 불필요한 디테일을 제거하는 과정</p>
+                        <ul class="list-decimal list-inside ml-6">
+                            <li>자료 수집 → 자료 분석 → 자료 표현</li>
+                        </ul>
+                        <p><b>2. 분해 (Decomposition):</b> 거대한 문제를 해결 가능한 작은 문제들로 나누는 것</p>
+                        <p><b>3. 알고리즘 (Algorithm):</b> 작은 문제들을 해결하기 위한 단계별 절차와 규칙 설계</p>
+                        <p><b>4. 자동화 (Automation):</b> 설계된 알고리즘을 컴퓨터가 실행하도록 하여 문제를 효율적으로 해결</p>
+                        <ul class="list-disc list-inside ml-6">
+                            <li><b>시뮬레이션:</b> 현실 세계를 모델링하여 가상으로 실험</li>
+                            <li><b>병렬화:</b> 여러 작업을 동시에 처리하여 속도 향상</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- UPDATED SECTION -->
+                <div class="module-card bg-yellow-50 border-l-4 border-yellow-400 p-6 rounded-xl shadow">
+                    <h3 class="text-xl font-bold mb-3">⚠️ 잠깐! 연구자의 약속 (연구 윤리 5대 원칙)</h3>
+                    <p class="mb-4">올바른 연구는 정직함에서 시작됩니다. AI 시대에 더욱 중요해진 연구 윤리 원칙을 마음에 새깁시다.</p>
+                    <ul class="list-disc list-inside space-y-2">
+                        <li><b>정직성:</b> 데이터를 조작하거나 왜곡하지 않고, 연구 결과를 있는 그대로 보고합니다.</li>
+                        <li><b>객관성:</b> 개인적인 편견이나 선입견을 배제하고, 공정하게 연구를 수행합니다.</li>
+                        <li><b>공개성:</b> 연구 과정과 결과를 투명하게 공개하여 다른 연구자들이 검증할 수 있도록 합니다.</li>
+                        <li><b>책임성:</b> 자신의 연구 결과에 대해 사회적 책임을 지고, 오류가 발견되면 즉시 수정합니다.</li>
+                        <li><b>인간 존중:</b> 연구 참여자의 인권과 사생활을 보호하고, 자발적인 참여를 보장합니다.</li>
+                    </ul>
+                </div>
+
+                <div class="module-card bg-white p-6 rounded-xl shadow border-2 border-blue-500">
+                    <h3 class="text-xl font-bold mb-3">🔬 MINI-LAB 1: 내 머릿속 아이디어, AI로 꺼내보기</h3>
+                    <p class="mb-4">지금까지 배운 이론을 바탕으로, 막연한 내 관심사를 AI에게 질문하며 구체적인 연구 주제로 만들어보는 시간!</p>
+                    <p class="font-bold text-center mb-4">[▶️ 지금 바로 텍스트 AI(Gemini 등)를 열고 실행해보세요!]</p>
+                    <div class="space-y-4">
+                        <div class="prompt-recipe">
+                            <span>나는 요즘 [자신의 관심사]에 관심이 많아. 이와 관련해서 고등학생 수준에서 탐구해볼 만한 재미있는 연구 주제 5가지를 추천해줘. 양적 연구와 질적 연구 아이디어를 모두 포함해줘.</span>
+                            <button class="copy-btn" onclick="copyToClipboard(this)">복사</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================= MODULE 2 ======================= -->
+        <section id="module2" class="mb-12">
+            <h2 class="text-3xl font-bold border-l-8 border-red-500 pl-4 mb-6">MODULE 2: 최강 AI 툴킷 장착하기 <span class="text-gray-500 text-2xl">(50분)</span></h2>
+            <div class="space-y-6">
+                <div class="module-card bg-white p-6 rounded-xl shadow">
+                    <h3 class="text-xl font-bold mb-3">⚔️ AI 어벤져스, 툴킷 퀘스트!</h3>
+                    <p class="mb-4">각 분야 최고의 AI 영웅들을 만나 미션을 해결하고, 여러분의 AI 무기고를 채워보세요!</p>
+                    <div class="space-y-4">
+                        <div class="p-4 border rounded-lg hover:bg-gray-50">
+                            <h4 class="font-bold text-lg">📜 퀘스트 1: 지식의 탐험가, Perplexity AI</h4>
+                            <p>논문, 기사 등 신뢰도 높은 정보를 찾아 요약해주는 AI. 연구의 첫걸음을 도와줘요.</p>
+                            <p class="mt-2 font-semibold text-red-600">미션: '청소년의 수면 부족이 학업 성취도에 미치는 영향'에 대한 최신 연구 자료를 찾아, 핵심 결론을 3줄로 요약해달라고 요청해보세요.</p>
+                        </div>
+                        <div class="p-4 border rounded-lg hover:bg-gray-50">
+                            <h4 class="font-bold text-lg">🎨 퀘스트 2: 상상의 화가, Canva AI</h4>
+                            <p>몇 단어만으로 멋진 이미지와 디자인을 만들어내는 AI. 발표 자료의 퀄리티를 높여줘요.</p>
+                            <p class="mt-2 font-semibold text-red-600">미션: '숙제 없는 날'을 기념하는 인스타그램 홍보 이미지를 만들어보세요. '행복하게 웃는 학생들과 날아다니는 책들'을 그려달라고 요청해보세요.</p>
+                        </div>
+                         <div class="p-4 border rounded-lg hover:bg-gray-50">
+                            <h4 class="font-bold text-lg">🎵 퀘스트 3: 영감의 작곡가, Suno AI</h4>
+                            <p>원하는 분위기와 장르를 알려주면 뚝딱 음악을 만들어주는 AI. 영상 프로젝트에 날개를 달아줘요.</p>
+                            <p class="mt-2 font-semibold text-red-600">미션: '밤샘 공부할 때 집중력을 높여주는 30초짜리 Lo-fi 힙합 음악'을 만들어달라고 요청해보세요.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="module-card bg-white p-6 rounded-xl shadow border-2 border-red-500">
+                    <h3 class="text-xl font-bold mb-3">⌨️ MINI-LAB 2: 프롬프트 마스터 챌린지</h3>
+                    <p class="mb-4">AI의 잠재력을 200% 끌어내는 마법의 주문, '프롬프트'! 기본기를 넘어 심화 스킬까지 마스터해봅시다.</p>
+                    
+                    <h4 class="font-bold text-lg mb-2">LV.1 기본 원칙: C.R.O.P</h4>
+                    <ul class="list-disc list-inside space-y-2 mb-4">
+                        <li><b>Context (맥락):</b> "이런 상황이야." 배경을 알려주기</li>
+                        <li><b>Role (역할):</b> "너는 OOO 전문가야." 역할 부여하기</li>
+                        <li><b>Objective (목표):</b> "이걸 해줘." 명확하게 지시하기</li>
+                        <li><b>Persona (페르소나):</b> "OOO처럼 말해줘." 말투와 형식 지정하기</li>
+                    </ul>
+
+                    <h4 class="font-bold text-lg mt-6 mb-2">LV.2 심화 스킬: 페르소나 챌린지!</h4>
+                    <p class="mb-4">AI에게 황당하지만 구체적인 역할을 부여해서 창의력을 테스트해보세요. 얼마나 그럴듯하게 연기하는지 비교해보는 재미!</p>
+                    <div class="prompt-recipe mb-4">
+                        <span>너는 조선시대 왕인데, 백성들에게 '스마트폰 과의존의 위험성'에 대해 경고하는 교지를 내려줘. 근엄하고 예스러운 말투를 사용해야 해.</span>
+                        <button class="copy-btn" onclick="copyToClipboard(this)">복사</button>
+                    </div>
+                    <div class="prompt-recipe">
+                        <span>너는 엄청나게 열정적인 헬스 트레이너야. 회원들에게 '미적분의 중요성'을 PT 하듯이 설명해줘. "회원님!" 같은 호칭과 열정적인 말투는 필수!</span>
+                        <button class="copy-btn" onclick="copyToClipboard(this)">복사</button>
+                    </div>
+
+                    <h4 class="font-bold text-lg mt-6 mb-2">LV.3 최종 관문: 프롬프트 배틀!</h4>
+                    <p class="mb-4">아래의 '나쁜 프롬프트'를 C.R.O.P 원칙과 창의적인 페르소나를 더해 '최강의 프롬프트'로 업그레이드 시켜보세요. 모둠별로 가장 창의적이고 뛰어난 결과물을 만든 팀이 승리!</p>
+                    <p class="text-center font-bold text-xl p-4 bg-gray-100 rounded-lg">"지구온난화에 대해 알려줘."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================= MODULE 3 ======================= -->
+        <section id="module3">
+            <h2 class="text-3xl font-bold border-l-8 border-green-500 pl-4 mb-6">MODULE 3: THE MAIN QUEST - 우리 학교 문제 해결! <span class="text-gray-500 text-2xl">(40분)</span></h2>
+            <div class="bg-green-50 border border-green-200 p-6 rounded-xl text-center mb-6">
+                <h3 class="text-2xl font-bold">📢 Mission Briefing</h3>
+                <p class="mt-2">여러분은 우리 학교를 더 나은 곳으로 만들 '학생 문제 해결 TF팀'입니다.<br>최고의 컨설턴트인 AI와 함께 아래 문제 중 하나를 선택해, 멋진 해결책을 만들어보세요!</p>
+                <p class="mt-4 font-bold text-lg">🧐 시끄러운 복도 | 🗑️ 넘치는 쓰레기 | 📚 잠자는 도서관 | 📢 동아리 홍보</p>
+            </div>
+            
+            <div class="module-card bg-white p-6 rounded-xl shadow">
+                <h3 class="text-xl font-bold mb-3">🚀 프로젝트 4단계, AI와 함께 출발!</h3>
+                <div class="space-y-4">
+                    <div>
+                        <h4 class="font-bold text-lg">STEP 1: 문제의 뿌리 뽑기 (원인 분석)</h4>
+                        <div class="prompt-recipe">
+                            <span>너는 행동경제학자이자 학교 컨설턴트야. 우리 학교의 [우리가 선택한 문제] 문제의 근본적인 원인을 학생, 학교 시스템, 공간 구조의 3가지 측면에서 심층적으로 분석해줘.</span>
+                            <button class="copy-btn" onclick="copyToClipboard(this)">복사</button>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg">STEP 2: 해결책 아이디어 발전시키기 (브레인스토밍)</h4>
+                        <div class="prompt-recipe">
+                            <span>위에서 분석한 원인들을 해결하기 위한 창의적인 아이디어를 5가지만 제안해줘. 특히, 학생들이 자발적으로 즐겁게 참여할 수 있는 '넛지(Nudge)' 방식의 아이디어를 포함해줘.</span>
+                            <button class="copy-btn" onclick="copyToClipboard(this)">복사</button>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg">STEP 3: 아이디어를 눈에 보이게! (시각화)</h4>
+                        <div class="prompt-recipe">
+                            <span>[여러분의 아이디어]를 홍보하기 위한 캠페인 포스터를 그려줘. 학생들이 즐겁게 참여하는 모습이 담겨있고, 밝고 희망찬 애니메이션 스타일로 만들어줘. 슬로건은 '[직접 만든 슬로건]'으로 넣어줘.</span>
+                            <button class="copy-btn" onclick="copyToClipboard(this)">복사</button>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg">STEP 4: 최종 제안서 밑그림 그리기 (개요 작성)</h4>
+                        <div class="prompt-recipe">
+                            <span>지금까지 논의한 '[우리의 프로젝트 이름]'에 대한 제안서의 개요를 작성해줘. [문제 제기 - 현황 분석 - 해결 방안 - 기대 효과 - 필요한 자원]의 순서로 목차를 짜고, 각 항목에 들어갈 핵심 내용을 요약해서 보고서 형식으로 작성해줘.</span>
+                            <button class="copy-btn" onclick="copyToClipboard(this)">복사</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================= CONCLUSION ======================= -->
+        <footer class="text-center bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-8 sm:p-12 rounded-2xl shadow-lg mt-12">
+            <h2 class="text-3xl sm:text-4xl font-black mb-2">🎉 CONGRATULATIONS!</h2>
+            <p class="text-lg sm:text-xl font-bold">여러분은 이제 AI와 함께 문제를 해결하는 '미래형 연구자'로 거듭났습니다!</p>
+            <p class="mt-4">오늘 배운 가장 중요한 것은 AI 사용법이 아니라, <b>AI를 '나의 생각 파트너'로 삼아 더 깊고 넓게 사고하는 방법</b>입니다. 앞으로 어떤 문제를 만나든, 주저하지 말고 AI에게 똑똑하게 질문하고 협력하며 여러분만의 멋진 해결책을 찾아나가길 바랍니다!</p>
+        </footer>
+
+    </div>
+
+    <!-- Toast Message Element -->
+    <div id="toast" class="toast-message">클립보드에 복사되었습니다!</div>
+
+    <script>
+        function copyToClipboard(button) {
+            const textToCopy = button.previousElementSibling.innerText;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const toast = document.getElementById('toast');
+                toast.style.opacity = 1;
+                setTimeout(() => {
+                    toast.style.opacity = 0;
+                }, 2000);
+            }).catch(err => {
+                console.error('클립보드 복사에 실패했습니다:', err);
+                try {
+                    const textArea = document.createElement('textarea');
+                    textArea.value = textToCopy;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    const toast = document.getElementById('toast');
+                    toast.style.opacity = 1;
+                    setTimeout(() => {
+                        toast.style.opacity = 0;
+                    }, 2000);
+                } catch (e) {
+                    console.error('Fallback 복사 방식도 실패했습니다:', e);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
