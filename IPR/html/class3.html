@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로젝트 기반 학습: 파이썬 조 추첨 알고리즘 연구</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js"></script>
+    <style>
+        :root {
+            --primary-color: #00aaff;
+            --secondary-color: #ff00ff;
+            --background-color: #0d1117;
+            --surface-color: #161b22;
+            --text-color: #c9d1d9;
+            --header-font: 'Orbitron', sans-serif;
+            --body-font: 'Noto Sans KR', sans-serif;
+        }
+
+        body {
+            font-family: var(--body-font);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2.5rem;
+            background-color: var(--surface-color);
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 170, 255, 0.1);
+        }
+
+        h1, h2, h3, h4 {
+            font-family: var(--header-font);
+            color: var(--primary-color);
+            text-shadow: 0 0 8px rgba(0, 170, 255, 0.5);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            animation: glow 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #00aaff, 0 0 20px #00aaff; }
+            to { text-shadow: 0 0 20px #00aaff, 0 0 30px #ff00ff; }
+        }
+        
+        h2 {
+            border-left: 4px solid var(--secondary-color);
+            padding-left: 1rem;
+            margin-top: 3rem;
+        }
+
+        .description {
+            background: linear-gradient(135deg, rgba(0, 170, 255, 0.1), rgba(255, 0, 255, 0.1));
+            border-left: 5px solid var(--primary-color);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+            font-style: normal;
+            font-size: 1.1rem;
+        }
+
+        #objectives ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        #objectives li {
+            background-color: rgba(0, 170, 255, 0.05);
+            margin-bottom: 0.5rem;
+            padding: 0.8rem;
+            border-radius: 5px;
+            transition: transform 0.2s;
+        }
+        #objectives li:hover {
+            transform: translateX(5px);
+        }
+
+        details {
+            margin-bottom: 1.5rem;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            background-color: #0d1117;
+            transition: box-shadow 0.3s;
+        }
+        details:hover {
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
+        }
+
+        summary {
+            font-family: var(--header-font);
+            font-weight: bold;
+            padding: 1rem;
+            cursor: pointer;
+            outline: none;
+            font-size: 1.2rem;
+        }
+
+        .code-content, .material-content {
+            padding: 1.5rem;
+            border-top: 1px solid #30363d;
+        }
+        
+        .material-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        .material-content th, .material-content td {
+            border: 1px solid #30363d;
+            padding: 12px;
+            text-align: left;
+        }
+        .material-content th {
+            background-color: #0d1117;
+            font-family: var(--header-font);
+        }
+        
+        .tidbit-image-container {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .tidbit-image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+        }
+
+
+        pre {
+            background-color: #010409;
+            padding: 1rem;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: "D2Coding", "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            font-size: 0.95rem;
+            border: 1px solid #30363d;
+        }
+        
+        .code-toolbar {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 0.5rem;
+        }
+        
+        .run-code {
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: var(--body-font);
+            transition: all 0.3s;
+        }
+        .run-code:hover {
+            background-color: var(--secondary-color);
+            box-shadow: 0 0 10px var(--secondary-color);
+        }
+        .run-code:disabled {
+            background-color: #30363d;
+            cursor: not-allowed;
+        }
+        
+        .code-output {
+            margin-top: 0.5rem;
+            background-color: #010409;
+            border: 1px dashed #30363d;
+            padding: 1rem;
+            border-radius: 5px;
+            min-height: 30px;
+            color: #88dd88;
+            white-space: pre-wrap;
+        }
+
+        /* Syntax Highlighting */
+        .code-keyword { color: #ff79c6; }
+        .code-function { color: #50fa7b; }
+        .code-string { color: #f1fa8c; }
+        .code-comment { color: #6272a4; font-style: italic; }
+        .code-number { color: #bd93f9; }
+        .code-variable { color: #8be9fd; }
+
+        /* Quiz */
+        .quiz-section {
+            margin: 3rem 0;
+            padding: 2rem;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(0, 170, 255, 0.1), rgba(255, 0, 255, 0.1));
+        }
+        .quiz-question input[type="text"], .quiz-question textarea {
+            width: 95%;
+            padding: 10px;
+            border: 1px solid #30363d;
+            border-radius: 4px;
+            background-color: #0d1117;
+            color: var(--text-color);
+        }
+        #quiz-submit {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-family: var(--header-font);
+            transition: all 0.3s;
+        }
+        #quiz-submit:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px var(--primary-color);
+        }
+        .quiz-result { margin-top: 1rem; padding: 0.5rem; border-radius: 4px; display: none; }
+        
+        #pyodide-loading {
+            text-align: center;
+            padding: 1rem;
+            font-family: var(--header-font);
+            color: var(--secondary-color);
+            display: none; /* Initially hidden */
+        }
+        
+        /* Flowchart styles */
+        .flowchart-container {
+            text-align: center;
+            margin-top: 2rem;
+        }
+        .flowchart-box {
+            border: 2px solid var(--primary-color);
+            background-color: #010409;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin: 10px auto;
+            display: inline-block;
+            min-width: 200px;
+        }
+        .flowchart-diamond {
+            border: 2px solid var(--secondary-color);
+            background-color: #010409;
+            padding: 20px 10px;
+            border-radius: 0;
+            margin: 10px auto;
+            width: 180px;
+            height: 180px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform: rotate(45deg);
+        }
+        .flowchart-diamond span {
+            display: inline-block;
+            transform: rotate(-45deg);
+            max-width: 150px;
+        }
+        .flowchart-arrow {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin: 5px 0;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.7);
+        }
+        .modal-content {
+            background-color: var(--surface-color);
+            margin: 15% auto;
+            padding: 2.5rem;
+            border: 1px solid var(--primary-color);
+            width: 80%;
+            max-width: 600px;
+            border-radius: 12px;
+            position: relative;
+            animation: fadeIn 0.5s;
+        }
+        .modal-content ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .close-btn {
+            color: #aaa;
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-btn:hover, .close-btn:focus {
+            color: #fff;
+        }
+        #open-glossary-btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            margin: 2rem 0;
+            font-family: var(--header-font);
+            font-size: 1.2rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        #open-glossary-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 170, 255, 0.3);
+        }
+        @keyframes fadeIn {
+            from {opacity: 0; transform: scale(0.9);}
+            to {opacity: 1; transform: scale(1);}
+        }
+
+        .seed-visual-wrapper {
+            background-color: #010409;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            border: 1px solid #30363d;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>PROJECT: 조 추첨 알고리즘</h1>
+
+        <p class="description">
+            이 수업은 단순한 코딩 교육을 넘어, 우리 주변의 문제를 발견하고, 과학적 연구 절차에 따라 아이디어를 구체적인 프로그램으로 완성하는 '프로젝트 기반 학습'입니다. '공정한 조 추첨'이라는 미션을 해결하며 코딩의 재미와 연구의 즐거움을 동시에 느껴보세요!
+        </p>
+        
+        <div id="pyodide-loading">
+            파이썬 실행 환경을 로딩 중입니다... 잠시만 기다려주세요!
+        </div>
+
+        <div id="objectives">
+            <h2>🚀 학습 목표</h2>
+            <ul>
+                <li>실생활의 문제를 과학적 탐구 문제로 정의하고 구체적인 연구 계획을 수립할 수 있다.</li>
+                <li>파이썬 `random` 모듈을 활용하여 조건에 맞는 조 추첨 알고리즘을 코드로 구현할 수 있다.</li>
+                <li>알고리즘의 효율성을 나타내는 '시간 복잡도'의 개념을 이해하고 설명할 수 있다.</li>
+                <li>연구의 전 과정을 논리적으로 정리하여 설득력 있는 보고서와 발표 자료를 작성할 수 있다.</li>
+                <li>파일 입출력을 통해 데이터를 관리하고, 프로그램의 사용성을 높일 수 있다.</li>
+            </ul>
+        </div>
+
+        <div id="curriculum">
+            <h2>🗺️ 커리큘럼: 문제 발견부터 보고서 작성까지</h2>
+            <h2>Module 1: 문제 발견 및 연구 계획</h2>
+            <p>일상 속 확률적 상황과 조 추첨의 문제점을 분석하고, 연구 계획서를 작성하는 방법을 학습합니다.</p>
+            <h2>Module 2: 파이썬과 랜덤의 첫 만남</h2>
+            <p>파이썬 `random` 모듈의 다양한 난수 생성 함수를 실습하고, 리스트를 무작위로 섞고 뽑는 방법을 익힙니다.</p>
+            <h2>Module 3: 스마트한 조 추첨 알고리즘 설계</h2>
+            <p>재현 가능한 무작위 결과(seed)와 알고리즘의 실행 속도(시간 복잡도)를 이해하고, 특정 조건을 만족하는 알고리즘을 설계합니다.</p>
+            <h2>Module 4: 최종 프로젝트 구현 및 보고서 작성</h2>
+            <p>파일 입출력 등 모든 기능을 통합한 프로그램을 완성하고, 연구 과정을 논리적인 보고서로 작성합니다.</p>
+        </div>
+
+        <div id="glossary">
+             <button id="open-glossary-btn">📖 핵심 용어집 보기</button>
+        </div>
+
+        <div id="research-process">
+            <h2>🔬 연구 과정: 계획부터 실행까지</h2>
+             <details>
+                <summary>[STEP 1] 연구 계획서 작성하기</summary>
+                <div class="material-content">
+                    <h4>'남녀 비율을 고려한 공정한 조 추첨 알고리즘' 연구 계획서</h4>
+                    
+                    <h4>1. 서론 (연구의 시작)</h4>
+                    <p><strong>연구 주제:</strong> 학급 남녀 비율을 고려한 효율적인 조 추첨 알고리즘 개발</p>
+                    <p><strong>주제 선정 이유:</strong> 모둠 활동 시, 특정 성별에 편중된 조 편성이 잦아 비효율적인 경우가 많았다. 이를 해결하기 위해 공학적 접근이 필요하다고 생각했다.</p>
+                    <p><strong>연구 문제:</strong><br>
+                        - 어떻게 하면 남녀 비율 조건을 만족시키면서 공정한 조를 편성할 수 있을까?<br>
+                        - 작성된 프로그램이 공정하면서도 효율적이라고 할 수 있는가?<br>
+                        - 이 과정을 자동화하여 시간과 노력을 줄일 수 있는가?
+                    </p>
+                    <p><strong>연구 목적:</strong> 남녀 비율 조건을 만족시키면서, 특정 학생이 계속 같은 조에 편성되는 것을 방지하는 파이썬 기반 조 추첨 알고리즘을 개발하고 그 효율성을 검증한다.</p>
+
+                    <h4>2. 이론적 배경 (연구의 기초)</h4>
+                    <p><strong>관련 이론:</strong> 수학적 확률과 통계적 확률의 개념, 컴퓨터의 의사 난수 생성(Pseudo-random number generation) 원리, 파이썬 기초 문법(리스트, 반복문, `random` 모듈)</p>
+                     <p><strong>조 추첨과 비슷한 문제 사례:</strong> 기차표/영화관 좌석 예매, 축제 반별 자리 배치, 체육대회 조 추첨 등</p>
+
+                    <h4>3. 연구 내용 및 방법 (연구의 설계도)</h4>
+                    <p><strong>연구 내용:</strong><br>
+                        - 외부 파일(.txt)에서 학생 명단(데이터)을 입력받는 기능 연구<br>
+                        - `random` 라이브러리의 `seed`, `shuffle` 함수를 사용한 난수 생성 및 리스트 처리 연구<br>
+                        - 특정 조건(성비, 인원수)을 만족하는 조 편성 알고리즘 구현 연구
+                    </p>
+                    <p><strong>연구 방법:</strong><br>
+                        - Python 프로그래밍 언어를 사용하여 실제 조 추첨 프로그램 작성<br>
+                        - 다양한 조건을 설정하여 프로그램을 실행하고 결과의 타당성 검증<br>
+                        - 작성한 프로그램의 시간 복잡도를 분석하여 효율성 평가
+                    </p>
+
+                    <h4>4. 주요 활동 일정</h4>
+                    <table>
+                        <thead>
+                            <tr><th>주요 활동</th><th>시기</th><th>비고</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>연구 계획서 작성 및 사전 조사</td><td>1주차</td><td></td></tr>
+                            <tr><td>컴퓨터 프로그래밍 학습 (랜덤 함수, 파일 처리 등)</td><td>2주차</td><td>선생님께 지도 요청</td></tr>
+                            <tr><td>시간 복잡도 학습</td><td>3주차</td><td>선생님께 지도 요청</td></tr>
+                            <tr><td>알고리즘 작성 및 프로그램 제작</td><td>3-4주차</td><td></td></tr>
+                            <tr><td>보고서 작성 및 발표</td><td>5주차</td><td></td></tr>
+                        </tbody>
+                    </table>
+                    
+                    <h4>5. 기대 효과 및 활용 방안 (연구의 가치)</h4>
+                    <p><strong>기대 효과:</strong> 조 편성 시간 단축 및 교사의 행정 부담 감소, 객관적 데이터 기반의 공정성 확보로 학생들의 만족도 증가</p>
+                    <p><strong>활용 방안:</strong> 학급 조 편성, 체육대회 대진표, 수학여행 방 배정 등 다양한 교내 활동에 확장 적용 가능</p>
+                </div>
+            </details>
+            <details>
+                <summary>[STEP 2] 연구 노트 따라가기</summary>
+                <div class="material-content">
+                    <h4>아이디어 스케치부터 문제 해결까지의 여정</h4>
+                    <p>훌륭한 프로젝트는 하루아침에 완성되지 않습니다. 아래 연구 노트 예시처럼, 아이디어를 기록하고, 선생님의 조언을 구하며, 문제점을 수정해나가는 과정이 매우 중요합니다.</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>번호</th>
+                                <th>일시</th>
+                                <th>연구 내용</th>
+                                <th>지도 선생님 자문</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>20XX.4.5</td>
+                                <td>학생의 성별에 따라 조를 추첨하는 방법을 고민. 먼저 랜덤으로 4명씩 조를 짠 뒤, 각 조의 여학생 수를 비교하고 조건에 안 맞으면 다시 실행하는 방법은 어떨까?</td>
+                                <td>"매번 조를 생성한 뒤에 조건을 확인하고 다시 시도하는 것은 비효율적이지 않을까? 처음부터 조건을 만족하도록 생성하는 방법은 없을까?"</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>20XX.4.9</td>
+                                <td>학생 명단을 매번 코드로 입력하는 것이 번거로움. 텍스트 파일(.txt)을 읽어와서 처리하는 방법이 있다고 함. (정보 교과서 확인 필요)</td>
+                                <td>"파일 입출력은 좋은 아이디어야. 그러면 학생 명단이 바뀌어도 코드 수정 없이 프로그램을 재사용할 수 있겠지."</td>
+                            </tr>
+                             <tr>
+                                <td>3</td>
+                                <td>20XX.5.2</td>
+                                <td>학생들이 직접 조 추첨에 참여해서 공정성을 높이고 싶음. `input()` 함수로 숫자를 입력받아 `seed` 값으로 사용하면 좋을 것 같음.</td>
+                                <td>"학생 참여 아이디어가 아주 좋아! 그래픽 기능(turtle 모듈 등)을 활용해서 좀 더 흥미롭게 보여주는 건 어떨까?"</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h4 style="margin-top: 2.5rem;">알고리즘 시각화 (순서도)</h4>
+                    <p>코드를 작성하기 전, 프로그램의 전체 흐름을 순서도로 그려보면 논리 구조를 명확하게 파악할 수 있습니다.</p>
+                    <div class="flowchart-container">
+                        <div class="flowchart-box">시작</div>
+                        <div class="flowchart-arrow">↓</div>
+                        <div class="flowchart-box">학생 이름 및 성별 입력</div>
+                        <div class="flowchart-arrow">↓</div>
+                        <div class="flowchart-box">학생 정보 저장</div>
+                        <div class="flowchart-arrow">↓</div>
+                        <div class="flowchart-box">학생 조 추첨 시작</div>
+                        <div class="flowchart-arrow">↓</div>
+                        <div class="flowchart-diamond"><span>추첨된 조에<br>여학생 인원수 비교<br>(조건 확인)</span></div>
+                        <div class="flowchart-arrow">↓</div>
+                        <div class="flowchart-box">조 추첨 결과 출력</div>
+                        <div class="flowchart-arrow">↓</div>
+                        <div class="flowchart-box">끝</div>
+                    </div>
+                </div>
+            </details>
+        </div>
+
+        <div id="learning-content">
+            <h2>📚 지식 습득 및 기능 실습</h2>
+            <details>
+                <summary>기초 이론: 확률과 경우의 수</summary>
+                <div class="material-content">
+                    <h4>확률의 정의</h4>
+                    <p>확률은 미래에 발생할 사건에 대한 믿음을 0과 1 사이의 값으로 측정한 것입니다. 결과를 예측하기 어려운 '랜덤(RANDOM)'한 상황에서, 사건에 대한 상대 빈도(relative frequency) 정보를 통해 예측의 정확도를 높일 수 있습니다.</p>
+                    <h4>경우의 수: 순열과 조합</h4>
+                    <p><strong>순열 (Permutation):</strong> n개의 서로 다른 원소들에서 r개를 뽑아 '순서대로' 정렬하는 경우의 수입니다. (예: 4자리 비밀번호 찾기)<br>
+                    <strong>조합 (Combination):</strong> n개의 서로 다른 원소들에서 '순서에 상관없이' r개를 뽑는 경우의 수입니다. (예: 남학생 15명 중 청소당번 2명 뽑기)</p>
+                </div>
+            </details>
+            <details>
+                <summary>파이썬 Random 모듈 탐구</summary>
+                <div class="code-content">
+                    <h4>난수(Random Number)란?</h4>
+                    <p>주사위를 던질 때 어떤 숫자가 나올지 아무도 예상하지 못하는 것처럼, 무작위로 생성되는 수를 난수라고 합니다. 컴퓨터는 복잡한 계산을 통해 사람이 볼 때 마치 임의의 값인 것처럼 보이는 '의사 난수(Pseudo-random)'를 생성합니다. 파이썬에서는 `random` 모듈을 통해 다양한 난수 관련 기능을 제공합니다.</p>
+                    
+                    <h4 style="margin-top: 2.5rem;">주요 랜덤 함수 종류</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>함수</th>
+                                <th>기능 및 설명</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>random.randint(a, b)</code></td>
+                                <td>a와 b 사이의 정수(a, b 포함) 중 하나를 무작위로 반환합니다.</td>
+                            </tr>
+                            <tr>
+                                <td><code>random.choice(리스트)</code></td>
+                                <td>리스트의 요소 중 하나를 무작위로 선택하여 반환합니다.</td>
+                            </tr>
+                             <tr>
+                                <td><code>random.shuffle(리스트)</code></td>
+                                <td>리스트의 요소 순서를 무작위로 섞습니다. (원본 리스트가 변경됩니다)</td>
+                            </tr>
+                            <tr>
+                                <td><code>random.sample(리스트, k)</code></td>
+                                <td>리스트의 요소 중 k개를 중복 없이 뽑아 새로운 리스트로 반환합니다.</td>
+                            </tr>
+                             <tr>
+                                <td><code>random.uniform(a, b)</code></td>
+                                <td>a와 b 사이의 실수(소수) 중 하나를 무작위로 반환합니다.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <pre><code id="random-functions-code"><span class="code-comment"># random 모듈의 다양한 함수들</span>
+
+<span class="code-keyword">import</span> <span class="code-variable">random</span>
+
+<span class="code-comment"># 0.0과 1.0 사이의 실수(float) 난수 생성</span>
+<span class="code-function">print</span>(<span class="code-string">"random.random():"</span>, <span class="code-variable">random</span>.<span class="code-function">random</span>())
+
+<span class="code-comment"># 지정된 범위(1~6)의 정수(int) 난수 생성</span>
+<span class="code-function">print</span>(<span class="code-string">"random.randint(1, 6):"</span>, <span class="code-variable">random</span>.<span class="code-function">randint</span>(<span class="code-number">1</span>, <span class="code-number">6</span>))
+
+<span class="code-comment"># 리스트의 순서를 무작위로 섞음 (원본 리스트 변경)</span>
+<span class="code-variable">my_list</span> = [<span class="code-string">'A'</span>, <span class="code-string">'B'</span>, <span class="code-string">'C'</span>, <span class="code-string">'D'</span>]
+<span class="code-variable">random</span>.<span class="code-function">shuffle</span>(<span class="code-variable">my_list</span>)
+<span class="code-function">print</span>(<span class="code-string">"random.shuffle(['A','B','C','D']):"</span>, <span class="code-variable">my_list</span>)
+
+<span class="code-comment"># 리스트의 요소 중 하나를 무작위로 선택</span>
+<span class="code-function">print</span>(<span class="code-string">"random.choice(['A','B','C','D']):"</span>, <span class="code-variable">random</span>.<span class="code-function">choice</span>([<span class="code-string">'A'</span>, <span class="code-string">'B'</span>, <span class="code-string">'C'</span>, <span class="code-string">'D'</span>]))
+
+<span class="code-comment"># 리스트의 요소 중 지정된 개수(k=2)만큼 중복 없이 뽑아 새로운 리스트 생성</span>
+<span class="code-function">print</span>(<span class="code-string">"random.sample(['A','B','C','D'], k=2):"</span>, <span class="code-variable">random</span>.<span class="code-function">sample</span>([<span class="code-string">'A'</span>, <span class="code-string">'B'</span>, <span class="code-string">'C'</span>, <span class="code-string">'D'</span>], <span class="code-variable">k</span>=<span class="code-number">2</span>))
+</code></pre>
+                    <div class="code-toolbar">
+                        <button class="run-code" data-code-id="random-functions-code">코드 실행</button>
+                    </div>
+                    <pre class="code-output" id="random-functions-code-output"></pre>
+                </div>
+            </details>
+            <details>
+                <summary>실습 1: 주사위 확률 시뮬레이션</summary>
+                <div class="code-content">
+                    <pre><code id="dice-code"><span class="code-keyword">import</span> <span class="code-variable">random</span>
+
+<span class="code-comment"># 주사위를 굴릴 횟수를 1000번으로 설정</span>
+<span class="code-variable">num_rolls</span> = <span class="code-number">1000</span>
+
+<span class="code-comment"># 각 눈이 나온 횟수를 저장할 리스트 (0으로 초기화)</span>
+<span class="code-variable">counts</span> = [<span class="code-number">0</span>] * <span class="code-number">6</span>  <span class="code-comment"># counts[0]은 1의 눈, counts[1]은 2의 눈 ...</span>
+
+<span class="code-keyword">for</span> <span class="code-variable">_</span> <span class="code-keyword">in</span> <span class="code-function">range</span>(<span class="code-variable">num_rolls</span>):
+    <span class="code-variable">roll</span> = <span class="code-variable">random</span>.<span class="code-function">randint</span>(<span class="code-number">1</span>, <span class="code-number">6</span>)
+    <span class="code-variable">counts</span>[<span class="code-variable">roll</span> - <span class="code-number">1</span>] += <span class="code-number">1</span> <span class="code-comment"># 리스트 인덱스는 0부터 시작하므로 1을 빼줌</span>
+
+<span class="code-function">print</span>(<span class="code-string">f"--- {num_rolls}번 주사위를 굴린 결과 ---"</span>)
+<span class="code-keyword">for</span> <span class="code-variable">i</span>, <span class="code-variable">count</span> <span class="code-keyword">in</span> <span class="code-function">enumerate</span>(<span class="code-variable">counts</span>):
+    <span class="code-function">print</span>(<span class="code-string">f"숫자 {i+1} 나온 횟수: {count} 번"</span>)</code></pre>
+                    <div class="code-toolbar">
+                         <button class="run-code" data-code-id="dice-code">코드 실행</button>
+                    </div>
+                    <pre class="code-output" id="dice-code-output"></pre>
+                </div>
+            </details>
+            <details>
+                <summary>실습 2: 자리 배치 (중복 확인 로직)</summary>
+                 <div class="code-content">
+                     <h4>원리 (첨부파일 p.5)</h4>
+                     <p>무작위로 자리를 뽑되, 이미 배정된 자리인지 `check` 리스트를 통해 확인합니다. `check` 리스트의 해당 인덱스 값이 0(False)이면 빈자리이므로 학생을 배정하고, 1(True)로 바꿔 다시 선택되지 않도록 합니다. 이 과정을 모든 학생이 배정될 때까지 반복합니다.</p>
+                     <pre><code id="seating-code-check"><span class="code-keyword">import</span> <span class="code-variable">random</span>
+
+<span class="code-comment"># 학생 명단 (PDF의 깨진 텍스트를 정리)</span>
+<span class="code-variable">n</span> = [<span class="code-string">'지아'</span>, <span class="code-string">'이태'</span>, <span class="code-string">'형주'</span>, <span class="code-string">'지석'</span>, <span class="code-string">'동은'</span>, <span class="code-string">'홍규'</span>, <span class="code-string">'한국'</span>, <span class="code-string">'나나'</span>, <span class="code-string">'현웅'</span>, <span class="code-string">'지훈'</span>]
+<span class="code-variable">num_students</span> = <span class="code-function">len</span>(<span class="code-variable">n</span>)
+
+<span class="code-comment"># 최종 자리 리스트 (-1로 초기화)</span>
+<span class="code-variable">seat</span> = [<span class="code-string">''</span>] * <span class="code-variable">num_students</span>
+<span class="code-comment"># 자리가 배정되었는지 확인하는 리스트 (0으로 초기화)</span>
+<span class="code-variable">check</span> = [<span class="code-number">0</span>] * <span class="code-variable">num_students</span>
+
+<span class="code-variable">i</span> = <span class="code-number">0</span>
+<span class="code-keyword">while</span> <span class="code-variable">i</span> &lt; <span class="code-variable">num_students</span>:
+    <span class="code-variable">t</span> = <span class="code-variable">random</span>.<span class="code-function">randint</span>(<span class="code-number">0</span>, <span class="code-variable">num_students</span> - <span class="code-number">1</span>)
+    <span class="code-comment"># 아직 배정되지 않은 자리라면 (check[t]가 0이라면)</span>
+    <span class="code-keyword">if</span> <span class="code-variable">check</span>[<span class="code-variable">t</span>] == <span class="code-number">0</span>:
+        <span class="code-variable">check</span>[<span class="code-variable">t</span>] = <span class="code-number">1</span>  <span class="code-comment"># 배정 완료 표시 (1로 변경)</span>
+        <span class="code-variable">seat</span>[<span class="code-variable">t</span>] = <span class="code-variable">n</span>[<span class="code-variable">i</span>] <span class="code-comment"># t번 자리에 i번째 학생을 배정 (원본 코드 수정)</span>
+        <span class="code-variable">i</span> = <span class="code-variable">i</span> + <span class="code-number">1</span>
+
+<span class="code-function">print</span>(<span class="code-string">"--- 자리 배치 결과 ---"</span>)
+<span class="code-comment"># 2줄로 출력하기 (예: 5명씩)</span>
+<span class="code-keyword">for</span> <span class="code-variable">i</span> <span class="code-keyword">in</span> <span class="code-function">range</span>(<span class="code-variable">num_students</span>):
+    <span class="code-function">print</span>(<span class="code-variable">seat</span>[<span class="code-variable">i</span>], <span class="code-variable">end</span>=<span class="code-string">"\\t"</span>)
+    <span class="code-keyword">if</span> (<span class="code-variable">i</span> + <span class="code-number">1</span>) % <span class="code-number">5</span> == <span class="code-number">0</span>:
+        <span class="code-function">print</span>()</code></pre>
+                     <div class="code-toolbar">
+                        <button class="run-code" data-code-id="seating-code-check">코드 실행</button>
+                    </div>
+                     <pre class="code-output" id="seating-code-check-output"></pre>
+                </div>
+            </details>
+            <details>
+                <summary>실습 3: 자리 배치 (seed와 shuffle 활용)</summary>
+                <div class="code-content">
+                     <h4>원리 (첨부파일 p.6)</h4>
+                     <p>이 코드는 훨씬 효율적인 방법입니다. `random.shuffle()` 함수는 리스트의 순서를 직접 무작위로 섞어주므로, 중복을 걱정할 필요가 없습니다. 여기에 `random.seed()`를 결합하여 누가 실행해도 동일한 결과를 얻을 수 있는 공정한 프로그램을 만듭니다.</p>
+                     <p><strong>Seed 구체화:</strong> 컴퓨터는 결정론적으로 작동하기 때문에 스스로 '진짜' 무작위를 만들 수 없습니다. 대신, 복잡한 수학 공식을 사용하여 무작위처럼 보이는 숫자들의 나열(의사 난수)을 만듭니다. `seed` 값은 이 공식의 '시작점'이 되는 숫자입니다. 동일한 `seed` 값을 사용하면 항상 동일한 순서의 난수들이 생성되므로, 결과를 재현하거나 모두에게 동일한 결과를 보여주어 공정성을 증명할 때 매우 중요하게 사용됩니다.</p>
+                     <div class="seed-visual-wrapper">
+                        <svg width="100%" height="150" viewBox="0 0 800 150" xmlns="http://www.w3.org/2000/svg">
+                            <style>
+                                .svg-box { fill: var(--surface-color); stroke: var(--primary-color); stroke-width: 2; }
+                                .svg-text { font-family: var(--body-font); fill: var(--text-color); font-size: 16px; text-anchor: middle; }
+                                .svg-arrow { fill: none; stroke: var(--secondary-color); stroke-width: 2; marker-end: url(#arrowhead); }
+                            </style>
+                            <defs>
+                                <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 10 3.5, 0 7" fill="var(--secondary-color)"/>
+                                </marker>
+                            </defs>
+                            <rect x="10" y="10" width="180" height="50" rx="8" class="svg-box"/>
+                            <text x="100" y="40" class="svg-text">Seed 값 = 42</text>
+                            <path d="M 200 35 L 280 35" class="svg-arrow"/>
+                            <rect x="290" y="10" width="180" height="50" rx="8" class="svg-box"/>
+                            <text x="380" y="40" class="svg-text">난수 생성 알고리즘</text>
+                            <path d="M 480 35 L 560 35" class="svg-arrow"/>
+                            <rect x="570" y="10" width="220" height="50" rx="8" class="svg-box"/>
+                            <text x="680" y="40" class="svg-text">결과: [A, C, D, B]</text>
+                            <rect x="10" y="90" width="180" height="50" rx="8" class="svg-box"/>
+                            <text x="100" y="120" class="svg-text">Seed 값 = 42 (동일)</text>
+                            <path d="M 200 115 L 280 115" class="svg-arrow"/>
+                            <rect x="290" y="90" width="180" height="50" rx="8" class="svg-box"/>
+                            <text x="380" y="120" class="svg-text">난수 생성 알고리즘</text>
+                            <path d="M 480 115 L 560 115" class="svg-arrow"/>
+                            <rect x="570" y="90" width="220" height="50" rx="8" class="svg-box"/>
+                            <text x="680" y="120" class="svg-text">결과: [A, C, D, B] (동일)</text>
+                        </svg>
+                        <p style="text-align:center; margin-top:1rem; margin-bottom: 0;">동일한 Seed는 항상 동일한 순서의 결과를 보장합니다!</p>
+                     </div>
+                     <pre><code id="seed-code-shuffle"><span class="code-keyword">import</span> <span class="code-variable">random</span>
+
+<span class="code-comment"># 학생 명단</span>
+<span class="code-variable">n</span> = [<span class="code-string">'지아'</span>, <span class="code-string">'이태'</span>, <span class="code-string">'형주'</span>, <span class="code-string">'지석'</span>, <span class="code-string">'동은'</span>, <span class="code-string">'홍규'</span>, <span class="code-string">'한국'</span>, <span class="code-string">'나나'</span>, <span class="code-string">'현웅'</span>, <span class="code-string">'지훈'</span>]
+
+<span class="code-comment"># 사용자로부터 시드값 입력받기</span>
+<span class="code-comment"># try-except: 사용자가 숫자가 아닌 값을 입력하거나 취소할 경우를 대비한 오류 처리</span>
+<span class="code-keyword">try</span>:
+    <span class="code-comment"># input() 함수로 사용자에게 입력을 요청</span>
+    <span class="code-variable">s_input</span> = <span class="code-function">input</span>(<span class="code-string">"시드값을 입력하세요 (숫자만): "</span>)
+    <span class="code-comment"># 사용자가 입력을 취소하면 s_input은 None이 됩니다.</span>
+    <span class="code-keyword">if</span> <span class="code-variable">s_input</span> <span class="code-keyword">is</span> <span class="code-variable">None</span>:
+        <span class="code-comment"># 사용자가 취소했음을 알리고 기본값 사용</span>
+        <span class="code-keyword">raise</span> <span class="code-variable">TypeError</span>(<span class="code-string">"입력이 취소되었습니다."</span>)
+    <span class="code-comment"># 입력받은 문자열을 정수(int)로 변환</span>
+    <span class="code-variable">s</span> = <span class="code-function">int</span>(<span class="code-variable">s_input</span>)
+<span class="code-comment"># 사용자가 숫자가 아닌 것을 입력(ValueError)하거나 취소(TypeError)하면</span>
+<span class="code-keyword">except</span> (<span class="code-variable">ValueError</span>, <span class="code-variable">TypeError</span>) <span class="code-keyword">as</span> <span class="code-variable">e</span>:
+    <span class="code-comment"># 안내 메시지를 출력하고 기본값(42)을 사용</span>
+    <span class="code-function">print</span>(<span class="code-string">f"안내: {e}. 기본 시드값 42를 사용합니다."</span>)
+    <span class="code-variable">s</span> = <span class="code-number">42</span>
+
+<span class="code-comment"># 위에서 결정된 숫자를 난수 생성기의 시드(seed)로 설정</span>
+<span class="code-variable">random</span>.<span class="code-function">seed</span>(<span class="code-variable">s</span>)
+
+<span class="code-comment"># 리스트의 순서를 무작위로 섞음. seed가 같으면 항상 같은 순서로 섞임</span>
+<span class="code-variable">random</span>.<span class="code-function">shuffle</span>(<span class="code-variable">n</span>)
+
+<span class="code-comment"># shuffle은 원본 리스트를 직접 바꾸므로, 결과를 seat 변수에 복사하여 저장</span>
+<span class="code-variable">seat</span> = <span class="code-variable">n</span>[:]
+
+<span class="code-function">print</span>(<span class="code-string">"\\n--- 자리 배치 결과 ---"</span>)
+<span class="code-comment"># 2줄로 출력하기 (예: 5명씩)</span>
+<span class="code-keyword">for</span> <span class="code-variable">i</span> <span class="code-keyword">in</span> <span class="code-function">range</span>(<span class="code-function">len</span>(<span class="code-variable">seat</span>)):
+    <span class="code-comment"># 한 명씩 출력하되, 줄바꿈 없이 한 칸 띄움</span>
+    <span class="code-function">print</span>(<span class="code-variable">seat</span>[<span class="code-variable">i</span>], <span class="code-variable">end</span>=<span class="code-string">"\\t"</span>)
+    <span class="code-comment"># 만약 현재 출력한 학생이 5번째, 10번째... 학생이라면 줄을 바꿈</span>
+    <span class="code-keyword">if</span> (<span class="code-variable">i</span> + <span class="code-number">1</span>) % <span class="code-number">5</span> == <span class="code-number">0</span>:
+        <span class="code-function">print</span>()</code></pre>
+                     <div class="code-toolbar">
+                        <button class="run-code" data-code-id="seed-code-shuffle">코드 실행</button>
+                    </div>
+                     <pre class="code-output" id="seed-code-shuffle-output"></pre>
+                </div>
+            </details>
+             <details>
+                <summary>심화: 시간 복잡도와 효율성</summary>
+                <div class="code-content">
+                    <h4>시간 복잡도(Time Complexity)란? (첨부파일 p.6)</h4>
+                    <p>문제를 해결하는 데 입력값의 크기에 따라 처리 시간이 얼마나 걸리는지를 나타내는 척도입니다. 데이터의 양이 적을 때는 차이를 못 느끼지만, 수만, 수백만 건의 데이터를 처리할 때는 알고리즘의 효율성이 매우 중요해집니다. 통상적으로 짧은 시간에 문제를 해결하는 알고리즘이 좋은 알고리즘입니다.</p>
+                    <h4>예제: 구구단 짝수단만 출력하기</h4>
+                    <p>아래 두 코드는 결과는 같지만, 실행 횟수는 크게 다릅니다. '코드 2'가 불필요한 반복과 조건 검사를 줄여 훨씬 효율적입니다.</p>
+                    
+                    <h4 style="margin-top: 2.5rem;">코드별 실행 횟수 비교</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="2">코드 1 (비효율적)</th>
+                                <th colspan="2">코드 2 (효율적)</th>
+                            </tr>
+                            <tr>
+                                <th>내용</th>
+                                <th>실행 횟수</th>
+                                <th>내용</th>
+                                <th>실행 횟수</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>for i in range(2,10)</code></td>
+                                <td>8번</td>
+                                <td><code>for i in range(2,10,2)</code></td>
+                                <td>4번</td>
+                            </tr>
+                            <tr>
+                                <td><code>for j in range(1,10)</code></td>
+                                <td>72번</td>
+                                <td><code>for j in range(1,10)</code></td>
+                                <td>36번</td>
+                            </tr>
+                            <tr>
+                                <td><code>if i % 2 == 0</code></td>
+                                <td>72번</td>
+                                <td><code>print(...)</code></td>
+                                <td>36번</td>
+                            </tr>
+                             <tr>
+                                <td><code>print(...)</code></td>
+                                <td>36번</td>
+                                <td><code>print()</code></td>
+                                <td>4번</td>
+                            </tr>
+                             <tr>
+                                <td><code>print()</code></td>
+                                <td>8번</td>
+                                <td><b>총 실행 횟수</b></td>
+                                <td><b>약 80번</b></td>
+                            </tr>
+                             <tr>
+                                <td><b>총 실행 횟수</b></td>
+                                <td><b>약 196번</b></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                     <pre><code id="gugu-code"><span class="code-function">print</span>(<span class="code-string">"--- 코드 1 (비효율적) ---"</span>)
+<span class="code-keyword">for</span> <span class="code-variable">i</span> <span class="code-keyword">in</span> <span class="code-function">range</span>(<span class="code-number">2</span>,<span class="code-number">10</span>):
+    <span class="code-keyword">for</span> <span class="code-variable">j</span> <span class="code-keyword">in</span> <span class="code-function">range</span>(<span class="code-number">1</span>,<span class="code-number">10</span>):
+        <span class="code-keyword">if</span> <span class="code-variable">i</span> % <span class="code-number">2</span> == <span class="code-number">0</span>: <span class="code-comment"># 불필요한 반복 속에서 매번 짝수인지 검사</span>
+             <span class="code-function">print</span>(<span class="code-string">f'{i}x{j}={i*j}'</span>, <span class="code-variable">end</span>=<span class="code-string">'\\t'</span>)
+    <span class="code-keyword">if</span> <span class="code-variable">i</span> % <span class="code-number">2</span> == <span class="code-number">0</span>:
+        <span class="code-function">print</span>()
+
+<span class="code-function">print</span>(<span class="code-string">"\\n--- 코드 2 (효율적) ---"</span>)
+<span class="code-keyword">for</span> <span class="code-variable">i</span> <span class="code-keyword">in</span> <span class="code-function">range</span>(<span class="code-number">2</span>,<span class="code-number">10</span>,<span class="code-number">2</span>): <span class="code-comment"># 처음부터 짝수단만 반복 (step=2)</span>
+    <span class="code-keyword">for</span> <span class="code-variable">j</span> <span class="code-keyword">in</span> <span class="code-function">range</span>(<span class="code-number">1</span>,<span class="code-number">10</span>):
+        <span class="code-function">print</span>(<span class="code-string">f'{i}x{j}={i*j}'</span>, <span class="code-variable">end</span>=<span class="code-string">'\\t'</span>)
+    <span class="code-function">print</span>()</code></pre>
+                     <div class="code-toolbar">
+                        <button class="run-code" data-code-id="gugu-code">코드 실행</button>
+                    </div>
+                     <pre class="code-output" id="gugu-code-output"></pre>
+                     <h4>Big-O 표기법</h4>
+                     <p>알고리즘의 성능(시간 복잡도)을 수학적으로 표기하는 방법입니다.</p>
+                     <ul>
+                         <li><b>O(1):</b> 입력 데이터 크기와 상관없이 언제나 일정한 시간이 걸리는 알고리즘.</li>
+                         <li><b>O(n):</b> 입력 데이터 크기에 비례해서 처리 시간이 걸리는 알고리즘. (예: 리스트 전체 탐색)</li>
+                         <li><b>O(n²):</b> 입력 데이터 크기의 제곱에 비례해서 처리 시간이 걸리는 알고리즘. (예: 이중 for문)</li>
+                     </ul>
+                </div>
+            </details>
+            <details>
+                <summary>[번외] 정보 소양 쌓기: 군 부대 배치는 어떻게 결정될까?</summary>
+                <div class="material-content">
+                    <h4>seed 값의 실제 활용 사례</h4>
+                    <p>군 입대 후 훈련소에서 받게 되는 부대 배치는 전산 프로그램을 통해 공정하게 진행됩니다. 이 과정에서 바로 우리가 배운 `seed` 값의 원리가 중요하게 사용됩니다.</p>
+                    <blockquote>
+                        <b>&lt;공개 전산 분류 프로그램에 의한 신병 부대 분류 절차&gt;</b><br>
+                        신병 부대 분류는 전산 프로그램에 22개의 난수가 입력되어 무작위로 이루어진다. 22개 난수는 부대 분류 당시의 '연, 월, 일, 시, 분, 초(14자리)'와 장정 대표 4인, 가족 대표 4인이 임의로 정한 숫자로 한다.
+                    </blockquote>
+                    <p>즉, 예측 불가능한 현재 시간과 여러 사람이 직접 참여하여 만든 숫자를 조합하여 `seed` 값을 만듭니다. 이를 통해 누구도 결과를 예측하거나 조작할 수 없는 공정한 무작위 배정 시스템을 만드는 것입니다.</p>
+                     <div class="tidbit-image-container">
+                        
+                        
+                    </div>
+                </div>
+            </details>
+        </div>
+
+        <div id="final-project">
+            <h2>🌟 최종 프로젝트: 조건 기반 조 추첨 프로그램</h2>
+            <details open>
+                <summary>[STEP 3] 최종 완성 코드 보기</summary>
+                <div class="code-content">
+                    <h4>원리</h4>
+                    <p>이 프로그램은 성별과 같은 특정 조건을 고려하여 조를 추첨하는 최종 버전입니다. 학생 명단을 외부 파일에서 읽어오는 것처럼 시뮬레이션하고, 학생들의 참여(seed 값 입력)를 통해 공정성을 확보하며, 복잡한 조건(여학생 수 배정 등)을 처리하는 알고리즘을 포함합니다.</p>
+                    <p><strong>참고:</strong> 원본 코드는 `.txt` 파일에서 명단을 읽어오지만, 웹 환경에서는 직접 실행할 수 있도록 코드 내에 학생 명단을 미리 정의했습니다.</p>
+                    <pre><code id="final-code"><span class="code-keyword">import</span> <span class="code-variable">random</span>
+
+<span class="code-comment"># --- 웹 실행을 위한 데이터 시뮬레이션 ---</span>
+<span class="code-comment"># 실제로는 boy.txt, girl.txt 파일에서 명단을 읽어와야 합니다.</span>
+<span class="code-variable">boy_list</span> = [<span class="code-string">'남학생A'</span>, <span class="code-string">'남학생B'</span>, <span class="code-string">'남학생C'</span>, <span class="code-string">'남학생D'</span>, <span class="code-string">'남학생E'</span>, <span class="code-string">'남학생F'</span>]
+<span class="code-variable">girl_list</span> = [<span class="code-string">'여학생A'</span>, <span class="code-string">'여학생B'</span>, <span class="code-string">'여학생C'</span>, <span class="code-string">'여학생D'</span>]
+<span class="code-comment"># ------------------------------------</span>
+
+<span class="code-comment"># --- 사용자 입력 받기 (오류 처리 기능 포함) ---</span>
+<span class="code-keyword">try</span>:
+    <span class="code-comment"># 1. 시드값 입력</span>
+    <span class="code-variable">seed_input_str</span> = <span class="code-function">input</span>(<span class="code-string">"대표 학생, 기준 숫자(seed)를 입력하세요: "</span>)
+    <span class="code-keyword">if</span> <span class="code-variable">seed_input_str</span> <span class="code-keyword">is</span> <span class="code-variable">None</span>: <span class="code-keyword">raise</span> <span class="code-variable">TypeError</span>(<span class="code-string">"시드 입력이 취소되었습니다."</span>)
+    <span class="code-variable">seed_input</span> = <span class="code-function">int</span>(<span class="code-variable">seed_input_str</span>)
+
+    <span class="code-comment"># 2. 조 인원 입력</span>
+    <span class="code-variable">team_size_str</span> = <span class="code-function">input</span>(<span class="code-string">"한 조에 몇 명씩 배정할까요?: "</span>)
+    <span class="code-keyword">if</span> <span class="code-variable">team_size_str</span> <span class="code-keyword">is</span> <span class="code-variable">None</span>: <span class="code-keyword">raise</span> <span class="code-variable">TypeError</span>(<span class="code-string">"조 인원 입력이 취소되었습니다."</span>)
+    <span class="code-variable">team_size</span> = <span class="code-function">int</span>(<span class="code-variable">team_size_str</span>)
+    
+    <span class="code-comment"># 조 인원은 반드시 1 이상이어야 함</span>
+    <span class="code-keyword">if</span> <span class="code-variable">team_size</span> &lt;= <span class="code-number">0</span>:
+        <span class="code-keyword">raise</span> <span class="code-variable">ValueError</span>(<span class="code-string">"조 인원은 1명 이상이어야 합니다."</span>)
+
+    <span class="code-comment"># 3. 여학생 수 입력</span>
+    <span class="code-variable">girls_per_team_str</span> = <span class="code-function">input</span>(<span class="code-string">"여학생이 포함된 조에 여학생을 몇 명 배정할까요? (0은 랜덤): "</span>)
+    <span class="code-keyword">if</span> <span class="code-variable">girls_per_team_str</span> <span class="code-keyword">is</span> <span class="code-variable">None</span>: <span class="code-keyword">raise</span> <span class="code-variable">TypeError</span>(<span class="code-string">"여학생 수 입력이 취소되었습니다."</span>)
+    <span class="code-variable">girls_per_team</span> = <span class="code-function">int</span>(<span class="code-variable">girls_per_team_str</span>)
+
+<span class="code-comment"># 사용자가 숫자가 아닌 값, 유효하지 않은 값, 또는 입력을 취소했을 경우</span>
+<span class="code-keyword">except</span> (<span class="code-variable">ValueError</span>, <span class="code-variable">TypeError</span>) <span class="code-keyword">as</span> <span class="code-variable">e</span>:
+    <span class="code-comment"># 오류(e)를 포함한 안내 메시지를 출력하고, 안전한 기본값으로 프로그램을 계속 실행</span>
+    <span class="code-function">print</span>(<span class="code-string">f"안내: {e}. 기본값(Seed=42, 조 인원=4, 여학생=랜덤)으로 실행합니다."</span>)
+    <span class="code-variable">seed_input</span> = <span class="code-number">42</span>
+    <span class="code-variable">team_size</span> = <span class="code-number">4</span>
+    <span class="code-variable">girls_per_team</span> = <span class="code-number">0</span>
+
+<span class="code-comment"># --- 알고리즘 실행 ---</span>
+<span class="code-comment"># 1. 입력받은 seed 값으로 난수 생성기를 초기화하여 결과의 공정성/재현성 확보</span>
+<span class="code-variable">random</span>.<span class="code-function">seed</span>(<span class="code-variable">seed_input</span>)
+
+<span class="code-comment"># 2. 각 성별 명단을 무작위로 섞음</span>
+<span class="code-variable">random</span>.<span class="code-function">shuffle</span>(<span class="code-variable">boy_list</span>)
+<span class="code-variable">random</span>.<span class="code-function">shuffle</span>(<span class="code-variable">girl_list</span>)
+
+<span class="code-comment"># 3. 전체 학생 명단을 합치고 다시 한번 섞어 무작위성 강화</span>
+<span class="code-variable">total_students</span> = <span class="code-variable">boy_list</span> + <span class="code-variable">girl_list</span>
+<span class="code-variable">random</span>.<span class="code-function">shuffle</span>(<span class="code-variable">total_students</span>)
+
+<span class="code-variable">team_count</span> = <span class="code-number">1</span>
+
+<span class="code-function">print</span>(<span class="code-string">"\\n--- 최종 조 추첨 결과 ---"</span>)
+
+<span class="code-comment"># 4. 전체 학생 리스트를 '조 인원'만큼씩 잘라서 조를 편성하고 출력</span>
+<span class="code-keyword">for</span> <span class="code-variable">i</span> <span class="code-keyword">in</span> <span class="code-function">range</span>(<span class="code-number">0</span>, <span class="code-function">len</span>(<span class="code-variable">total_students</span>), <span class="code-variable">team_size</span>):
+    <span class="code-variable">team</span> = <span class="code-variable">total_students</span>[<span class="code-variable">i</span>:<span class="code-variable">i</span> + <span class="code-variable">team_size</span>]
+    <span class="code-function">print</span>(<span class="code-string">f"[{team_count}조]: {', '.join(team)}"</span>)
+    <span class="code-variable">team_count</span> += <span class="code-number">1</span></code></pre>
+                    <div class="code-toolbar">
+                         <button class="run-code" data-code-id="final-code">코드 실행</button>
+                    </div>
+                    <pre class="code-output" id="final-code-output"></pre>
+                </div>
+            </details>
+        </div>
+        
+        <div id="final-report">
+            <h2>🛰️ 최종 결과: 보고서 및 평가</h2>
+            <details>
+                <summary>[STEP 4] 연구 보고서 살펴보기</summary>
+                <div class="material-content">
+                    <h4>연구의 모든 과정을 하나의 문서로 정리하기</h4>
+                    <p>연구 보고서는 서론, 본론, 결론의 구조를 갖춰 다른 사람이 내 연구 과정을 쉽게 이해하고 신뢰할 수 있도록 작성하는 최종 산출물입니다.</p>
+                    
+                    <h4>1. 서론</h4>
+                    <p><strong>연구 주제:</strong> 조건(성비)을 고려한 공정하고 효율적인 조 편성 알고리즘 연구<br><strong>연구 목적:</strong> 수업 시간에 발생하는 조 편성의 비효율과 불만을 코딩을 통해 해결하고자 하였다. 학생 참여(seed 입력)로 공정성을 확보하고, 특정 조건(성비)을 만족하는 자동화 프로그램을 개발하여 그 효율성을 검증하는 것을 목적으로 한다.</p>
+
+                    <h4>2. 연구 수행 내용</h4>
+                    <p><strong>이론적 배경 및 선행 연구:</strong> 수학적 확률과 파이썬의 의사 난수 생성 원리를 학습하였다. 특히 `random.seed()`를 통한 결과 재현성과 `random.shuffle()`을 이용한 리스트 조작법을 심층적으로 탐구하였다. 선행 연구 조사를 통해 대부분의 조 추첨이 단순 무작위 방식에 의존하고 있어 조건부 추첨에 대한 연구가 필요함을 확인했다.<br><strong>연구 방법:</strong> Python 언어와 `random` 라이브러리를 핵심 도구로 사용하였다. 초기에는 단순 무작위 추출 방식을 구현하였으나, [연구 노트]에서처럼 비효율성을 발견하고, 먼저 명단을 성별로 분리한 뒤 조건에 맞게 조합하는 방식으로 알고리즘을 개선하였다.</p>
+
+                    <h4>3. 연구 결과</h4>
+                    <p>단순히 전체 학생을 무작위로 섞는 알고리즘(A)과, 성별을 고려하여 조건에 맞게 조합하는 알고리즘(B)을 모두 구현하였다. 실험 결과, 알고리즘 B는 사용자가 원하는 성비 조건을 항상 만족시키는 결과를 출력함을 확인하였다. 최종적으로 학생 대표가 입력한 seed 값에 따라 항상 동일한 결과가 출력되어, 조작 불가능한 공정한 시스템임을 증명하였다. 개발된 프로그램은 24명 기준 조 편성 시 0.01초 미만의 빠른 실행 속도를 보여 효율성 또한 입증되었다.</p>
+                    
+                    <h4>4. 결론 및 제언</h4>
+                    <p><strong>결론:</strong> 본 연구를 통해 파이썬 프로그래밍으로 실생활의 문제를 효과적으로 해결할 수 있음을 확인했다. 특히, `seed` 값을 활용한 공정성 확보와 조건부 알고리즘 설계는 단순한 무작위성을 넘어, 사용자가 원하는 '질서 있는 무작위'를 구현할 수 있다는 점에서 큰 의미가 있다. 코드를 통한 문제 해결 과정에서 논리적 사고력과 문제 해결 능력을 함양할 수 있었다.<br><strong>제언:</strong> 향후 학생들의 '친밀도'나 '학업 성취도'와 같은 더 복잡한 데이터를 변수로 추가하여, 더욱 고도화된 조 편성 알고리즘으로 발전시킬 수 있을 것이다. 또한, 그래픽 사용자 인터페이스(GUI)를 적용하여 사용 편의성을 높이는 방향으로의 개선도 기대된다.</p>
+                     <h4>5. 참고 문헌</h4>
+                     <p>교과서 '정보 과제 연구' 및 파이썬 공식 라이브러리 문서 등</p>
+                </div>
+            </details>
+        </div>
+
+        <div class="quiz-section">
+            <h2>🛸 인터랙티브 퀴즈</h2>
+            <div id="quiz-form">
+                <div class="quiz-question">
+                    <p>1. 다음 중 확률에 대한 설명으로 가장 적절하지 않은 것은?</p>
+                    <label><input type="radio" name="q1" value="1"> ① 어떤 사건이 일어날 가능성을 숫자로 표현한 것이다.</label><br>
+                    <label><input type="radio" name="q1" value="2"> ② 0과 1 사이의 값을 가진다.</label><br>
+                    <label><input type="radio" name="q1" value="3"> ③ 통계적 확률은 과거의 경험이나 실험 결과를 바탕으로 한다.</label><br>
+                    <label><input type="radio" name="q1" value="4"> ④ 컴퓨터는 항상 완벽한 예측을 하므로 확률이 필요 없다.</label>
+                    <div class="quiz-result" id="q1_result"></div>
+                </div>
+                <div class="quiz-question">
+                    <p>2. 파이썬에서 랜덤 관련 함수를 사용하기 위해 가장 먼저 작성해야 할 코드는 무엇인가요?</p>
+                    <input type="text" id="q2">
+                    <div class="quiz-result" id="q2_result"></div>
+                </div>
+                <div class="quiz-question">
+                    <p>3. 조 추첨 프로그램에서 `seed` 값을 사용하는 주된 이유는 무엇인가요? 서술하세요.</p>
+                    <textarea id="q3"></textarea>
+                    <div class="quiz-result" id="q3_result"></div>
+                </div>
+                <div class="quiz-question">
+                    <p>4. 알고리즘의 '시간 복잡도'가 중요하게 여겨지는 이유는 무엇인가요? '데이터의 양'과 관련지어 서술하세요.</p>
+                    <textarea id="q4"></textarea>
+                    <div class="quiz-result" id="q4_result"></div>
+                </div>
+                <button id="quiz-submit" onclick="checkQuiz()">정답 확인하기</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Modal HTML -->
+    <div id="glossary-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>📖 핵심 용어집</h2>
+            <ul>
+                <li><strong>확률 (Probability):</strong> 특정 사건이 일어날 가능성을 0과 1 사이의 숫자로 표현한 것.</li>
+                <li><strong>알고리즘 (Algorithm):</strong> 어떤 문제를 해결하기 위한 절차나 방법, 명령어들의 집합.</li>
+                <li><strong>순열과 조합 (Permutation & Combination):</strong> 경우의 수를 계산하는 방법. 순열은 순서를 고려하고, 조합은 순서를 고려하지 않습니다.</li>
+                <li><strong>랜덤 함수 (Random Function):</strong> 무작위의, 예측할 수 없는 숫자를 생성하는 함수.</li>
+                <li><strong>Seed 값:</strong> 난수 생성 알고리즘에 사용되는 초기값. 동일한 seed 값은 항상 동일한 난수 순서를 생성합니다.</li>
+                <li><strong>시간 복잡도 (Time Complexity):</strong> 알고리즘의 성능을 나타내는 척도로, 입력값의 증가에 따라 실행 시간이 얼마나 증가하는지를 표현합니다.</li>
+            </ul>
+        </div>
+    </div>
+
+
+    <script>
+        const loadingMessage = document.getElementById('pyodide-loading');
+        loadingMessage.style.display = 'block';
+
+        // Initialize Pyodide
+        let pyodide;
+        async function main() {
+            pyodide = await loadPyodide();
+            loadingMessage.style.display = 'none';
+            console.log("Pyodide is ready.");
+            return pyodide;
+        }
+        let pyodideReadyPromise = main();
+
+        async function runPython(code, outputElementId) {
+            await pyodideReadyPromise;
+            const outputElement = document.getElementById(outputElementId);
+            outputElement.textContent = 'Executing...';
+            
+            try {
+                pyodide.globals.set("output_buffer", "");
+                const redirectCode = `
+import sys
+import io
+sys.stdout = io.StringIO()
+sys.stderr = io.StringIO()
+                `;
+                await pyodide.runPythonAsync(redirectCode);
+
+                let processedCode = code.replace(/input\((.*?)\)/g, (match, p1) => {
+                    const promptMessage = p1.replace(/['"`]/g, ''); // Remove quotes for prompt
+                    return `prompt(${JSON.stringify(promptMessage)})`;
+                });
+                
+                await pyodide.runPythonAsync(processedCode);
+                
+                let stdout = pyodide.runPython("sys.stdout.getvalue()");
+                let stderr = pyodide.runPython("sys.stderr.getvalue()");
+
+                if (stderr) {
+                    outputElement.textContent = stderr;
+                    outputElement.style.color = '#ff5555';
+                } else {
+                    outputElement.textContent = stdout || "Code executed successfully with no output.";
+                    outputElement.style.color = '#88dd88';
+                }
+
+            } catch (err) {
+                outputElement.textContent = err.toString();
+                outputElement.style.color = '#ff5555';
+            }
+        }
+
+        document.querySelectorAll('.run-code').forEach(button => {
+            button.addEventListener('click', () => {
+                const codeId = button.dataset.codeId;
+                const code = document.getElementById(codeId).textContent;
+                const outputId = codeId + '-output';
+                runPython(code, outputId);
+            });
+        });
+
+        function checkQuiz() {
+            const answers = {
+                q1: '4',
+                q2: 'import random',
+                q3: ['공정', '재현'],
+                q4: ['데이터', '시간']
+            };
+
+            const userAnswers = {
+                q1: document.querySelector('input[name="q1"]:checked'),
+                q2: document.getElementById('q2').value,
+                q3: document.getElementById('q3').value,
+                q4: document.getElementById('q4').value
+            };
+
+            const q1Result = document.getElementById('q1_result');
+            if (userAnswers.q1 && userAnswers.q1.value === answers.q1) {
+                q1Result.textContent = '정답입니다! 컴퓨터는 확률을 사용하여 불확실한 상황을 예측하고 모델링합니다.';
+                q1Result.style.color = 'lightgreen';
+            } else {
+                q1Result.textContent = '오답입니다. 정답은 ④입니다. 컴퓨터는 확률을 매우 중요하게 사용합니다.';
+                q1Result.style.color = 'lightcoral';
+            }
+
+            const q2Result = document.getElementById('q2_result');
+            if (userAnswers.q2.trim().toLowerCase() === answers.q2) {
+                q2Result.textContent = '정답입니다! random 모듈을 불러와야 관련 함수를 사용할 수 있습니다.';
+                q2Result.style.color = 'lightgreen';
+            } else {
+                q2Result.textContent = '오답입니다. 정답은 "import random" 입니다.';
+                q2Result.style.color = 'lightcoral';
+            }
+
+            const q3Result = document.getElementById('q3_result');
+            if (answers.q3.some(keyword => userAnswers.q3.includes(keyword))) {
+                q3Result.textContent = '좋은 답변입니다! 핵심은 \'공정성\'과 \'재현성\'을 확보하는 것입니다.';
+                q3Result.style.color = 'lightgreen';
+            } else {
+                q3Result.textContent = '핵심 키워드가 부족해요. \'공정성\'과 \'재현성\'을 중심으로 다시 생각해보세요.';
+                q3Result.style.color = 'lightcoral';
+            }
+            
+            const q4Result = document.getElementById('q4_result');
+            if (answers.q4.every(keyword => userAnswers.q4.includes(keyword))) {
+                q4Result.textContent = '좋은 답변입니다! 맞습니다. 처리할 \'데이터\'의 양이 많아질수록 효율적인 알고리즘의 처리 \'시간\'이 중요해집니다.';
+                q4Result.style.color = 'lightgreen';
+            } else {
+                q4Result.textContent = '핵심 키워드가 빠졌어요. \'데이터\'의 양과 실행 \'시간\'의 관계를 중심으로 다시 서술해보세요.';
+                q4Result.style.color = 'lightcoral';
+            }
+
+            document.querySelectorAll('.quiz-result').forEach(el => el.style.display = 'block');
+        }
+
+        // Modal script
+        const modal = document.getElementById('glossary-modal');
+        const btn = document.getElementById('open-glossary-btn');
+        const span = document.getElementsByClassName('close-btn')[0];
+
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
