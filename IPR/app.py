@@ -31,10 +31,12 @@ def load_html(file_path):
 st.sidebar.title("📚 학습 목차")
 
 # st.sidebar.radio를 사용하여 메뉴를 만듭니다.
+# 3차시 수업을 추가했습니다.
 page_options = {
     "OT / 시작하기": "ot.html",
     "1차시: HTML 기초": "class1.html",
-    "2차시: 정보과제연구 수업 자료": "class2.html"
+    "2차시: 정보과제연구 수업 자료": "class2.html",
+    "3차시: 조 추첨 알고리즘 프로젝트": "class3.html"
 }
 selection = st.sidebar.radio("이동할 페이지를 선택하세요:", list(page_options.keys()))
 
@@ -51,9 +53,10 @@ html_file_path = os.path.join(HTML_DIR, html_file_name)
 # HTML 파일을 로드하고 화면에 표시합니다.
 html_content = load_html(html_file_path)
 # height를 넉넉하게 주어 스크롤이 생기도록 합니다.
-components.html(html_content, height=1000, scrolling=True)
+components.html(html_content, height=8000, scrolling=True)
 
 
 # --- 푸터 ---
 st.sidebar.markdown("---")
 st.sidebar.info("이 웹앱은 Streamlit으로 만들어졌습니다.")
+
