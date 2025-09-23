@@ -35,6 +35,7 @@ page_options = {
     "OT / 시작하기": "ot.html",
     "1차시: HTML 기초": "class1.html",
     "2차시: 정보과제연구 수업 자료": "class2.html",
+    "3차시: 정보과제연구 실제": "class3.html",
     "수행평가: 연구 계획서": "pa1.html"
 }
 selection = st.sidebar.radio("이동할 페이지를 선택하세요:", list(page_options.keys()))
