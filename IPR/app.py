@@ -71,7 +71,7 @@ st.markdown(f'<style>{custom_css}</style>', unsafe_allow_html=True)
 
 # --- 현재 파일의 절대 경로를 기준으로 HTML 폴더 경로 설정 ---
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-HTML_DIR = os.path.join(BASE_DIR, 'htmls') # 사용자님이 말씀하신 'htmls' 폴더로 수정
+HTML_DIR = os.path.join(BASE_DIR, 'html') # 폴더 이름을 'html'로 다시 수정
 
 
 # --- HTML 파일 로드 함수 ---
@@ -95,7 +95,7 @@ page_options = {
     "🎨 1차시: HTML 기초": "class1.html",
     "📖 2차시: 정보과제연구 수업 자료": "class2.html",
     "🧪 3차시: 정보과제연구 실제": "class3.html",
-    "🗺️ 4차시: 최단 경로 탐구": "class4.html", # 새로 추가된 페이지
+    "🗺️ 4차시: 최단 경로 탐구": "class4.html",
     "🏆 수행평가: 연구 계획서": "pa1.html"
 }
 selection = st.sidebar.radio(
@@ -124,3 +124,4 @@ components.html(html_content, height=1000, scrolling=True)
 # --- 푸터 ---
 st.sidebar.markdown("---")
 st.sidebar.info("이 웹앱은 Streamlit으로 만들어졌습니다. ✨")
+
