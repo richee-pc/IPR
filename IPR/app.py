@@ -55,7 +55,7 @@ h1, h2, h3 {
 }
 
 /* 메인 타이틀 디자인 */
-[data-testid="stAppViewContainer"] > .main > div > div > div > div > h1 {
+[data-testid="stAppViewContainer"] h1 {
     color: #0c4a6e;
     padding: 1rem;
     background-color: #f0f9ff;
@@ -71,7 +71,7 @@ st.markdown(f'<style>{custom_css}</style>', unsafe_allow_html=True)
 
 # --- 현재 파일의 절대 경로를 기준으로 HTML 폴더 경로 설정 ---
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-HTML_DIR = os.path.join(BASE_DIR, 'html') # 폴더 이름을 'html'로 다시 수정
+HTML_DIR = os.path.join(BASE_DIR, 'html')
 
 
 # --- HTML 파일 로드 함수 ---
@@ -89,13 +89,14 @@ st.sidebar.markdown("## 🚀 정보과제연구 교실")
 st.sidebar.markdown("---")
 st.sidebar.markdown("### 📚 학습 목차")
 
-# 각 페이지에 어울리는 이모티콘과 파일명을 딕셔너리로 관리합니다.
+# 각 페이지에 어울리는 이모티콘을 추가합니다.
 page_options = {
     "👋 OT / 시작하기": "ot.html",
     "🎨 1차시: HTML 기초": "class1.html",
     "📖 2차시: 정보과제연구 수업 자료": "class2.html",
     "🧪 3차시: 정보과제연구 실제": "class3.html",
     "🗺️ 4차시: 최단 경로 탐구": "class4.html",
+    "📊 5차시: 인구 소멸 분석": "class5.html",
     "🏆 수행평가: 연구 계획서": "pa1.html"
 }
 selection = st.sidebar.radio(
@@ -106,7 +107,7 @@ selection = st.sidebar.radio(
 
 
 # --- 메인 페이지 콘텐츠 ---
-# 페이지 제목에서 이모티콘을 분리하여 표시합니다.
+# 페이지 제목에서 이모티콘을 분리합니다.
 selected_title = selection.split(" ", 1)[1]
 st.title(selected_title)
 
