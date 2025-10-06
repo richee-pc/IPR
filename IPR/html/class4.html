@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>정보과제연구 | 최단 경로 산출하기</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
+
+        :root {
+            --primary-color: #4a90e2;
+            --primary-light: #8ecae6;
+            --secondary-color: #ffb703;
+            --background-color: #f8f9fa;
+            --text-color: #343a40;
+            --header-color: #212529;
+            --code-bg-color: #2d3748;
+            --code-text-color: #edf2f7;
+            --border-color: #dee2e6;
+            --info-color: #6c757d;
+            --info-bg-color: #f1f3f5;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- 기본 및 스크롤바 스타일 --- */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            line-height: 1.8;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--background-color);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-light);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-color);
+        }
+
+        /* --- 컨테이너 및 헤더 --- */
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px 40px;
+            background-color: white;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            border-radius: 15px;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        header {
+            text-align: center;
+            padding: 50px 20px;
+            margin: -20px -40px 40px -40px;
+            border-radius: 15px 15px 0 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: white;
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin: 0;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        /* --- 섹션 및 제목 스타일 --- */
+        main section {
+            margin-bottom: 70px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        main section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h2 {
+            font-size: 2.2em;
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-top: 40px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        h3 {
+            font-size: 1.6em;
+            color: var(--header-color);
+            margin-top: 35px;
+            display: flex;
+            align-items: baseline;
+        }
+        
+        h4 {
+            font-size: 1.25em;
+            color: #1a5c9e;
+            margin-top: 30px;
+            padding-left: 12px;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .page-ref {
+            font-size: 0.75em;
+            color: var(--info-color);
+            font-weight: 400;
+            margin-left: 12px;
+            white-space: nowrap;
+        }
+
+        strong {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+        
+        /* --- 상호작용 및 UI 요소 --- */
+        .callout {
+            background-color: #eef5fd;
+            border-left: 5px solid var(--primary-color);
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .callout:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px var(--shadow-color);
+        }
+        
+        .callout.info {
+            background-color: var(--info-bg-color);
+            border-left-color: var(--info-color);
+        }
+        
+        .callout strong {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .code-block-container {
+            position: relative;
+        }
+
+        pre {
+            background-color: var(--code-bg-color);
+            color: var(--code-text-color);
+            padding: 25px;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-family: 'D2Coding', 'Courier New', monospace;
+            font-size: 1em;
+            line-height: 1.7;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .copy-button {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background-image: linear-gradient(to right, #6a7f9a, #53647c);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 0.8em;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .copy-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.95em;
+            box-shadow: 0 4px 10px var(--shadow-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 14px;
+            text-align: center;
+        }
+        
+        th {
+            background-color: var(--header-color);
+            color: white;
+            font-weight: 700;
+        }
+
+        .dijkstra-step {
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+        
+        .dijkstra-step h4 {
+            color: var(--secondary-color);
+            font-size: 1.4em;
+            margin-top: 0;
+            border-left: none;
+            padding-left: 0;
+        }
+
+        .highlight {
+            background-color: #fff3cd;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        
+        .finalized {
+            background-color: #d4edda;
+            font-weight: bold;
+        }
+        
+        .project-step-input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 1em;
+            box-sizing: border-box; 
+        }
+        
+        textarea.project-step-input {
+            height: 120px;
+            resize: vertical;
+        }
+        
+        .diagram {
+            width: 100%;
+            max-width: 500px;
+            display: block;
+            margin: 20px auto;
+            border-radius: 8px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 30px 0 10px 0;
+            border-top: 1px solid var(--border-color);
+            color: var(--info-color);
+        }
+
+        /* --- 애니메이션 --- */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* --- 반응형 디자인 --- */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px 20px;
+                margin: 15px;
+            }
+            header {
+                padding: 30px 10px;
+                margin: -15px -20px 30px -20px;
+            }
+            header h1 { font-size: 2.2em; }
+            h2 { font-size: 1.8em; }
+            h3 { font-size: 1.4em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>최단 경로 산출하기</h1>
+            <p>정보과제연구 프로젝트: 다익스트라 알고리즘 탐구</p>
+        </header>
+
+        <main>
+            <section id="intro">
+                <h2>🚀 최단 경로 탐험을 시작하며!</h2>
+                <div class="callout">
+                    <p><strong>"내비게이션은 어떻게 수많은 길 중에서 가장 빠른 길을 척척 찾아낼까요?"</strong></p>
+                    <p>일상 속 편리함을 제공하는 기술 뒤에는 '알고리즘'이라는 멋진 해결사가 숨어있답니다. 알고리즘은 마치 복잡한 요리의 '레시피'와 같아요. 정해진 순서대로 따라가기만 하면 누구든 맛있는 요리를 완성할 수 있는 것처럼, 알고리즘도 문제 해결을 위한 명확한 절차를 알려주죠. 오늘 우리는 그중에서도 '최단 경로'라는 문제를 해결하는 최고의 레시피, 다익스트라 알고리즘을 배우고 우리만의 멋진 프로젝트를 완성하게 될 거예요!</p>
+                </div>
+                <h3>💡 오늘의 학습 목표</h3>
+                <ul>
+                    <li>그래프(Graph) 자료구조의 기본 개념과 종류를 이해하고 설명할 수 있다.</li>
+                    <li>다익스트라(Dijkstra) 알고리즘의 원리를 단계별로 설명할 수 있다.</li>
+                    <li>파이썬 코드로 다익스트라 알고리즘을 구현하고, 실제 문제에 적용할 수 있다.</li>
+                    <li>'최단 경로'와 관련된 나만의 연구 주제를 선정하고, 탐구하여 연구 보고서를 작성할 수 있다.</li>
+                </ul>
+            </section>
+
+            <section id="step1">
+                <h2>🗺️ 1단계: 세상을 연결하는 지도, 그래프(Graph)</h2>
+                <h3>그래프 이론<span class="page-ref">(PDF 2쪽)</span></h3>
+                <p><strong>그래프(Graph)</strong>는 여러 개의 '점(정점)'들이 '선(간선)'으로 서로 복잡하게 연결된 자료구조를 말합니다. 점과 선으로 세상의 다양한 관계들을 표현할 수 있죠. 예를 들어, 사람 관계는 '인맥 지도'로, 도시는 '교통망'으로 나타낼 수 있습니다.</p>
+                
+                <div class="callout info">
+                    <strong>트리(Tree) vs 그래프(Graph)</strong>
+                    <p>혹시 '트리' 구조에 대해 들어봤나요? 트리는 부모-자식 관계가 명확하고, 정점 간의 경로가 유일하며, 사이클(Cycle, 순환)이 없는 특별한 형태의 그래프입니다. 반면, 일반적인 그래프는 더 자유로워서 여러 정점을 거쳐 다시 자기 자신에게 돌아오는 '사이클' 구조를 가질 수 있습니다.</p>
+                </div>
+                
+                <h4>핵심 용어 정리<span class="page-ref">(PDF 4, 7-8쪽)</span></h4>
+                <p>그래프의 언어를 익혀봅시다!</p>
+                <ul>
+                    <li><strong>정점 (Vertex/Node):</strong> 그래프의 주인공인 '점'입니다. (예: 도시, 지하철역, 사람)</li>
+                    <li><strong>간선 (Edge/Link):</strong> 정점들을 연결하는 '선'입니다. (예: 도로, 철로, 친구 관계)</li>
+                    <li><strong>가중치 (Weight):</strong> 간선에 부여된 값으로, 정점 사이의 **거리, 시간, 비용** 등을 나타냅니다. 가중치가 있는 그래프를 **가중치 그래프**라고 불러요.</li>
+                    <li><strong>경로 (Path):</strong> 한 정점에서 다른 정점으로 가는 길입니다.</li>
+                    <li><strong>사이클 (Cycle):</strong> 출발해서 여러 정점을 거쳐 다시 출발점으로 돌아오는 경로입니다.</li>
+                </ul>
+                
+                <h4>그래프의 종류</h4>
+                <ul>
+                    <li><strong>무방향 그래프 (Undirected Graph):</strong> 간선에 방향이 없어 양쪽으로 이동 가능합니다. (예: 일반적인 친구 관계, 양방향 도로)</li>
+                    <li><strong>방향 그래프 (Directed Graph):</strong> 간선에 방향이 있어 한쪽으로만 이동 가능합니다. (예: 인스타그램 팔로우 관계, 일방통행 도로)</li>
+                </ul>
+
+                <h3>그래프를 코드로 표현하기: 인접 리스트<span class="page-ref">(교과서 85, 95쪽)</span></h3>
+                <p><strong>인접 리스트(Adjacency List)</strong>는 그래프를 표현하는 가장 일반적인 방법 중 하나입니다. 각 정점마다 자신과 연결된 정점들의 목록을 저장하는 방식이죠. 이때 파이썬의 **딕셔너리(Dictionary)**를 사용하면 아주 직관적으로 구현할 수 있습니다.</p>
+                <div class="callout info">
+                    <strong>인접 행렬도 있어요! <span class="page-ref">(PDF 9-12쪽)</span></strong>
+                    <p>그래프를 표현하는 또 다른 방법으로는 <strong>인접 행렬(Adjacency Matrix)</strong>이 있습니다. 이는 2차원 배열(표)을 만들어 정점 i와 정점 j가 연결되어 있으면 1(또는 가중치), 아니면 0을 표시하는 방식입니다. 모든 정점 간의 연결 정보를 바로 알 수 있어 편하지만, 연결되지 않은 정보까지 모두 저장해야 해서 메모리 효율이 떨어질 수 있습니다.</p>
+                </div>
+
+                <h4>실전 예제: 버스 노선을 인접 리스트로 표현하기</h4>
+                <p>우리 동네의 주요 지점과 버스 노선을 그래프로 만들고, 이를 인접 리스트로 표현해 봅시다.</p>
+                <div class="code-block-container">
+                    <pre><code class="language-python">
+# 우리 동네의 주요 지점과 버스 노선(소요 시간)을 인접 리스트로 표현
+# Key: 출발 정점
+# Value: [(도착 정점1, 가중치1), (도착 정점2, 가중치2), ...]
+bus_routes = {
+    '학교': [('도서관', 10), ('중앙공원', 15)],
+    '도서관': [('학교', 10), ('버스터미널', 20)],
+    '중앙공원': [('학교', 15)],
+    '버스터미널': [('도서관', 20)]
+}
+                    </code></pre>
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                </div>
+            </section>
+            
+            <section id="step2">
+                <h2>✨ 2단계: 최강의 길잡이, 다익스트라 알고리즘</h2>
+                <h3>다익스트라 알고리즘이란?</h3>
+                <p>네덜란드의 컴퓨터 과학자 <strong>에츠허르 다익스트라(Edsger Dijkstra)</strong>가 고안한 알고리즘으로, 특정 시작 정점에서 다른 모든 정점까지의 최단 경로를 찾아주는 놀라운 방법입니다. 핵심 원리는 **탐욕 알고리즘(Greedy Algorithm)**에 기반하여 <strong>'현재까지 알려진 가장 가까운 길부터 차근차근 확정해 나가는 것'</strong>입니다.</p>
+                 <div class="callout">
+                    <strong>잠깐! 탐욕 알고리즘(Greedy Algorithm)이 뭔가요?</strong>
+                    <p>'탐욕적'이라는 이름처럼, 먼 미래를 계산하지 않고 매 순간 눈앞에 보이는 최선의 선택을 하는 방식입니다. 다익스트라 알고리즘에서는 '현재 방문하지 않은 노드 중, 시작점에서부터 가장 거리가 짧은 노드'를 계속해서 선택해 나가는 방식으로 이 원리를 적용합니다.</p>
+                </div>
+                <div class="callout info">
+                    <strong>🚨 다익스트라 알고리즘의 중요 조건!</strong>
+                    <p>다익스트라 알고리즘은 간선의 가중치가 **모두 양수일 때**만 정확하게 작동합니다. 만약 가중치가 음수인 간선(예: 특정 경로를 지나면 오히려 시간이 줄어드는 경우)이 있다면, 다른 알고리즘(예: 벨만-포드 알고리즘)을 사용해야 합니다.</p>
+                </div>
+
+                <h3>최단 경로 산출 절차<span class="page-ref">(교과서 87-89, 100쪽)</span></h3>
+                <p>아래 예제 그래프와 테이블을 보면서 다익스트라 알고리즘이 어떻게 작동하는지 한 단계씩 따라가 봅시다. 우리는 **'최단 거리 테이블'**과 **'부모 노드 테이블'** 두 가지를 함께 기록하며 최단 경로를 찾아낼 거예요.</p>
+                
+                <p style="text-align:center;"><strong>시작 노드: A</strong></p>
+                
+                <div class="dijkstra-step">
+                    <h4>초기 설정</h4>
+                    <p>1. 시작 노드 'A'의 거리는 0, 나머지는 무한대(∞)로 초기화합니다.<br>2. '부모 노드 테이블'은 비워둡니다.</p>
+                    <table>
+                        <thead><tr><th>노드</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th></tr></thead>
+                        <tbody><tr><td><strong>최단 거리</strong></td><td class="finalized">0</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td></tr></tbody>
+                    </table>
+                </div>
+
+                <div class="dijkstra-step">
+                    <h4>STEP 1: 노드 A 방문</h4>
+                    <p>1. 가장 거리가 짧은 'A'를 방문합니다.<br>2. 'A'와 연결된 'B', 'C'의 거리를 갱신하고, 부모를 'A'로 기록합니다.</p>
+                    <table>
+                        <thead><tr><th>노드</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>최단 거리</strong></td><td class="finalized">0</td><td class="highlight">10</td><td class="highlight">3</td><td>∞</td><td>∞</td></tr>
+                            <tr><td><strong>부모 노드</strong></td><td>-</td><td class="highlight">A</td><td class="highlight">A</td><td>-</td><td>-</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="dijkstra-step">
+                    <h4>STEP 2: 노드 C 방문</h4>
+                    <p>1. 다음으로 가장 짧은 'C'(거리 3)를 방문/확정합니다.<br>2. 'C'를 거쳐가는 경로('A-C-B', 'A-C-D', 'A-C-E')를 계산하여 기존 값보다 짧으면 갱신합니다.</p>
+                     <table>
+                        <thead><tr><th>노드</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>최단 거리</strong></td><td class="finalized">0</td><td class="highlight">7</td><td class="finalized">3</td><td class="highlight">11</td><td class="highlight">5</td></tr>
+                            <tr><td><strong>부모 노드</strong></td><td>-</td><td class="highlight">C</td><td>A</td><td class="highlight">C</td><td class="highlight">C</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="dijkstra-step">
+                    <h4>STEP 3 ~ 5: 나머지 노드 방문 및 종료</h4>
+                    <p>같은 방식으로, 남은 노드 중 최단 거리가 가장 짧은 노드(E → B → D)를 순서대로 방문하며 테이블을 계속 갱신합니다. 모든 노드를 방문하면 알고리즘이 종료됩니다.</p>
+                    <table>
+                        <thead><tr><th>노드</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>최종 최단 거리</strong></td><td class="finalized">0</td><td class="finalized">7</td><td class="finalized">3</td><td class="finalized">9</td><td class="finalized">5</td></tr>
+                            <tr><td><strong>최종 부모 노드</strong></td><td>-</td><td>C</td><td>A</td><td>B</td><td>C</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="callout">
+                    <strong>🎉 최종 결과 분석!</strong>
+                    <p><strong>1. 최단 거리 확인:</strong> 최종 '최단 거리 테이블'을 보면 시작점 A로부터 각 노드까지의 최단 거리를 바로 알 수 있습니다. (예: A에서 D까지 최단 거리는 9)</p>
+                    <p><strong>2. 최단 경로 역추적:</strong> 실제 경로는 최종 '부모 노드 테이블'을 거꾸로 따라가며 찾습니다. (D → B → C → A)
+                    <br>이 순서를 뒤집으면, 최단 경로는 <strong>A → C → B → D</strong> 임을 알 수 있습니다!</p>
+                </div>
+            </section>
+            
+            <section id="step3">
+                <h2>👨‍💻 3단계: 최단 경로 알고리즘 구현</h2>
+                <h3>핵심 코드 분석 및 구현<span class="page-ref">(교과서 104-105쪽)</span></h3>
+                <p>이제 이론을 실제 코드로 구현해 볼 시간입니다. 이 코드는 '우선순위 큐'라는 자료구조를 활용하여 다익스트라 알고리즘의 효율을 높인 버전입니다. 우선순위 큐는 '가장 거리가 짧은 노드를 선택'하는 과정을 매우 빠르게 처리해준답니다.</p>
+                
+                <div class="callout">
+                    <strong>코드 톺아보기 🔍</strong>
+                    <ul>
+                        <li><strong><code>import heapq</code> (우선순위 큐)</strong>: '힙(heap)'이라는 자료구조를 기반으로 만들어진 라이브러리입니다. 데이터를 넣으면 항상 '우선순위'가 가장 높은 데이터(여기서는 거리가 가장 짧은 데이터)를 제일 먼저 꺼내주는 똑똑한 주머니라고 생각할 수 있습니다. 덕분에 매번 '가장 거리가 짧은 노드가 뭘까?' 하고 전부 찾아볼 필요 없이, 아주 빠르게 다음 노드를 선택할 수 있습니다.</li>
+                        <li><strong><code>dijkstra(graph, start)</code> 함수</strong>: 알고리즘의 핵심 로직입니다.
+                            <ul>
+                                <li><strong>초기화</strong>: <code>distances</code> 딕셔너리에 시작 노드는 0, 나머지는 무한대(<code>inf</code>)로 설정합니다. 경로 추적을 위한 <code>parent_nodes</code> 딕셔너리도 준비합니다.</li>
+                                <li><strong>핵심 반복문 (<code>while priority_queue</code>)</strong>: 큐가 빌 때까지, 즉 모든 경로 탐색이 끝날 때까지 반복합니다. 큐에서 가장 거리가 짧은 노드를 꺼내고, 그 노드를 거쳐 인접 노드로 가는 경로가 기존 경로보다 더 짧다면, 거리를 갱신하고 부모 노드를 기록한 뒤 큐에 다시 넣습니다.</li>
+                            </ul>
+                        </li>
+                         <li><strong><code>get_shortest_path(...)</code> 함수</strong>: 다익스트라 함수가 찾아낸 <code>parent_nodes</code> 정보를 이용해, 도착점에서부터 부모 노드를 계속 따라가며 시작점까지의 전체 경로를 역으로 추적하여 찾아냅니다.</li>
+                    </ul>
+                </div>
+
+                <div class="code-block-container">
+                    <pre><code class="language-python">
+# 다익스트라 알고리즘 파이썬 구현 예제
+import heapq  # 우선순위 큐(Priority Queue)를 사용하기 위한 라이브러리
+
+def dijkstra(graph, start):
+    """다익스트라 알고리즘을 수행하여 최단 거리와 부모 노드 정보를 반환하는 함수"""
+    
+    # 1. 초기화 단계
+    distances = {node: float('inf') for node in graph} # 모든 거리를 무한대로 초기화
+    distances[start] = 0 # 시작점의 거리는 0
+    parent_nodes = {node: None for node in graph}
+    priority_queue = [(0, start)] # (거리, 노드) 형태로 큐에 저장. 거리를 앞에 두어야 heapq가 거리 기준으로 정렬함
+
+    # 2. 핵심 로직: 큐에 탐색할 노드가 남아있는 동안 반복
+    while priority_queue:
+        # 거리가 가장 짧은 노드를 자동으로 선택하여 꺼냄
+        current_distance, current_node = heapq.heappop(priority_queue)
+
+        # 이미 더 짧은 경로를 발견했다면(테이블의 값이 더 작다면), 이번 경로는 무시하고 다음으로 넘어감
+        if current_distance > distances[current_node]:
+            continue
+
+        # 현재 노드와 연결된 다른 노드들을 확인 (for문)
+        for adjacent_node, weight in graph[current_node]:
+            distance = current_distance + weight # 시작점부터 현재 노드를 거쳐 인접 노드까지의 총 거리
+            
+            # 현재 노드를 거쳐 가는 것이 기존에 알려진 거리보다 더 짧은 경우
+            if distance < distances[adjacent_node]:
+                distances[adjacent_node] = distance # 거리 정보 갱신
+                parent_nodes[adjacent_node] = current_node # 부모 노드 기록
+                heapq.heappush(priority_queue, (distance, adjacent_node)) # 갱신된 정보를 우선순위 큐에 추가
+    
+    return distances, parent_nodes
+
+def get_shortest_path(parent_nodes, start, end):
+    """부모 노드 정보를 바탕으로 실제 최단 경로를 찾는 함수"""
+    path = []
+    current_node = end
+    # 도착점부터 시작하여 부모 노드를 계속 따라감
+    while current_node is not None:
+        path.append(current_node)
+        # 시작점에 도달하면 멈춤
+        if current_node == start:
+            break
+        current_node = parent_nodes[current_node]
+    
+    return path[::-1] # 경로를 뒤집어서 시작점부터 보이도록 함
+
+# --- 실행 부분 ---
+# 1. 그래프 정의 (교과서 지하철 노선도 예제)
+subway_graph = {
+    '교대': [('강남', 2), ('남부터미널', 3)],
+    '강남': [('교대', 2), ('역삼', 2)],
+    '역삼': [('강남', 2), ('선릉', 2)],
+    '남부터미널': [('교대', 3), ('양재', 3)],
+    '양재': [('남부터미널', 3), ('매봉', 1)],
+    '선릉': [('역삼', 2)],
+    '매봉': [('양재', 1)]
+}
+
+start_node = '교대'
+end_node = '선릉'
+
+# 2. 다익스트라 알고리즘 실행
+shortest_distances, parent_nodes_result = dijkstra(subway_graph, start_node)
+
+# 3. 결과 출력
+print(f"'{start_node}'역에서 다른 역까지의 최단 소요 시간:")
+for station, time in shortest_distances.items():
+    print(f"- {station}: {time}분")
+
+# 4. 특정 목적지까지의 최단 경로 출력
+path_result = get_shortest_path(parent_nodes_result, start_node, end_node)
+print(f"\n'{start_node}'역에서 '{end_node}'역까지의 최단 경로:")
+print(" -> ".join(path_result))
+                    </code></pre>
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                </div>
+            </section>
+            
+            <section id="mini-project">
+                <h2>🚀 실전 미니 프로젝트: 우리 동네 맛집 찾기!</h2>
+                <p>이론 학습은 여기까지! 이제 우리가 배운 모든 지식을 총동원하여 실제 문제를 해결해 볼 시간입니다. 아래 미션을 통해 그래프, 다익스트라 알고리즘, 인접 리스트, 딕셔너리 활용법을 완전히 내 것으로 만들어 보세요!</p>
+                
+                <div class="callout">
+                    <strong>🚩 오늘의 미션!</strong>
+                    <p>학교 수업이 끝났습니다. 너무 배가 고파서 학교 앞 <strong>떡볶이집</strong>에 들렀다가, 후식으로 <strong>아이스크림 가게</strong>도 가고 싶어요. 두 곳을 모두 들러 <strong>집</strong>에 가는 가장 빠른 길을 찾아주세요!</p>
+                </div>
+            
+                <h4>[1단계] 문제 시각화 및 그래프 변환</h4>
+                <p>먼저, 문제 상황을 한눈에 파악할 수 있도록 우리 동네 지도를 상상하고, 이를 그래프로 그려봅시다. 각 장소는 '정점'이 되고, 장소 사이를 이동하는 길은 '간선', 걸리는 시간(분)은 '가중치'가 됩니다.</p>
+                
+                <h4>[2단계] 코드로 변환: 인접 리스트 만들기</h4>
+                <p>이제 우리가 그린 그래프를 파이썬 딕셔너리를 이용해 인접 리스트로 표현해 봅시다. 1단계에서 배운 내용을 떠올리며 직접 코드를 완성해 보세요.</p>
+                <div class="code-block-container">
+                    <pre><code class="language-python">
+# 우리 동네 지도를 인접 리스트로 표현
+my_town_graph = {
+    '학교': [('떡볶이집', 5), ('PC방', 7)],
+    '떡볶이집': [('학교', 5), ('아이스크림 가게', 4), ('문구점', 6)],
+    'PC방': [('학교', 7), ('집', 10)],
+    '아이스크림 가게': [('떡볶이집', 4), ('집', 8)],
+    '문구점': [('떡볶이집', 6), ('집', 5)],
+    '집': [('PC방', 10), ('아이스크림 가게', 8), ('문구점', 5)]
+}
+                    </code></pre>
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                </div>
+                
+                <h4>[3단계] 해결 전략 세우기</h4>
+                <p>우리의 목표는 '학교 → 떡볶이집 → 아이스크림 가게 → 집' 순서일 수도 있고, '학교 → 아이스크림 가게 → 떡볶이집 → 집' 순서일 수도 있습니다. 두 가지 경우를 모두 계산해서 더 짧은 경로를 선택해야겠죠?</p>
+                <ol>
+                    <li><strong>경로 1 총 시간</strong> = (학교 → 떡볶이집 최단 시간) + (떡볶이집 → 아이스크림 가게 최단 시간) + (아이스크림 가게 → 집 최단 시간)</li>
+                    <li><strong>경로 2 총 시간</strong> = (학교 → 아이스크림 가게 최단 시간) + (아이스크림 가게 → 떡볶이집 최단 시간) + (떡볶이집 → 집 최단 시간)</li>
+                </ol>
+                <p>각 구간의 최단 시간을 구하려면 다익스트라 알고리즘을 여러 번 실행해야 합니다. 예를 들어, (학교 → 떡볶이집)과 (학교 → 아이스크림 가게) 시간을 알려면, 시작점을 '학교'로 설정하여 다익스트라를 한 번 실행하면 됩니다.</p>
+            
+                <h4>[4단계] 최종 코드 작성 및 정답 확인</h4>
+                <p>이제 최종적으로 두 경로의 총 소요 시간을 계산하고 비교하여 정답을 찾는 코드를 작성해 봅시다. 3단계에서 배운 <code>dijkstra</code> 함수를 그대로 활용하면 됩니다.</p>
+                <div class="code-block-container">
+                    <pre><code class="language-python">
+# 3단계에서 배운 dijkstra 함수가 이미 있다고 가정합니다.
+
+# 각 지점을 시작점으로 하여 최단 거리 테이블들을 미리 계산
+distances_from_school, _ = dijkstra(my_town_graph, '학교')
+distances_from_tteokbokki, _ = dijkstra(my_town_graph, '떡볶이집')
+distances_from_icecream, _ = dijkstra(my_town_graph, '아이스크림 가게')
+
+# 경로 1: 학교 -> 떡볶이집 -> 아이스크림 가게 -> 집
+path1_time = (distances_from_school['떡볶이집'] + 
+              distances_from_tteokbokki['아이스크림 가게'] + 
+              distances_from_icecream['집'])
+
+# 경로 2: 학교 -> 아이스크림 가게 -> 떡볶이집 -> 집
+path2_time = (distances_from_school['아이스크림 가게'] +
+              distances_from_icecream['떡볶이집'] +
+              distances_from_tteokbokki['집'])
+
+# 결과 출력
+print(f"경로 1 (떡볶이집 먼저): {path1_time}분 소요")
+print(f"경로 2 (아이스크림 가게 먼저): {path2_time}분 소요")
+
+if path1_time <= path2_time:
+    print(f"\n최단 경로는 '학교 -> 떡볶이집 -> 아이스크림 가게 -> 집' 이며, 총 {path1_time}분 걸립니다!")
+else:
+    print(f"\n최단 경로는 '학교 -> 아이스크림 가게 -> 떡볶이집 -> 집' 이며, 총 {path2_time}분 걸립니다!")
+
+# 주의: 위 코드를 실행하려면 3단계의 dijkstra 함수와 heapq import가 먼저 선언되어 있어야 합니다.
+                    </code></pre>
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                </div>
+            
+                <div class="callout">
+                    <strong>🥳 미션 완료!</strong>
+                    <p>축하합니다! 여러분은 이제 다익스트라 알고리즘을 응용하여 더 복잡한 실생활 문제를 해결할 수 있게 되었습니다. 이처럼 하나의 문제를 해결하기 위해 알고리즘을 여러 번 사용하는 것은 매우 흔한 접근 방식이랍니다. 이제 이 경험을 바탕으로 여러분만의 독창적인 프로젝트에 도전해 보세요!</p>
+                </div>
+            </section>
+
+            <section id="step5">
+                <h2>🔬 5단계: 나만의 최단 경로 탐구 프로젝트</h2>
+                <h3>프로젝트 개요<span class="page-ref">(교과서 112쪽)</span></h3>
+                <p>이제 배운 내용을 바탕으로 우리 주변의 문제를 해결하는 진짜 연구를 시작해 볼 시간입니다! 훌륭한 연구는 거창한 발견이 아니라, 주변의 작은 호기심을 해결하는 과정에서 시작된답니다.</p>
+                
+                <h3>[STEP 1] 연구 계획 ✍️</h3>
+                <h4>주제 선정하기</h4>
+                <p>우리 주변에서 '최단 경로'를 찾을 수 있는 문제는 무엇이 있을까요?</p>
+                <ul>
+                    <li><strong>우리 동네 버스 최단 경로:</strong> 우리 집에서 학교까지 가장 빠른 버스 노선은?</li>
+                    <li><strong>학교 건물 내 최단 이동 경로:</strong> 1층 교무실에서 4층 음악실까지 가장 빨리 가는 길은? (계단, 복도 등)</li>
+                    <li><strong>안전한 등하굣길 찾기:</strong> CCTV나 가로등이 많은 길에는 낮은 가중치(선호도)를, 위험한 길에는 높은 가중치를 부여하여 가장 안전한 경로 찾기</li>
+                    <li><strong>게임 맵 최단 경로:</strong> 게임 캐릭터가 특정 지점까지 가는 가장 빠른 길 찾기</li>
+                </ul>
+                <div class="callout info">
+                    <strong>✨ Pro-Tip!</strong>
+                    <p>더 실감 나는 프로젝트를 원한다면, 실제 데이터를 활용해 보세요! 네이버나 카카오 지도 API를 이용하면 실제 장소 간의 거리나 소요 시간 데이터를 얻을 수 있습니다. 공공데이터포털에서 제공하는 버스 노선 정보나 CCTV 위치 정보를 활용하여 우리 사회의 문제를 직접 해결해 볼 수도 있답니다.</p>
+                </div>
+
+                <h4>보고서 양식 가이드<span class="page-ref">(교과서 108-109쪽)</span></h4>
+                <p>좋은 연구는 체계적인 기록에서 시작됩니다. 아래 항목에 따라 연구 계획을 미리 세워보고, 연구를 진행하며 내용을 채워나가세요.</p>
+                
+                <div>
+                    <strong>1. 연구 동기 (서론)</strong>
+                    <p>이 연구를 왜 하게 되었나요? 어떤 문제를 해결하고 싶었나요?</p>
+                    <textarea class="project-step-input" placeholder="예) 매일 아침 버스를 갈아타며 어떤 노선이 가장 빠를지 궁금했습니다. 이 문제를 해결하기 위해..."></textarea>
+                </div>
+                
+                <div>
+                    <strong>2. 연구 방법 및 과정</strong>
+                    <p>어떤 데이터(장소, 경로, 시간 등)를 수집했나요? 다익스트라 알고리즘을 어떻게 적용했나요?</p>
+                    <textarea class="project-step-input" placeholder="예) 1. 네이버 지도를 이용해 버스 정류장과 노선별 소요 시간을 수집했습니다. 2. 각 정류장을 '노드'로, 노선별 소요 시간을 '가중치'로 설정하여 그래프를 만들었습니다. 3. 파이썬 코드를 이용해..."></textarea>
+                </div>
+
+                <div>
+                    <strong>3. 연구 결과 (예상)</strong>
+                    <p>연구를 통해 어떤 결과가 나올 것으로 예상되나요?</p>
+                    <textarea class="project-step-input" placeholder="예) 현재 이용하는 노선보다 더 효율적인 최단 경로를 발견할 수 있을 것으로 기대합니다."></textarea>
+                </div>
+
+                <h3>[STEP 2] 연구 수행 ⚙️</h3>
+                <h4>변수 설정 및 그래프 구현<span class="page-ref">(교과서 102쪽)</span></h4>
+                <p>연구 주제에 맞게 정점(노드)과 간선(가중치)을 정의해야 합니다. 예를 들어, '학교 건물 내 최단 이동 경로'를 탐구한다면 아래와 같이 변수를 설정할 수 있습니다.</p>
+                <table>
+                    <thead><tr><th>변수</th><th>의미</th><th>예시</th></tr></thead>
+                    <tbody>
+                        <tr><td>노드</td><td>주요 위치</td><td>'1층 현관', '2층 과학실', '중앙 계단'</td></tr>
+                        <tr><td>간선</td><td>위치 간의 연결</td><td>'1층 현관'과 '중앙 계단' 사이의 복도</td></tr>
+                        <tr><td>가중치</td><td>이동하는 데 걸리는 시간(초)</td><td>복도 이동 15초, 계단 한 층 20초</td></tr>
+                    </tbody>
+                </table>
+                <p>이렇게 정의한 변수를 바탕으로, 3단계에서 배운 파이썬 코드를 수정하여 나만의 그래프(딕셔너리)를 만들어 보세요.</p>
+                
+                <h4>코드 실행 및 결과 기록</h4>
+                <p>나만의 그래프를 만든 후, 시작점과 도착점을 설정하여 코드를 실행하고 결과를 확인합니다. 이때, 결과가 어떻게 나왔는지, 예상과 다른 점은 없는지 등을 '연구 노트'(교과서 107쪽) 형식으로 꼼꼼히 기록해두는 것이 중요합니다. 오류가 발생했다면 왜 발생했는지 추적하는 과정도 훌륭한 연구의 일부랍니다!</p>
+
+                <h3>[STEP 3] 결과 분석 및 정리 📊</h3>
+                <h4>결과 해석</h4>
+                <p>코드를 실행해서 나온 최단 경로와 거리는 어떤 의미를 가질까요? 예를 들어, '우리 동네 버스 최단 경로' 연구에서 'A정류장 -> C정류장 -> F정류장' 경로가 15분으로 나왔다면, 이는 'A에서 F까지 가는 가장 빠른 방법은 C를 거쳐 가는 것이며, 최소 15분이 걸린다'는 의미로 해석할 수 있습니다.</p>
+                
+                <h4>결론 및 제언</h4>
+                <p>마지막으로 연구 전체를 정리하는 시간입니다.</p>
+                <ul>
+                    <li><strong>연구를 통해 새롭게 알게 된 점:</strong> "생각보다 환승하는 것이 더 빠른 경로일 수 있다는 것을 알게 되었다."</li>
+                    <li><strong>느낀 점:</strong> "수학적 원리가 코딩을 통해 실제 문제를 해결하는 도구가 되는 것이 신기했다."</li>
+                    <li><strong>연구 결과 확장하기 <span class="page-ref" style="margin-left:5px;">(추가 탐구, 교과서 106쪽)</span>:</strong> "시간대별 교통체증을 가중치에 반영하면 더 정확한 결과를 얻을 수 있을 것이다."</li>
+                </ul>
+                 <div class="callout">
+                    <strong>✍️ 최종 보고서 작성하기</strong>
+                    <p>지금까지 계획하고 수행한 모든 과정을 정리하여 한 편의 멋진 연구 보고서를 완성해 보세요! 여러분의 탐구 과정 그 자체가 바로 훌륭한 연구 결과입니다.</p>
+                </div>
+            </section>
+
+            <section id="appendix">
+                <h2>🧠 부록: 더 넓은 컴퓨터 과학의 세계</h2>
+                <h3>이산수학과의 연결<span class="page-ref">(교과서 111쪽)</span></h3>
+                <p>우리가 오늘 배운 '그래프 이론'은 사실 <strong>'이산수학(Discrete Mathematics)'</strong>이라는 더 큰 학문 분야에 속해있어요. 이산수학은 연속적이지 않고 셀 수 있는 값들을 다루는 수학으로, 컴퓨터 과학의 논리적 기반을 이루는 아주 중요한 학문입니다. 알고리즘, 자료구조, 데이터베이스, 컴퓨터 네트워크 등 컴퓨터 과학의 거의 모든 분야가 이산수학 위에 세워져 있답니다.</p>
+                
+                <div class="callout info">
+                    <h4>최단 경로 너머: 최소 신장 트리 (MST)<span class="page-ref">(PDF 29쪽)</span></h4>
+                    <p>그래프를 활용한 또 다른 재미있는 문제로 **최소 신장 트리(Minimum Spanning Tree)**가 있습니다. 이것은 '모든 정점을 사이클 없이 연결하되, 간선들의 가중치 합이 최소가 되도록 만드는 것'을 목표로 합니다.
+                    <br><br>
+                    <strong>최단 경로(다익스트라) vs 최소 신장 트리(MST)</strong><br>
+                    - <strong>최단 경로:</strong> "A도시에서 B도시까지 가장 빨리 가려면?" (출발점과 도착점이 중요)<br>
+                    - <strong>최소 신장 트리:</strong> "모든 도시에 통신망을 설치하는데, 어떻게 연결해야 케이블 비용이 가장 적게 들까?" (전체 연결의 효율성이 중요)<br>
+                    이 문제를 해결하기 위한 알고리즘으로는 **크루스컬(Kruskal) 알고리즘**과 **프림(Prim) 알고리즘**이 유명합니다.</p>
+                </div>
+
+                <h3>참고 문헌<span class="page-ref">(교과서 110쪽)</span></h3>
+                <ul>
+                    <li>파이썬(Python) 공식 웹사이트. https://www.python.org</li>
+                    <li>Thomas H. Cormen 외, 『Introduction to Algorithms』, 한빛아카데미, 2014.</li>
+                    <li>위키백과, "다익스트라 알고리즘". https://ko.wikipedia.org/wiki/데이크스트라_알고리즘</li>
+                </ul>
+            </section>
+        </main>
+        
+        <footer>
+            <p>정보과제연구 수업 자료 | 여러분의 멋진 탐구를 응원합니다!</p>
+        </footer>
+    </div>
+    
+    <script>
+        // 코드 복사 기능을 위한 함수
+        function copyCode(button) {
+            const pre = button.previousElementSibling;
+            const code = pre.querySelector('code');
+            const textArea = document.createElement('textarea');
+            textArea.value = code.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            button.textContent = '복사 완료!';
+            setTimeout(() => {
+                button.textContent = '복사';
+            }, 2000);
+        }
+
+        // 스크롤 애니메이션을 위한 스크립트
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('main section');
+
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>
