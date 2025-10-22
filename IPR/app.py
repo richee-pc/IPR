@@ -97,7 +97,7 @@ page_options = {
     "🧪 3차시: 정보과제연구 실제": "class3.html",
     "🗺️ 4차시: 최단 경로 탐구": "class4.html",
     "📊 5차시: 인구 소멸 분석": "class5.html",
-    "🏆 수행평가: 연구 계획서": "pa1.html"
+    "🏆 수행평가: 연구 계획 & 연구 수행": "pa1.html"
 }
 selection = st.sidebar.radio(
     "이동할 페이지를 선택하세요:", 
