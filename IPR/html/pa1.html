@@ -7,113 +7,157 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700&family=Sunflower:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&family=Sunflower:wght@500;700&display=swap" rel="stylesheet">
     <style>
+        /* Base styles */
+        html { scroll-behavior: smooth; }
         body {
-            font-family: 'Nanum Gothic', sans-serif;
+            font-family: 'Nanum Gothic', 'Noto Sans KR', sans-serif;
             background-color: #f0f9ff; /* Cool Pastel Blue */
+            overflow-x: hidden; /* Prevent horizontal scroll */
         }
         .font-header {
             font-family: 'Sunflower', sans-serif;
         }
         .gradient-text {
-            background: linear-gradient(to right, #38bdf8, #facc15); /* Blue to Yellow */
+            background: linear-gradient(to right, #38bdf8, #fb7185); /* Blue to Pastel Pink */
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .rubric-table th, .rubric-table td {
-            border: 1px solid #fef9c3; /* Yellow */
+
+        /* Tables */
+        .rubric-table th, .rubric-table td,
+        .detailed-rubric-table th, .detailed-rubric-table td,
+        .log-table th, .log-table td {
+            border: 1px solid #e0e7ff; /* Consistent border color */
             padding: 12px;
             text-align: left;
             vertical-align: top;
         }
-        .rubric-table th {
-            background-color: #fefce8; /* Yellow */
+        .rubric-table th,
+        .detailed-rubric-table th,
+        .log-table th {
+            background-color: #eef2ff; /* Light indigo background for headers */
             font-weight: 700;
         }
+        .detailed-rubric-table .level-col { width: 10%; text-align: center; font-weight: bold;}
+        .detailed-rubric-table .score-col { width: 10%; text-align: center; font-weight: bold;}
+        .detailed-rubric-table .criteria-col { width: 60%; font-size: 0.85rem;}
+        .detailed-rubric-table .eval-element-col { width: 20%; font-weight: bold;}
+        .log-table th { background-color: #f1f5f9; }
+
+        /* Cards and Boxes */
         .prompt-card {
             background: #f1f5f9;
             border-left: 4px solid #f472b6; /* Pink */
             color: #1e293b;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
         }
-        /* Cute and clean "sticky note" style for guide boxes */
         .guide-box {
             background-color: #fdf2f8; /* Soft Pink */
             border-left: 4px solid #fbcfe8;
             padding: 1.5rem;
-            border-radius: 0.75rem; /* More rounded */
+            border-radius: 0.75rem;
             margin-bottom: 1.5rem;
             position: relative;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
-        .guide-box::before { /* Fun "tape" element */
+        .guide-box::before {
             content: '💡 멘토 가이드';
             font-family: 'Sunflower', sans-serif;
             position: absolute;
-            top: -12px;
-            left: 20px;
-            background: #f9a8d4;
-            padding: 2px 12px;
-            border-radius: 9999px;
-            font-size: 1rem;
-            font-weight: 700;
-            color: #9d174d;
+            top: -12px; left: 20px;
+            background: #fbcfe8; padding: 2px 12px; border-radius: 9999px;
+            font-size: 1rem; font-weight: 700; color: #9d174d;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
-        .guide-box p {
-            padding-top: 1rem;
-            color: #be185d;
-        }
-        /* Cute and clean "checklist" style for example boxes */
+        .guide-box p { padding-top: 1rem; color: #9d174d; }
+
         .example-box {
             background-color: #ecfeff; /* Soft Cyan */
             border-left: 4px solid #67e8f9;
-            padding: 1.25rem;
-            padding-left: 2rem;
-            border-radius: 0.75rem;
-            margin-top: 1rem;
-            position: relative;
+            padding: 1.25rem; padding-left: 2rem; border-radius: 0.75rem;
+            margin-top: 1rem; position: relative;
         }
-         .example-box::before {
-            content: '✅';
-            position: absolute;
-            left: 12px;
-            top: 18px;
-            font-size: 1.25rem;
+        .example-box::before {
+            content: '✅'; position: absolute; left: 12px; top: 18px; font-size: 1.25rem;
         }
+
+        .tips-box {
+            background-color: #fffbeb; /* Light Yellow */
+            border: 2px dashed #facc15; /* Dashed Yellow Border */
+            padding: 1.5rem; border-radius: 0.75rem; margin-top: 2rem;
+            text-align: center;
+        }
+        .tips-box h5 { font-family: 'Sunflower', sans-serif; font-size: 1.25rem; font-weight: 700; color: #ca8a04; margin-bottom: 0.5rem;}
+        .tips-box p { color: #a16207; font-size: 0.95rem; }
+
+        /* Details & Summary */
         details > summary {
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 1.125rem;
-            padding: 0.75rem 1rem;
-            border-radius: 0.75rem;
+            cursor: pointer; font-weight: 700; font-size: 1.125rem;
+            padding: 0.75rem 1rem; border-radius: 0.75rem;
             transition: background-color 0.2s;
+            display: flex; align-items: center; justify-content: space-between;
         }
-        details > summary:hover {
-            background-color: #fefce8; /* Yellow */
+        details > summary::after { /* Add arrow */
+             content: '▼'; font-size: 0.7rem; transition: transform 0.2s; margin-left: 0.5rem;
         }
-        details[open] > summary {
-            background-color: #fef9c3; /* Yellow */
-        }
-        textarea {
+        details[open] > summary::after { transform: rotate(180deg); }
+        details > summary:hover { background-color: #fefce8; }
+        details[open] > summary { background-color: #fef9c3; }
+
+        /* Inputs & Buttons */
+        textarea, input[type="date"] {
             transition: all 0.2s;
             border-radius: 0.75rem !important;
             background-color: #f9fafb;
+            border: 1px solid #cbd5e1;
         }
-        textarea:focus {
+        textarea:focus, input[type="date"]:focus {
             box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.4);
             border-color: #60a5fa;
             background-color: white;
+            outline: none;
         }
-        .title-box {
-            background-color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 1.5rem;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            border: 1px solid #e2e8f0;
-            margin-bottom: 2rem;
-            max-width: 48rem;
-            margin-left: auto;
-            margin-right: auto;
+        .log-table input[type="date"], .log-table textarea { padding: 8px; }
+        .log-table textarea { min-height: 50px; }
+        .log-table button { transition: all 0.2s; }
+        .log-table .delete-btn { background-color: #fecaca; color: #b91c1c; font-size: 0.8rem; }
+        .log-table .delete-btn:hover { background-color: #fca5a5; transform: scale(1.05); }
+
+        /* Buttons */
+        .btn {
+            font-weight: 700; padding: 0.75rem 2rem; border-radius: 9999px;
+            transition: all 0.2s; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+            transform-origin: center;
         }
+        .btn:hover {
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            transform: translateY(-2px) scale(1.02);
+        }
+        .btn-cyan { background-color: #06b6d4; color: white; } .btn-cyan:hover { background-color: #0891b2; }
+        .btn-pink { background-color: #ec4899; color: white; } .btn-pink:hover { background-color: #db2777; }
+        .btn-yellow { background-color: #f59e0b; color: white; } .btn-yellow:hover { background-color: #d97706; }
+
+        /* Animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Mission Dividers */
+        .mission-divider {
+            margin: 4rem 0;
+            text-align: center;
+        }
+        .mission-divider svg { display: inline-block; width: 40px; height: 40px; color: #94a3b8; }
+
     </style>
 </head>
 <body class="bg-sky-50 text-slate-700">
@@ -121,10 +165,10 @@
     <!-- Header -->
     <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-6 py-4 flex items-center gap-3">
-             <span class="text-3xl">✏️</span>
+             <span class="text-3xl animate-bounce">✏️</span>
             <div>
                  <h1 class="text-2xl font-bold text-slate-800 font-header">정보과제연구 수행평가</h1>
-                 <p class="text-slate-500">연구 계획서 작성 및 웹페이지 제작 최종 가이드</p>
+                 <p class="text-slate-500">연구 계획서 작성 & 웹페이지 제작 완벽 가이드 ✨</p>
             </div>
         </div>
     </header>
@@ -133,123 +177,137 @@
     <main class="container mx-auto px-6 py-12">
 
         <!-- Introduction -->
-        <section class="text-center py-12">
-            <h2 class="text-5xl md:text-6xl font-bold mb-4 tracking-tighter font-header">
-                <span class="gradient-text">반짝이는 아이디어</span>를<br>체계적인 계획으로!
+        <section class="text-center pt-12 pb-16 fade-in">
+             <div class="text-6xl mb-4">🎉</div>
+            <h2 class="text-5xl md:text-6xl font-bold mb-6 tracking-tighter font-header">
+                <span class="gradient-text">여러분의 아이디어</span>를<br>세상에 보여줄 시간!
             </h2>
-            <p class="text-lg text-slate-600 max-w-3xl mx-auto">
-                이번 수행평가는 여러분의 빛나는 아이디어를 체계적인 '연구 계획서'로 설계하고, '웹페이지'로 세상에 선보이는 첫 번째 미션입니다. 이 가이드를 따라 차근차근 정복해봅시다!
+            <p class="text-lg text-slate-600 max-w-3xl mx-auto mb-8">
+                이 가이드는 단순한 안내서가 아니에요. 여러분의 반짝이는 생각을 멋진 '연구 계획'으로 만들고, 직접 '수행'하며 성장하는 모든 과정을 함께하는 든든한 멘토가 되어 줄 거예요!
             </p>
+            <a href="#mission1" class="btn btn-cyan">
+                 시작 가이드 보기
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
         </section>
 
-        <!-- Assessment Overview -->
-        <section id="overview" class="mb-20">
-            <div class="title-box">
-                <h3 class="text-3xl font-bold text-center font-header text-sky-700">수행평가 개요 한눈에 보기 🎯</h3>
+        <!-- MISSION 1: Research Plan -->
+        <section id="mission1" class="mb-20 fade-in">
+            <div class="bg-sky-100 border-2 border-sky-300 shadow-lg rounded-3xl mb-12">
+                <h3 class="text-3xl font-bold text-center font-header text-sky-800 py-5 px-6 rounded-t-3xl flex items-center justify-center gap-3">
+                    <span class="text-4xl">🚀</span> MISSION 1: A+ 연구 계획서 초안 완성하기
+                </h3>
             </div>
-            <div class="grid md:grid-cols-4 gap-6 max-w-5xl mx-auto">
-                <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 text-center transform hover:-translate-y-1 transition-transform">
-                    <p class="text-4xl mb-2">📝</p>
-                    <h4 class="font-bold text-slate-500">평가 영역</h4>
-                    <p class="text-xl font-bold text-sky-600">연구 계획</p>
-                </div>
-                 <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 text-center transform hover:-translate-y-1 transition-transform">
-                    <p class="text-4xl mb-2">💯</p>
-                    <h4 class="font-bold text-slate-500">반영 비율</h4>
-                    <p class="text-xl font-bold text-sky-600">50%</p>
-                </div>
-                 <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 text-center transform hover:-translate-y-1 transition-transform">
-                    <p class="text-4xl mb-2">🎨</p>
-                    <h4 class="font-bold text-slate-500">평가 방법</h4>
-                    <p class="text-xl font-bold text-sky-600">프로젝트</p>
-                </div>
-                 <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 text-center transform hover:-translate-y-1 transition-transform">
-                    <p class="text-4xl mb-2">🗓️</p>
-                    <h4 class="font-bold text-slate-500">평가 시기</h4>
-                    <p class="text-xl font-bold text-sky-600">10월 1-2주(2차시)</p>
+            
+            <!-- Assessment Overview -->
+            <div id="overview1" class="mb-16">
+                <h4 class="text-2xl font-bold mb-6 text-center font-header">수행평가 개요 (연구 계획) 🎯</h4>
+                <div class="grid md:grid-cols-4 gap-6 max-w-5xl mx-auto">
+                    <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 text-center transform hover:-translate-y-1 transition-transform">
+                        <p class="text-4xl mb-2">📝</p>
+                        <h5 class="font-bold text-slate-500">평가 영역</h5>
+                        <p class="text-xl font-bold text-sky-600">연구 계획</p>
+                    </div>
+                     <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 text-center transform hover:-translate-y-1 transition-transform">
+                        <p class="text-4xl mb-2">💯</p>
+                        <h5 class="font-bold text-slate-500">반영 비율</h5>
+                        <p class="text-xl font-bold text-sky-600">50%</p>
+                    </div>
+                     <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 text-center transform hover:-translate-y-1 transition-transform">
+                        <p class="text-4xl mb-2">🎨</p>
+                        <h5 class="font-bold text-slate-500">평가 방법</h5>
+                        <p class="text-xl font-bold text-sky-600">프로젝트</p>
+                    </div>
+                     <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 text-center transform hover:-translate-y-1 transition-transform">
+                        <p class="text-4xl mb-2">🗓️</p>
+                        <h5 class="font-bold text-slate-500">평가 시기</h5>
+                        <p class="text-xl font-bold text-sky-600">10월 1-2주(2차시)</p>
+                    </div>
                 </div>
             </div>
-        </section>
-        
-        <!-- Rubric Details -->
-        <section id="rubric" class="mb-20">
-            <div class="title-box">
-                 <h3 class="text-3xl font-bold text-center font-header text-sky-700">A+를 위한 채점 기준 완전 분석 🔍</h3>
+            
+            <!-- Rubric Details -->
+            <div id="rubric1" class="mb-16">
+                <h4 class="text-2xl font-bold mb-6 text-center font-header">채점 기준 완전 분석 (연구 계획) 🔍</h4>
+                <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-200 overflow-x-auto">
+                    <table class="w-full rubric-table">
+                        <thead>
+                            <tr>
+                                <th class="rounded-tl-xl w-1/4">평가 요소</th>
+                                <th class="w-1/2">세부 채점 기준</th>
+                                <th class="rounded-tr-xl w-1/4">배점</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="bg-yellow-50">
+                                <td rowspan="2" class="font-bold">1. 연구 주제 탐색 및 자료 조사</td>
+                                <td>자신이 흥미를 가진 연구 분야를 키워드 형식으로 작성하고, 선정 이유를 명확하게 정리하였는가?</td>
+                                <td class="text-center font-bold">5점</td>
+                            </tr>
+                            <tr class="bg-yellow-50">
+                                <td>키워드와 관련된 사이트를 탐색하여 조사한 내용을 정보 과제 연구의 영역별로 체계적으로 분류하고 요약하였는가?</td>
+                                <td class="text-center font-bold">15점</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="3" class="font-bold">2. 문제의 발견 및 선정</td>
+                                <td>정보 과제 연구의 목적(컴퓨터 활용 문제 해결)에 맞는 주제를 선정하고, 그 이유를 다른 분야의 과제 연구와 비교하여 논리적으로 설명하였는가?</td>
+                                <td class="text-center font-bold">15점</td>
+                            </tr>
+                            <tr>
+                                <td>선정한 주제에 따른 문제를 'A로 인하여 B이다'와 같은 인과적 표현을 사용하여 다양한 관점에서 구체적으로 작성하였는가?</td>
+                                <td class="text-center font-bold">5점</td>
+                            </tr>
+                            <tr>
+                                <td>주제로부터 도출한 여러 문제에 대한 과학적 근거를 각각 수집하여, 가장 탐구 가치가 높은 문제를 최종적으로 선정하였는가?</td>
+                                <td class="text-center font-bold">10점</td>
+                            </tr>
+                            <tr class="bg-yellow-50">
+                                <td class="font-bold">3. 연구 계획서 작성</td>
+                                <td>
+                                    <p>아래의 모든 요소를 포함하여 논리적인 연구 계획서를 완성하였는가?</p>
+                                    <ul class="list-disc list-inside mt-2 text-sm text-slate-600">
+                                        <li><strong>연구 목적 및 이론적 배경</strong>의 논리적 근거 제시</li>
+                                        <li><strong>연구 과정 및 방법</strong>의 구체성</li>
+                                        <li>주제와 연관된 <strong>기대 효과</strong> 명시</li>
+                                    </ul>
+                                </td>
+                                <td class="text-center font-bold">50점</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="text-right font-bold text-lg rounded-bl-xl">총점 (연구 계획)</td>
+                                <td class="text-center font-bold text-lg text-yellow-600 rounded-br-xl">100점</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <details class="mt-4 text-sm">
+                        <summary class="text-gray-500 font-semibold">채점 기준 상세 보기 (클릭)</summary>
+                        <div class="mt-2 p-4 bg-gray-50 rounded-lg border">
+                           [참고: 연구 계획 채점 기준 상세 내용 - 필요시 여기에 PDF의 상세 기준을 추가할 수 있습니다.]
+                        </div>
+                    </details>
+                </div>
             </div>
-            <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-200 overflow-x-auto">
-                <table class="w-full rubric-table">
-                    <thead>
-                        <tr>
-                            <th class="rounded-tl-xl w-1/4">평가 요소</th>
-                            <th class="w-1/2">세부 채점 기준</th>
-                            <th class="rounded-tr-xl w-1/4">배점</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="bg-yellow-50">
-                            <td rowspan="2" class="font-bold">1. 연구 주제 탐색 및 자료 조사</td>
-                            <td>자신이 흥미를 가진 연구 분야를 키워드 형식으로 작성하고, 선정 이유를 명확하게 정리하였는가?</td>
-                            <td class="text-center font-bold">5점</td>
-                        </tr>
-                        <tr class="bg-yellow-50">
-                            <td>키워드와 관련된 사이트를 탐색하여 조사한 내용을 정보 과제 연구의 영역별로 체계적으로 분류하고 요약하였는가?</td>
-                            <td class="text-center font-bold">15점</td>
-                        </tr>
-                        <tr>
-                            <td rowspan="3" class="font-bold">2. 문제의 발견 및 선정</td>
-                            <td>정보 과제 연구의 목적(컴퓨터 활용 문제 해결)에 맞는 주제를 선정하고, 그 이유를 다른 분야의 과제 연구와 비교하여 논리적으로 설명하였는가?</td>
-                            <td class="text-center font-bold">15점</td>
-                        </tr>
-                        <tr>
-                            <td>선정한 주제에 따른 문제를 'A로 인하여 B이다'와 같은 인과적 표현을 사용하여 다양한 관점에서 구체적으로 작성하였는가?</td>
-                            <td class="text-center font-bold">5점</td>
-                        </tr>
-                        <tr>
-                            <td>주제로부터 도출한 여러 문제에 대한 과학적 근거를 각각 수집하여, 가장 탐구 가치가 높은 문제를 최종적으로 선정하였는가?</td>
-                            <td class="text-center font-bold">10점</td>
-                        </tr>
-                        <tr class="bg-yellow-50">
-                            <td class="font-bold">3. 연구 계획서 작성</td>
-                            <td>
-                                <p>아래의 모든 요소를 포함하여 논리적인 연구 계획서를 완성하였는가?</p>
-                                <ul class="list-disc list-inside mt-2 text-sm text-slate-600">
-                                    <li><strong>연구 목적 및 이론적 배경</strong>의 논리적 근거 제시</li>
-                                    <li><strong>연구 과정 및 방법</strong>의 구체성</li>
-                                    <li>주제와 연관된 <strong>기대 효과</strong> 명시</li>
-                                </ul>
-                            </td>
-                            <td class="text-center font-bold">50점</td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" class="text-right font-bold text-lg rounded-bl-xl">총점</td>
-                            <td class="text-center font-bold text-lg text-yellow-600 rounded-br-xl">100점</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
 
-        <!-- How-to Guide: Research Plan -->
-        <section id="mission" class="mb-20">
-             <div class="title-box">
-                <h3 class="text-3xl font-bold text-center font-header text-sky-700">MISSION: A+ 연구 계획서 초안 완성하기 🚀</h3>
-            </div>
-            <p class="text-center text-slate-600 mb-10 max-w-3xl mx-auto -mt-4">여러분은 이제 정보과제연구 전문가가 되어, 아래 템플릿을 채우는 미션을 수행합니다. 각 항목별 멘토의 가이드를 따라 여러분만의 멋진 연구 계획서를 만들어보세요!</p>
-
+            <!-- How-to Guide: Research Plan -->
             <div class="bg-white p-8 md:p-12 rounded-3xl shadow-lg border border-slate-200 space-y-12">
-
-                <!-- 1. 연구 주제 -->
                 <div>
-                    <h4 class="text-2xl font-bold mb-4 bg-sky-100 text-sky-800 p-4 rounded-xl font-header">1. 연구 주제</h4>
+                    <div class="bg-white shadow-md rounded-xl mb-6">
+                        <h4 class="text-2xl font-bold font-header text-slate-800 py-3 px-6 rounded-xl flex items-center gap-2">
+                             <span class="text-xl">🎯</span> 1. 연구 주제
+                        </h4>
+                    </div>
                     <div class="guide-box">
                         <p>가장 먼저, 여러분의 연구가 어떤 이름으로 불릴지 정해야 합니다. Mission 1에서 정했던 주제를 여기에 명확하게 기입하세요. 주제는 연구의 전체 내용을 한 문장으로 압축해서 보여주는 '얼굴'과도 같습니다!</p>
                     </div>
-                    <textarea id="topic" class="w-full p-4 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-400" placeholder="[여기에 Mission 1에서 정한 나의 연구 주제 입력]"></textarea>
+                    <textarea id="m1_topic" class="w-full p-4 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-400" placeholder="[여러분의 호기심을 자극하는 연구 주제를 적어보세요!]"></textarea>
                 </div>
 
-                <!-- 2. 서론 -->
                 <div>
-                    <h4 class="text-2xl font-bold mb-4 bg-sky-100 text-sky-800 p-4 rounded-xl font-header">2. 서론</h4>
+                     <div class="bg-white shadow-md rounded-xl mb-6">
+                        <h4 class="text-2xl font-bold font-header text-slate-800 py-3 px-6 rounded-xl flex items-center gap-2">
+                            <span class="text-xl">🤔</span> 2. 서론
+                        </h4>
+                    </div>
                      <div class="guide-box">
                         <p>서론은 독자의 흥미를 유발하고 '왜 이 연구를 읽어야 하는지' 설득하는 가장 중요한 부분입니다. 동기, 목적, 문제를 명확하게 제시하여 연구의 전체적인 방향을 알려주세요.</p>
                     </div>
@@ -263,7 +321,7 @@
                                     <p><strong>예시)</strong> 매일 먹는 급식이지만, 친구들 사이에서는 메뉴에 대한 불만이 자주 나온다. 과연 어떤 이유로 만족도가 달라지는지 데이터로 직접 확인해보고, 더 나은 급식 문화를 만드는 데 기여하고 싶다는 생각에 연구를 시작하게 되었다.</p>
                                 </div>
                             </div>
-                            <textarea id="motivation" class="w-full p-4 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-400" placeholder="[내가 이 연구를 왜 하고 싶은지, 이 연구가 왜 중요한지 간단하게 입력]"></textarea>
+                            <textarea id="m1_motivation" class="w-full p-4 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-400" placeholder="[이 연구를 왜 하고 싶은지, 왜 중요한지 진솔하게 적어보세요!]"></textarea>
                         </div>
                     </details>
                     
@@ -276,7 +334,7 @@
                                     <p><strong>예시)</strong> 본교 학생들의 급식 메뉴 선호도 및 만족도 현황을 파악하고, 만족도에 영향을 미치는 핵심 요인을 데이터 분석을 통해 도출하는 것을 목적으로 한다.</p>
                                 </div>
                             </div>
-                            <textarea id="purpose" class="w-full p-4 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-400" placeholder="[이 연구를 통해 무엇을 명확히 밝혀내고 싶은지 입력]"></textarea>
+                            <textarea id="m1_purpose" class="w-full p-4 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-400" placeholder="[이 연구를 통해 무엇을 명확히 밝혀내고 싶은지 목표를 설정하세요!]"></textarea>
                         </div>
                     </details>
 
@@ -289,14 +347,17 @@
                                     <p><strong>예시)</strong><br>1. 우리 학교 학생들이 가장 선호하는 급식 메뉴와 가장 비선호하는 급식 메뉴는 무엇인가?<br>2. 메뉴의 어떤 속성(맛, 양, 종류, 비주얼 등)이 급식 만족도에 가장 큰 영향을 미치는가?</p>
                                 </div>
                             </div>
-                            <textarea id="problem" class="w-full p-4 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-400" placeholder="[연구를 통해 답을 찾고 싶은 구체적인 질문 1~2가지]"></textarea>
+                            <textarea id="m1_problem" class="w-full p-4 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-400" placeholder="[연구를 통해 답을 찾고 싶은 구체적인 질문 1~2가지를 던져보세요!]"></textarea>
                         </div>
                     </details>
                 </div>
 
-                <!-- 3. 이론적 배경 -->
                 <div>
-                     <h4 class="text-2xl font-bold mb-4 bg-sky-100 text-sky-800 p-4 rounded-xl font-header">3. 이론적 배경</h4>
+                    <div class="bg-white shadow-md rounded-xl mb-6">
+                         <h4 class="text-2xl font-bold font-header text-slate-800 py-3 px-6 rounded-xl flex items-center gap-2">
+                             <span class="text-xl">📚</span> 3. 이론적 배경
+                         </h4>
+                    </div>
                      <details class="bg-slate-100 p-2 rounded-xl">
                         <summary class="font-header">가. 관련 이론/기술 및 선행 연구 조사</summary>
                         <div class="p-4">
@@ -310,14 +371,17 @@
                                     3. "데이터 분석 기반 학생 의견 수렴"</p>
                                 </div>
                             </div>
-                             <textarea id="background" class="w-full p-4 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-400" placeholder="[내 연구에 필요한 핵심 개념이나 기술을 입력하고, 아래 추천 키워드로 선행 연구를 찾아보세요.]"></textarea>
+                             <textarea id="m1_background" class="w-full p-4 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-400" placeholder="[연구에 필요한 개념/기술을 적고, 관련 연구를 찾아 정리해보세요!]"></textarea>
                         </div>
                     </details>
                 </div>
 
-                <!-- 4. 연구 내용 및 방법 -->
                 <div>
-                    <h4 class="text-2xl font-bold mb-4 bg-sky-100 text-sky-800 p-4 rounded-xl font-header">4. 연구 내용 및 방법</h4>
+                    <div class="bg-white shadow-md rounded-xl mb-6">
+                        <h4 class="text-2xl font-bold font-header text-slate-800 py-3 px-6 rounded-xl flex items-center gap-2">
+                             <span class="text-xl">🛠️</span> 4. 연구 내용 및 방법
+                        </h4>
+                    </div>
                      <details class="bg-slate-100 p-2 rounded-xl">
                         <summary class="font-header">가. 연구 대상, 절차, 방법 및 일정</summary>
                         <div class="p-4">
@@ -336,14 +400,17 @@
                                     - 4주차 (10/6~10/12): 연구 계획서 최종 작성 및 웹페이지 제작</p>
                                 </div>
                             </div>
-                             <textarea id="method" class="w-full p-4 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-400" placeholder="[누구를 대상으로, 어떤 순서와 방법, 일정으로 연구할지 구체적으로 작성]"></textarea>
+                             <textarea id="m1_method" class="w-full p-4 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-400" placeholder="[누구를 대상으로, 어떤 순서/방법/일정으로 연구할지 구체적으로 설계하세요!]"></textarea>
                         </div>
                     </details>
                 </div>
                 
-                <!-- 5. 기대 효과 및 활용 방안 -->
                 <div>
-                     <h4 class="text-2xl font-bold mb-4 bg-sky-100 text-sky-800 p-4 rounded-xl font-header">5. 기대 효과 및 활용 방안</h4>
+                     <div class="bg-white shadow-md rounded-xl mb-6">
+                        <h4 class="text-2xl font-bold font-header text-slate-800 py-3 px-6 rounded-xl flex items-center gap-2">
+                             <span class="text-xl">✨</span> 5. 기대 효과 및 활용 방안
+                        </h4>
+                    </div>
                       <details class="bg-slate-100 p-2 rounded-xl">
                         <summary class="font-header">가. 기대 효과 및 활용 방안</summary>
                         <div class="p-4">
@@ -353,14 +420,17 @@
                                     <p><strong>예시)</strong> 본 연구의 분석 결과를 학교 영양사 선생님께 정책 자료로 전달하여, 실제 급식 메뉴 구성 시 학생들의 선호도를 반영하는 과학적인 근거로 활용될 수 있다. 이를 통해 급식 만족도를 실질적으로 향상시키고, 잔반을 줄여 환경 보호에도 기여할 수 있을 것으로 기대된다.</p>
                                 </div>
                             </div>
-                             <textarea id="effect" class="w-full p-4 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-400" placeholder="[이 연구 결과가 어떻게 활용될 수 있을지 자유롭게 상상해서 입력]"></textarea>
+                             <textarea id="m1_effect" class="w-full p-4 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-400" placeholder="[연구 결과가 가져올 긍정적인 변화와 활용 방법을 상상해보세요!]"></textarea>
                         </div>
                     </details>
                 </div>
 
-                <!-- 6. 참고 문헌 -->
                 <div>
-                    <h4 class="text-2xl font-bold mb-4 bg-sky-100 text-sky-800 p-4 rounded-xl font-header">6. 참고 문헌</h4>
+                     <div class="bg-white shadow-md rounded-xl mb-6">
+                        <h4 class="text-2xl font-bold font-header text-slate-800 py-3 px-6 rounded-xl flex items-center gap-2">
+                            <span class="text-xl">🔗</span> 6. 참고 문헌
+                        </h4>
+                    </div>
                      <details class="bg-slate-100 p-2 rounded-xl">
                         <summary class="font-header">가. 참고 문헌</summary>
                         <div class="p-4">
@@ -372,19 +442,26 @@
                                     2. 박영희. (2023). 고등학생의 학교 급식 만족도에 영향을 미치는 요인 분석. <em>한국청소년연구, 34</em>(2), 112-135.</p>
                                 </div>
                             </div>
-                            <textarea id="references" class="w-full p-4 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-400" placeholder="[연구에 참고한 자료가 있다면 APA 양식에 맞춰 작성해보세요.]"></textarea>
+                            <textarea id="m1_references" class="w-full p-4 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-400" placeholder="[연구에 참고한 자료가 있다면 APA 양식에 맞춰 작성해보세요.]"></textarea>
                         </div>
                     </details>
                 </div>
 
+                 <!-- Tips -->
+                <div class="tips-box">
+                    <h5>⭐ A+를 위한 꿀팁! ⭐</h5>
+                    <p>각 항목을 작성할 때는 '왜?', '무엇을?', '어떻게?'라는 질문을 스스로에게 던져보세요. 답변이 명확할수록 좋은 계획서가 됩니다!</p>
+                </div>
+
+
                 <!-- Action Buttons -->
                 <div class="mt-12 pt-8 border-t border-slate-200 text-center">
-                    <h4 class="text-2xl font-bold mb-4 font-header">🎉 미션 완료! 결과 저장하기</h4>
-                    <p class="text-slate-600 mb-6">위에서 작성한 내용을 파일로 다운로드하여 저장하세요.</p>
+                    <h4 class="text-2xl font-bold mb-4 font-header">🎉 미션 1 완료! 결과 저장하기</h4>
+                    <p class="text-slate-600 mb-6">모든 내용을 꼼꼼히 작성했나요? 이제 파일로 저장해서 다음 미션을 준비해요!</p>
                     <div class="flex justify-center">
-                        <button onclick="downloadReport()" class="w-full sm:w-auto bg-cyan-500 text-white font-bold py-3 px-8 rounded-full hover:bg-cyan-600 transition-all shadow hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
+                        <button onclick="downloadReport1()" class="btn btn-cyan">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                            파일(.txt)로 다운로드
+                            연구 계획서 파일(.txt)로 다운로드
                         </button>
                     </div>
                 </div>
@@ -392,41 +469,270 @@
             </div>
         </section>
 
-        <!-- How-to Guide: Webpage -->
-         <section id="howto-web">
-             <div class="title-box">
-                <h3 class="text-3xl font-bold text-center font-header text-sky-700">MISSION COMPLETE: 연구 계획서 웹으로 발표하기 💻</h3>
+        <!-- Divider -->
+        <div class="mission-divider">
+             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="m19 12H5"/></svg>
+        </div>
+
+
+        <!-- MISSION 2: Research Performance -->
+        <section id="mission2" class="mb-20 fade-in">
+            <div class="bg-pink-100 border-2 border-pink-300 shadow-lg rounded-3xl mb-12">
+                 <h3 class="text-3xl font-bold text-center font-header text-pink-800 py-5 px-6 rounded-t-3xl flex items-center justify-center gap-3">
+                    <span class="text-4xl">🏃‍♀️</span> MISSION 2: A+ 연구 수행하기 <span class="text-4xl">🏃‍♂️</span>
+                </h3>
             </div>
-            <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-200 -mt-4">
-                <h4 class="text-2xl font-bold mb-4 font-header">AI로 1분 만에 연구 계획 웹페이지 만들기</h4>
-                <p class="mb-6 text-slate-600">위 'MISSION' 섹션에서 다운로드한 연구 계획서 텍스트 파일을 열고, 전체 내용을 복사하세요. 그리고 아래 '궁극의 프롬프트'에 붙여넣기만 하면, AI가 여러분만의 연구 발표 사이트를 뚝딱 만들어 줄 거예요!</p>
+            
+            <!-- Assessment Overview -->
+            <div id="overview2" class="mb-16">
+                <h4 class="text-2xl font-bold mb-6 text-center font-header">수행평가 개요 (연구 수행) 🎯</h4>
+                <div class="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                    <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 text-center transform hover:-translate-y-1 transition-transform">
+                        <p class="text-4xl mb-2">🔬</p>
+                        <h5 class="font-bold text-slate-500">평가 영역</h5>
+                        <p class="text-xl font-bold text-pink-600">연구 수행</p>
+                    </div>
+                     <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 text-center transform hover:-translate-y-1 transition-transform">
+                        <p class="text-4xl mb-2">💯</p>
+                        <h5 class="font-bold text-slate-500">반영 비율</h5>
+                        <p class="text-xl font-bold text-pink-600">50%</p>
+                    </div>
+                     <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 text-center transform hover:-translate-y-1 transition-transform">
+                        <p class="text-4xl mb-2">🎨</p>
+                        <h5 class="font-bold text-slate-500">평가 방법</h5>
+                        <p class="text-xl font-bold text-pink-600">프로젝트, 포트폴리오</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Rubric Details -->
+            <div id="rubric2" class="mb-16">
+                <h4 class="text-2xl font-bold mb-6 text-center font-header">채점 기준 완전 분석 (연구 수행) 🔍</h4>
+                <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-200 overflow-x-auto">
+                    <table class="w-full detailed-rubric-table">
+                         <thead>
+                            <tr>
+                                <th class="rounded-tl-lg eval-element-col">평가 요소 (배점)</th>
+                                <th class="level-col">수준</th>
+                                <th class="criteria-col">채점 기준</th>
+                                <th class="rounded-tr-lg score-col">평정점</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 연구 방법 설계 -->
+                            <tr class="bg-yellow-50">
+                                <td rowspan="3" class="eval-element-col">연구 방법 설계<br/>(25점)</td>
+                                <td class="level-col">상</td>
+                                <td class="criteria-col">작성한 연구 계획서를 바탕으로 연구 주제와 연관된 자료를 수집하여 컴퓨터를 활용한 효율적인 연구 방법을 논리적으로 설계하고 설명함</td>
+                                <td class="score-col">25</td>
+                            </tr>
+                             <tr class="bg-yellow-50">
+                                <td class="level-col">중</td>
+                                <td class="criteria-col">작성한 연구 계획서를 바탕으로 연구 주제와 연관된 자료를 수집하여 컴퓨터를 활용한 연구 방법을 설계하고 설명함</td>
+                                <td class="score-col">20</td>
+                             </tr>
+                             <tr class="bg-yellow-50">
+                                <td class="level-col">하</td>
+                                <td class="criteria-col">작성한 연구 계획서를 바탕으로 연구 주제와 연관된 자료를 수집하여 컴퓨터를 활용한 연구 방법을 설계함</td>
+                                <td class="score-col">15</td>
+                            </tr>
+                            <!-- 연구 수행 -->
+                            <tr>
+                                <td rowspan="3" class="eval-element-col">연구 수행<br/>(50점)</td>
+                                <td class="level-col">상</td>
+                                <td class="criteria-col">컴퓨터를 활용한 연구 방법을 통해 절차적으로 연구를 수행하고, 이를 바탕으로 도출한 연구 결과를 분석하고 설명함</td>
+                                <td class="score-col">50</td>
+                            </tr>
+                             <tr>
+                                <td class="level-col">중</td>
+                                <td class="criteria-col">컴퓨터를 활용한 연구 방법을 통해 절차적으로 연구를 수행하고, 이를 바탕으로 연구 결과를 도출함</td>
+                                <td class="score-col">40</td>
+                             </tr>
+                             <tr>
+                                <td class="level-col">하</td>
+                                <td class="criteria-col">컴퓨터를 활용한 연구 방법을 통해 연구를 수행하고 연구 결과를 도출함</td>
+                                <td class="score-col">30</td>
+                            </tr>
+                             <!-- 연구 수행 점검 -->
+                            <tr class="bg-yellow-50">
+                                <td rowspan="3" class="eval-element-col">연구 수행 점검<br/>(25점)</td>
+                                <td class="level-col">상</td>
+                                <td class="criteria-col">연구 수행 점검표를 작성하여 지속적인 평가와 분석을 통해 자신의 수행 과정을 점검하고 개선 방향을 작성함.</td>
+                                <td class="score-col">25</td>
+                            </tr>
+                             <tr class="bg-yellow-50">
+                                <td class="level-col">중</td>
+                                <td class="criteria-col">연구 수행 점검표를 작성하여 지속적인 평가와 분석을 통해 자신의 수행 과정을 점검함.</td>
+                                <td class="score-col">20</td>
+                             </tr>
+                             <tr class="bg-yellow-50">
+                                <td class="level-col">하</td>
+                                <td class="criteria-col">연구 수행 점검표를 작성하여 자신의 수행 과정을 평가함.</td>
+                                <td class="score-col">10</td>
+                            </tr>
+                            <!-- 총점 -->
+                             <tr>
+                                <td colspan="3" class="text-right font-bold text-lg rounded-bl-lg">총점 (연구 수행)</td>
+                                <td class="text-center font-bold text-lg text-yellow-600 rounded-br-lg">100점</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                     <p class="text-xs text-gray-500 mt-2">* 상기 표는 요약본이며, 실제 평가에는 아래 링크의 상세 기준이 적용됩니다.</p>
+                     <p class="text-xs text-gray-500 mt-1">* 미제출 또는 작성 내용이 없거나 미흡한 경우 0점 처리될 수 있습니다.</p>
+                     <!-- Link to Detailed Rubric -->
+                    <div class="mt-4 text-center">
+                        <a href="https://drive.google.com/file/d/1hTvYSHn4RQiNC9iuBZoBkwDoGwR--mIB/view?usp=drive_link" target="_blank" class="inline-block bg-indigo-100 text-indigo-700 font-semibold py-2 px-4 rounded-full text-sm hover:bg-indigo-200 transition">
+                            📄 연구 수행 채점 기준표 상세 파일 보기 (클릭)
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- How-to Guide: Research Performance -->
+            <div class="bg-white p-8 md:p-12 rounded-3xl shadow-lg border border-slate-200 space-y-12">
+                <div>
+                    <div class="bg-white shadow-md rounded-xl mb-6">
+                        <h4 class="text-2xl font-bold font-header text-slate-800 py-3 px-6 rounded-xl flex items-center gap-2">
+                            <span class="text-xl">✍️</span> 1. 연구 방법 상세 설계
+                        </h4>
+                    </div>
+                    <div class="guide-box">
+                        <p>MISSION 1에서 계획한 연구 방법을 '어떻게' 실행할지 구체적인 시나리오로 작성해 보세요. 어떤 도구(프로그램, 라이브러리)를 쓸 건지, 데이터는 어떻게 수집하고 정제할 것인지, 어떤 알고리즘으로 분석할지 등을 상세하게 설계합니다.</p>
+                        <div class="example-box">
+                            <p><strong>예시)</strong><br>1. <strong>데이터 수집:</strong> 구글 폼 설문지를 제작, 2학년 5개 반에 배포하여 100건 이상의 응답 수집.<br>2. <strong>데이터 정제:</strong> 수집된 데이터를 'Pandas' 라이브러리를 사용해 CSV 파일로 변환. 비어있는 응답, 장난성 응답 제거.<br>3. <strong>데이터 분석:</strong>
+                                - (객관식) 'Matplotlib'를 사용해 메뉴 선호도, 만족도 점수 등을 막대그래프, 파이 차트로 시각화.
+                                - (주관식) 'Okt(Open Korean Text)' 라이브러리로 형태소 분석 후, 'WordCloud'로 불만족 사유 키워드 시각화.<br>
+                               4. <strong>결과 도출:</strong> 그래프와 워드클라우드를 분석하여, '짠맛'과 '양'이 만족도에 가장 큰 영향을 미친다는 결론 도출.
+                            </p>
+                        </div>
+                    </div>
+                    <textarea id="m2_design" class="w-full p-4 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-400" placeholder="[컴퓨터를 활용한 나의 구체적인 연구 방법론을 설계해보세요.]"></textarea>
+                </div>
+
+                <div>
+                    <div class="bg-white shadow-md rounded-xl mb-6">
+                        <h4 class="text-2xl font-bold font-header text-slate-800 py-3 px-6 rounded-xl flex items-center gap-2">
+                             <span class="text-xl">📓</span> 2. 연구 수행 일지 (과정 및 결과)
+                        </h4>
+                    </div>
+                     <div class="guide-box">
+                        <p>실제 연구를 수행하며 겪은 일들을 날짜별로 기록해 보세요. 계획대로 잘 된 점, 예상치 못한 문제점, 그리고 그 문제를 어떻게 해결했는지 구체적으로 작성합니다. 이것이 여러분의 소중한 포트폴리오가 됩니다.</p>
+                         <div class="example-box">
+                            <p><strong>예시)</strong><br><strong>10/14(월):</strong> 구글 폼 설문 배포 완료. 예상보다 응답률이 저조하여, 각 반 반장들에게 한 번 더 홍보를 부탁함.<br>
+                            <strong>10/16(수):</strong> 102건 응답 수집 완료. 데이터를 CSV로 다운로드하여 Pandas로 로드함. '기타' 의견에 비속어가 포함된 응답 2건 발견하여 제거함.<br>
+                            <strong>10/17(목):</strong> Matplotlib으로 선호 메뉴 그래프 생성. '치킨'이 압도적 1위 확인. 주관식 답변으로 워드클라우드를 만들었으나 "너무", "진짜" 등 불필요한 단어가 많아 불용어 사전을 만들어 제거 후 재실행.
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Research Log Table -->
+                     <div class="mt-4 overflow-x-auto bg-slate-50 p-4 rounded-xl border">
+                        <table id="researchLogTable" class="log-table">
+                            <thead>
+                                <tr>
+                                    <th class="w-1/4 rounded-tl-lg">날짜</th>
+                                    <th>수행 내용 및 결과</th>
+                                    <th class="w-16 rounded-tr-lg">삭제</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Log entries will be added here -->
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td class="rounded-bl-lg"><input type="date" id="logDate" class="border p-1 rounded"></td>
+                                    <td><textarea id="logContent" rows="1" class="border p-1 rounded w-full"></textarea></td>
+                                    <td class="rounded-br-lg"><button id="addLogBtn" class="bg-sky-500 hover:bg-sky-600 text-white px-3 py-1 rounded">추가</button></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                     <!-- Hidden Textarea for Saving Log Data -->
+                    <textarea id="m2_log_data" class="hidden"></textarea>
+
+                </div>
+
+                <div>
+                    <div class="bg-white shadow-md rounded-xl mb-6">
+                        <h4 class="text-2xl font-bold font-header text-slate-800 py-3 px-6 rounded-xl flex items-center gap-2">
+                            <span class="text-xl">🤔</span> 3. 연구 수행 자가 점검 및 개선
+                        </h4>
+                    </div>
+                     <div class="guide-box">
+                        <p>연구를 진행하면서 스스로 잘한 점, 아쉬운 점, 그리고 '만약 다시 한다면 이렇게 개선하겠다' 싶은 점을 솔직하게 작성해 보세요. 이 과정에서 여러분은 한 뼘 더 성장하게 됩니다.</p>
+                        <div class="example-box">
+                            <p><strong>예시)</strong><br>
+                                <strong>- 잘한 점:</strong> Python 라이브러리를 활용해 100개가 넘는 데이터를 빠르게 시각화하고, 주관식 답변에서 핵심 키워드를 뽑아낸 점.<br>
+                                <strong>- 아쉬운 점:</strong> 설문 문항을 만들 때 '비주얼' 항목을 빠뜨려서, "음식이 보기 좋지 않다"는 주관식 의견을 객관식으로 분석하지 못한 점.<br>
+                                <strong>- 개선 방향:</strong> 다음 연구에서는 설문 문항 설계 시 전문가(영양사 선생님)의 자문을 받아, 분석하고자 하는 요소를 빠짐없이 포함하도록 하겠다.
+                            </p>
+                        </div>
+                    </div>
+                    <textarea id="m2_review" class="w-full p-4 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-400" placeholder="[연구 과정에서의 문제점, 아쉬운 점, 그리고 개선할 점을 작성해보세요.]"></textarea>
+                </div>
+
+                 <!-- Tips -->
+                <div class="tips-box">
+                    <h5>⭐ A+를 위한 꿀팁! ⭐</h5>
+                    <p>연구 일지는 꾸준히 작성하는 것이 중요해요! 사소한 내용이라도 기록해두면 나중에 큰 도움이 됩니다. 자가 점검은 솔직하게, 그리고 구체적으로 작성할수록 좋아요!</p>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="mt-12 pt-8 border-t border-slate-200 text-center">
+                    <h4 class="text-2xl font-bold mb-4 font-header">🎉 미션 2 완료! 결과 저장하기</h4>
+                    <p class="text-slate-600 mb-6">모든 내용을 꼼꼼히 작성했나요? 이제 파일로 저장해서 최종 미션을 준비해요!</p>
+                    <div class="flex justify-center">
+                        <button onclick="downloadReport2()" class="btn btn-cyan">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            연구 수행 보고서 파일(.txt)로 다운로드
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Divider -->
+        <div class="mission-divider">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="m5 19 7-7 7 7"/></svg>
+        </div>
+
+        <!-- How-to Guide: Webpage -->
+         <section id="howto-web" class="fade-in">
+             <div class="bg-pink-100 border-2 border-pink-300 shadow-lg rounded-3xl mb-12">
+                 <h3 class="text-3xl font-bold text-center font-header text-pink-800 py-5 px-6 rounded-t-3xl flex items-center justify-center gap-3">
+                    <span class="text-4xl">💻</span> FINAL MISSION: 연구 결과 웹으로 발표하기 <span class="text-4xl">✨</span>
+                </h3>
+            </div>
+            <div class="bg-white p-8 md:p-12 rounded-3xl shadow-lg border border-slate-200">
+                <h4 class="text-2xl font-bold mb-4 font-header">AI 크루와 함께, 1분 만에 웹사이트 뚝딱!</h4>
+                <p class="mb-6 text-slate-600">MISSION 1과 2에서 다운로드한 텍스트 파일 내용을 모두 복사하세요. 그리고 아래 '궁극의 프롬프트'에 붙여넣기만 하면, AI가 여러분만의 연구 발표 사이트를 마법처럼 만들어 줄 거예요!</p>
                 <div class="prompt-card p-6 rounded-xl">
                     <p id="web-prompt" class="text-sm font-mono whitespace-pre-wrap leading-relaxed">
-너는 Notion 스타일의 깔끔하고 전문적인 웹 보고서를 만드는 최고의 웹 디자이너야. 내가 제공하는 '정보과제연구 계획서' 텍스트를 바탕으로, 발표용 단일 HTML 웹페이지를 만들어줘.
+너는 Notion 스타일의 깔끔하고 전문적인 웹 보고서를 만드는 최고의 웹 디자이너야. 내가 제공하는 '정보과제연구 계획서'와 '연구 수행 보고서' 텍스트를 바탕으로, 발표용 단일 HTML 웹페이지를 만들어줘.
 
 **[디자인 요구사항]**
 - **스타일링:** Tailwind CSS를 사용해줘.
 - **레이아웃:** 전체적으로 모던하고 가독성이 높은 디자인으로 만들어줘. 각 섹션은 명확하게 구분되고, 카드 UI나 구분선을 적절히 사용해줘.
-- **아이콘:** 각 섹션 제목 옆에 내용과 어울리는 SVG 아이콘을 추가해줘. (예: 🚀 연구 주제, 💡 서론, 📚 이론적 배경, 🔬 연구 방법, ✨ 기대 효과, 🔗 참고 문헌)
+- **아이콘:** 각 섹션 제목 옆에 내용과 어울리는 SVG 아이콘을 추가해줘. (예: 🚀 연구 주제, 💡 서론, 🔬 연구 방법, 📊 연구 수행 결과, ✨ 기대 효과 등)
 - **가독성:** 적절한 여백과 명확한 타이포그래피(제목, 부제목, 본문)를 사용해서 내용이 눈에 잘 들어오게 해줘.
-- **색상:** 전체적으로 차분하면서도 중요한 부분은 강조될 수 있는 색상 팔레트(예: 하늘색, 노란색 포인트)를 사용해줘.
+- **색상:** 전체적으로 차분하면서도 중요한 부분은 강조될 수 있는 색상 팔레트(예: 하늘색, 분홍색 포인트)를 사용해줘.
 
 **[페이지 구조]**
 1.  **헤더:** 연구 주제와 연구자 이름을 크게 표시해줘.
-2.  **본문:** 아래의 연구 계획서 내용을 각 섹션별로 멋지게 구성해줘.
+2.  **본문:** 아래의 연구 계획서와 수행 보고서 내용을 섹션별로 멋지게 구성해줘. (연구 계획과 수행 과정을 잘 나눠서 보여줘)
 3.  **푸터:** 간단한 저작권 문구나 응원 메시지를 넣어줘.
 
-이제 아래에 내가 작성한 연구 계획서 내용을 붙여넣을게. 이 내용을 가지고 최고의 웹페이지를 만들어줘.
+이제 아래에 내가 작성한 보고서 내용을 붙여넣을게. 이 내용을 가지고 최고의 웹페이지를 만들어줘.
 
 ---
-[여기에 '파일(.txt)로 다운로드'한 연구 계획서 내용을 그대로 붙여넣으세요!]
+[여기에 '연구 계획서.txt'와 '연구 수행 보고서.txt' 내용을 모두 복사해서 붙여넣으세요!]
 ---
                     </p>
                 </div>
-                 <button onclick="copyWebPrompt()" class="mt-6 w-full bg-yellow-500 text-white font-bold py-3 px-8 rounded-full hover:bg-yellow-600 transition-all shadow hover:shadow-lg transform hover:-translate-y-0.5">
+                 <button onclick="copyWebPrompt()" class="btn btn-pink mt-6 w-full">
                     궁극의 웹페이지 생성 프롬프트 복사하기
-                </button>
-                <div id="copy-web-message" class="text-center mt-3 text-yellow-600 font-semibold opacity-0 transition-opacity">복사 완료! Gemini에게 붙여넣고 마법을 경험해보세요!</div>
+                 </button>
+                <div id="copy-web-message" class="text-center mt-3 text-pink-600 font-semibold opacity-0 transition-opacity">복사 완료! Gemini에게 붙여넣고 마법을 경험해보세요!</div>
             </div>
         </section>
     </main>
@@ -434,54 +740,18 @@
     <!-- Footer -->
     <footer class="bg-slate-800 text-white mt-20">
         <div class="container mx-auto px-6 py-8 text-center">
-            <p>여러분의 빛나는 아이디어를 응원합니다! 궁금한 점은 언제나 질문해주세요.</p>
-            <p class="text-sm text-slate-400 mt-2">&copy; 2025 Creative Commons License. Freely use for educational purposes.</p>
+            <p class="font-semibold">✨ 여러분의 빛나는 아이디어를 응원합니다! ✨</p>
+             <p class="text-sm text-slate-400 mt-2">궁금한 점은 언제나 질문해주세요. | &copy; 2025 Creative Commons License.</p>
         </div>
     </footer>
 
     <script>
-        const missionTextareaIds = ['topic', 'motivation', 'purpose', 'problem', 'background', 'method', 'effect', 'references'];
+        // --- MISSION 1 ---
+        const mission1TextareaIds = ['m1_topic', 'm1_motivation', 'm1_purpose', 'm1_problem', 'm1_background', 'm1_method', 'm1_effect', 'm1_references'];
+        const m1StoragePrefix = 'researchPlan_';
 
-        function showCopyMessage(elementId) {
-            const message = document.getElementById(elementId);
-            message.classList.remove('opacity-0');
-            setTimeout(() => {
-                message.classList.add('opacity-0');
-            }, 3000);
-        }
-
-        function copyWebPrompt() {
-            const promptText = document.getElementById('web-prompt').innerText;
-            // Fallback for environments that block navigator.clipboard
-            try {
-                const textArea = document.createElement("textarea");
-                textArea.value = promptText;
-                
-                // Make the textarea invisible
-                textArea.style.top = "0";
-                textArea.style.left = "0";
-                textArea.style.position = "fixed";
-
-                document.body.appendChild(textArea);
-                textArea.focus();
-                textArea.select();
-
-                const successful = document.execCommand('copy');
-                if (successful) {
-                    showCopyMessage('copy-web-message');
-                } else {
-                    console.error('Copy command was unsuccessful');
-                }
-                
-                document.body.removeChild(textArea);
-            } catch (err) {
-                console.error('Oops, unable to copy', err);
-            }
-        }
-
-        function generateReport() {
-            const content = missionTextareaIds.map(id => document.getElementById(id).value.trim());
-            
+        function generateReport1() {
+            const content = mission1TextareaIds.map(id => document.getElementById(id).value.trim());
             const report = `
 # 정보과제연구 계획서
 
@@ -491,10 +761,8 @@ ${content[0] || "[내용 없음]"}
 ## 2. 서론
 ### 가. 연구 동기 및 필요성
 ${content[1] || "[내용 없음]"}
-
 ### 나. 연구 목적
 ${content[2] || "[내용 없음]"}
-
 ### 다. 연구 문제
 ${content[3] || "[내용 없음]"}
 
@@ -517,8 +785,8 @@ ${content[7] || "[내용 없음]"}
             return report.trim();
         }
 
-        function downloadReport() {
-            const reportText = generateReport();
+        function downloadReport1() {
+            const reportText = generateReport1();
             const blob = new Blob([reportText], { type: 'text/plain;charset=utf-8' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
@@ -528,29 +796,204 @@ ${content[7] || "[내용 없음]"}
             document.body.removeChild(a);
             URL.revokeObjectURL(a.href);
         }
-        
-        // --- 자동 저장 및 불러오기 기능 ---
-        
-        // 페이지 로드 시 저장된 내용 불러오기
-        window.addEventListener('DOMContentLoaded', () => {
-            missionTextareaIds.forEach(id => {
-                const savedContent = localStorage.getItem(`researchPlan_${id}`);
-                const textarea = document.getElementById(id);
-                if (savedContent && textarea) {
-                    textarea.value = savedContent;
+
+        // --- MISSION 2 ---
+        const mission2TextareaIds = ['m2_design', 'm2_review']; // Exclude log data textarea
+        const m2StoragePrefix = 'researchPerform_';
+        const logTableBody = document.getElementById('researchLogTable')?.querySelector('tbody');
+        const addLogBtn = document.getElementById('addLogBtn');
+        const logDateInput = document.getElementById('logDate');
+        const logContentInput = document.getElementById('logContent');
+        const logDataStorageKey = `${m2StoragePrefix}m2_log_data`; // Key for localStorage
+
+        // Function to save log data to localStorage
+        function saveLogData() {
+            if (!logTableBody) return;
+            const logEntries = [];
+            logTableBody.querySelectorAll('tr').forEach(row => {
+                const date = row.cells[0].innerText;
+                const content = row.cells[1].innerText;
+                logEntries.push({ date, content });
+            });
+            localStorage.setItem(logDataStorageKey, JSON.stringify(logEntries));
+        }
+
+        // Function to load log data from localStorage
+        function loadLogData() {
+             if (!logTableBody) return;
+            const savedLogs = localStorage.getItem(logDataStorageKey);
+            if (savedLogs) {
+                try {
+                    const logEntries = JSON.parse(savedLogs);
+                    logTableBody.innerHTML = ''; // Clear existing rows before loading
+                    logEntries.forEach(entry => addLogRow(entry.date, entry.content, false)); // Don't save again while loading
+                } catch (e) {
+                    console.error("Error parsing log data from localStorage", e);
+                }
+            }
+        }
+
+        // Function to add a row to the log table
+        function addLogRow(date, content, shouldSave = true) {
+             if (!logTableBody || !date || !content) return;
+            const newRow = logTableBody.insertRow();
+            const dateCell = newRow.insertCell();
+            const contentCell = newRow.insertCell();
+            const deleteCell = newRow.insertCell();
+
+            dateCell.innerText = date;
+            contentCell.innerText = content;
+            contentCell.classList.add('whitespace-pre-wrap'); // Preserve line breaks
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.innerText = '삭제';
+            deleteBtn.classList.add('delete-btn', 'px-2', 'py-1');
+            deleteBtn.onclick = function() {
+                newRow.remove();
+                saveLogData(); // Save after deleting
+            };
+            deleteCell.appendChild(deleteBtn);
+            deleteCell.classList.add('text-center');
+
+            if (shouldSave) {
+                saveLogData(); // Save after adding
+            }
+        }
+
+        // Event listener for adding new log entry
+        if (addLogBtn && logDateInput && logContentInput) {
+            addLogBtn.addEventListener('click', () => {
+                const date = logDateInput.value;
+                const content = logContentInput.value.trim();
+                if (date && content) {
+                    addLogRow(date, content);
+                    // Clear input fields after adding
+                    logDateInput.value = '';
+                    logContentInput.value = '';
+                } else {
+                    alert('날짜와 내용을 모두 입력해주세요.');
                 }
             });
-        });
+        }
 
-        // 텍스트 입력 시 자동으로 내용 저장하기
-        missionTextareaIds.forEach(id => {
-            const textarea = document.getElementById(id);
-            if(textarea) {
-                textarea.addEventListener('input', () => {
-                    localStorage.setItem(`researchPlan_${id}`, textarea.value);
+
+        function generateReport2() {
+            const designContent = document.getElementById('m2_design').value.trim();
+            const reviewContent = document.getElementById('m2_review').value.trim();
+            let logContent = "";
+
+            if (logTableBody) {
+                logTableBody.querySelectorAll('tr').forEach(row => {
+                     const date = row.cells[0].innerText;
+                     const content = row.cells[1].innerText;
+                     logContent += `\n[${date}]\n${content}\n`;
                 });
             }
+
+            const report = `
+# 정보과제연구 수행 보고서
+
+## 1. 연구 방법 상세 설계
+${designContent || "[내용 없음]"}
+
+## 2. 연구 수행 일지 (과정 및 결과)
+${logContent.trim() || "[기록 없음]"}
+
+## 3. 연구 수행 자가 점검 및 개선
+${reviewContent || "[내용 없음]"}
+`;
+            return report.trim();
+        }
+
+        function downloadReport2() {
+            const reportText = generateReport2();
+            const blob = new Blob([reportText], { type: 'text/plain;charset=utf-8' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = '연구수행보고서.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(a.href);
+        }
+
+
+        // --- Common Functions ---
+        function showCopyMessage(elementId) {
+            const message = document.getElementById(elementId);
+            message.classList.remove('opacity-0');
+            setTimeout(() => {
+                message.classList.add('opacity-0');
+            }, 3000);
+        }
+
+        function copyWebPrompt() {
+            const promptText = document.getElementById('web-prompt').innerText;
+            try {
+                const textArea = document.createElement("textarea");
+                textArea.value = promptText;
+                textArea.style.top = "0";
+                textArea.style.left = "0";
+                textArea.style.position = "fixed";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showCopyMessage('copy-web-message');
+                }
+                document.body.removeChild(textArea);
+            } catch (err) {
+                console.error('Oops, unable to copy', err);
+            }
+        }
+        
+        // --- Auto-Save and Load Functionality ---
+        function setupAutoSave(ids, prefix) {
+            // Load saved content for textareas
+            window.addEventListener('DOMContentLoaded', () => {
+                ids.forEach(id => {
+                    const savedContent = localStorage.getItem(`${prefix}${id}`);
+                    const textarea = document.getElementById(id);
+                    if (savedContent && textarea) {
+                        textarea.value = savedContent;
+                    }
+                });
+                 // Load log data specifically
+                 if (prefix === m2StoragePrefix) {
+                    loadLogData();
+                 }
+            });
+
+            // Save content on input for textareas
+            ids.forEach(id => {
+                const textarea = document.getElementById(id);
+                if(textarea) {
+                    textarea.addEventListener('input', () => {
+                        localStorage.setItem(`${prefix}${id}`, textarea.value);
+                    });
+                }
+            });
+            // Log data saving is handled by addLogRow, delete button click, and potentially on page unload for robustness
+            window.addEventListener('beforeunload', saveLogData); // Save log data when leaving the page
+        }
+        
+        setupAutoSave(mission1TextareaIds, m1StoragePrefix);
+        setupAutoSave(mission2TextareaIds, m2StoragePrefix); // m2_log_data is handled separately via loadLogData and saveLogData
+
+        // --- Fade-in Animation on Scroll ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in-visible');
+                }
+            });
+        }, { threshold: 0.1 }); // Trigger when 10% of the element is visible
+
+        document.querySelectorAll('.fade-in').forEach((el) => {
+            observer.observe(el);
         });
+
     </script>
 </body>
 </html>
